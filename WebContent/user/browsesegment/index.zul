@@ -1,0 +1,14 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div id="mainSegmentWindow" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.segmentquery.view.model.Index')"
+		height="98%" width="98%" align="left">
+		<div sclass="page-header">
+			<label value="Browse Segment" />
+		</div>
+		<tabbox id="tabBox" sclass="page-content">
+			<tabs id="tabs" />
+			<tabpanels id="tabPanels" />
+		</tabbox>
+	</div>
+</zk>
