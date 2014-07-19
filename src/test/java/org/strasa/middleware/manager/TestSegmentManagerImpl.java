@@ -39,21 +39,27 @@ public class TestSegmentManagerImpl
 	}
 	
 	@Test
-	public void testGetAllSegments()
+	public void testGetSegmentSummaryOnChromosomeAndDonor()
 	{
-		SegmentManagerImpl segmentManagerImpl = new SegmentManagerImpl();
-		List<Segment> segments = segmentManagerImpl.getAllSegments();
-		System.out.println(segments.size());
-		for(Segment s : segments)
-		{
-			System.out.println("Segment id " + s.getSegmentId() + ", chromosome " + s.getChromosome() + ", recurrent parent " 
-					+ s.getRecurrentParent() + " , donor parent "+ s.getDonorParent() + ", position 1 " + s.getPosition1()
-					+ ", position 2 " + s.getPosition2() + ", position 3 " + s.getPosition3() + ", position 4 " + s.getPosition4()
-					+ ", physical start " + s.getPhysicalStart() + ", physical end " + s.getPhysicalEnd() + ", estimated length " 
-					+ s.getEstimatedLength() + ", minimum length " + s.getMinimumLength() + ", maximum length " +
-					s.getMaximumLength() + ", description " + s.getDescription());
-		}
+		segmentManagerImpl.getSegmentSummaryOnChromosomeAndDonor();
 	}
+	
+//	@Test
+//	public void testGetAllSegments()
+//	{
+//		SegmentManagerImpl segmentManagerImpl = new SegmentManagerImpl();
+//		List<Segment> segments = segmentManagerImpl.getAllSegments();
+//		System.out.println(segments.size());
+//		for(Segment s : segments)
+//		{
+//			System.out.println("Segment id " + s.getSegmentId() + ", chromosome " + s.getChromosome() + ", recurrent parent " 
+//					+ s.getRecurrentParent() + " , donor parent "+ s.getDonorParent() + ", position 1 " + s.getPosition1()
+//					+ ", position 2 " + s.getPosition2() + ", position 3 " + s.getPosition3() + ", position 4 " + s.getPosition4()
+//					+ ", physical start " + s.getPhysicalStart() + ", physical end " + s.getPhysicalEnd() + ", estimated length " 
+//					+ s.getEstimatedLength() + ", minimum length " + s.getMinimumLength() + ", maximum length " +
+//					s.getMaximumLength() + ", description " + s.getDescription());
+//		}
+//	}
 //	@Test 
 //	public void testGetSegmentByRecurrentName()
 //	{

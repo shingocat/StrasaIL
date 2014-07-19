@@ -56,6 +56,15 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 	
 	@Wire
 	Navitem singlesite;
+	
+	@Wire
+	Navitem ssslAnalysis; // adding by QIN MAO
+	
+	@Wire 
+	Navitem pyramidedAnalysis; // adding by QIN MAO
+	
+	@Wire
+	Navitem introgressionLineAnalysis; // adding by QIN MAO
 
 	@Wire
 	Navitem linkagemapping;
@@ -191,6 +200,31 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 		Executions.createComponents("../user/analysis/singlesite/index.zul", d, null);
 		
 	}
+	
+	@Listen("onClick = #ssslAnalysis") // adding by QIN MAO
+	public void ssslAnalysis()
+	{
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/sssl/index.zul", d, null);
+	}
+	
+	@Listen("onClick = #pyramidedLineAnalysis") // adding by QIN MAO
+	public void pyramidedLineAnalysis()
+	{
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/pyramidedline/index.zul", d, null);
+	}
+	
+	@Listen("onClick = #introgressionLineAnalysis") // adding by QIN MAO 
+	public void introgressionLineAnalysis()
+	{
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/introgressionline/index.zul", d, null);
+	}
+	
 	@Listen("onClick = #linkagemapping")
 	public void linkagemapping(){
 		Div d=(Div) sidebar.getRoot().query("#contentui");

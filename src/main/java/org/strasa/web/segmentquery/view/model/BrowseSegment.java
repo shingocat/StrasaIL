@@ -167,6 +167,7 @@ public class BrowseSegment
 	private HashMap<Integer, Tab> activeGermplasmIds;
 	private Tab segmentSearchTab;
 	private List<Segment> lstSegment;
+	private List<SegmentExt> lstSegmentExt;
 	private List<ConditionAndValue> lstSegmentSummary;
 	
 	@Init
@@ -364,9 +365,19 @@ public class BrowseSegment
 		lstIntrogressionLine.clear();
 		lstSegment.clear();
 		lstSegment = sManagerImpl.getSegmentByDynamicSQL(params);
+		if(lstSegmentExt == null)
+			lstSegmentExt = new ArrayList<SegmentExt>();
+		lstSegmentExt.clear();
+		for(Segment s : lstSegment)
+		{
+			SegmentExt se = new SegmentExt();
+			se.setSegmentExtFromSegment(s);
+			se.setHarborer(ilManagerImpl.getIntrogressionLineBySegment(s));
+			lstSegmentExt.add(se);
+		}
 		lstIntrogressionLine = ilManagerImpl.getIntrogressionLineBySegmentParams(params);
 //		component.getFellow("divSearchSegmentResult").setVisible(true);
-		component.getFellow("divSearchIntrogressionLineResult").setVisible(true);
+		component.getFellow("divSearchIntrogressionLineResult").setVisible(false);
 		setSearchSegmentResultLabel("Search Segment Result " + lstSegment.size() + " Row(s) Return!");
 		setSearchResultLabel("Search Introgression Line Result " + lstIntrogressionLine.size() + " Row(s) Return!");
 		btnReset.setVisible(true);
@@ -402,6 +413,53 @@ public class BrowseSegment
 	}
 	
 	@NotifyChange("*")
+	@Command
+	public void openIntrogressionLineDetailInSegment(@ContextParam(ContextType.COMPONENT)Component component,
+			@ContextParam(ContextType.VIEW) Component view, @BindingParam("germplasmId")Integer id, @BindingParam("gname")String gname, @BindingParam("introgressionLine") IntrogressionLine introgressionLine)
+	{
+		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
+		Tabs tabs = (Tabs) component.getFellow("tabs");
+		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
+		
+		if(!activeGermplasmIds.containsKey(id))
+		{
+			final int gid = id;
+			Tab newTab = new Tab();
+			newTab.setLabel(gname);
+			newTab.setClosable(true);
+			newTab.addEventListener("onClose", new EventListener(){
+
+				@Override
+				public void onEvent(Event arg0) throws Exception {
+					// TODO Auto-generated method stub
+					activeGermplasmIds.remove(gid);
+				}
+				
+			});
+			Tabpanel newPanel = new Tabpanel();
+			
+			// initialize view after view construction
+			Include studyInformationPage = new Include();
+			studyInformationPage.setSrc("/user/browsesegment/introgressionlinedetail.zul");
+			studyInformationPage.setParent(newPanel);
+			studyInformationPage.setDynamicProperty("parentSource", "germplasm");
+			studyInformationPage.setDynamicProperty("gname", gname);
+			studyInformationPage.setDynamicProperty("introgressionLine", introgressionLine);
+			
+			tabPanels.appendChild(newPanel);
+			tabs.appendChild(newTab);
+			tabBox.setSelectedPanel(newPanel);
+			newTab.setSelected(true);
+			activeGermplasmIds.put(id, newTab);
+		} else
+		{
+			Tab tab = activeGermplasmIds.get(id);
+			tab.setSelected(true);
+		}
+		segmentSearchTab.setSelected(true);
+	}
+	
+	@NotifyChange("*")
 	@GlobalCommand
 	public void openIntrogressionLineDetail(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view,@BindingParam("germplasmId")Integer id,@BindingParam("gname")String gname, @BindingParam("introgressionLine") IntrogressionLine introgressionLine){
@@ -409,7 +467,7 @@ public class BrowseSegment
 		Tabpanels tabPanels = (Tabpanels) component.getFellow("tabPanels");
 		Tabs tabs = (Tabs) component.getFellow("tabs");
 		Tabbox tabBox = (Tabbox) component.getFellow("tabBox");
-
+		
 		if(!activeGermplasmIds.containsKey(id)){
 			final int gid=id;
 			Tab newTab = new Tab();
@@ -920,6 +978,14 @@ public class BrowseSegment
 	public void setLstSegmentSummary(List<ConditionAndValue> lstSegmentSummary)
 	{
 		this.lstSegmentSummary = lstSegmentSummary;
+	}
+
+	public List<SegmentExt> getLstSegmentExt() {
+		return lstSegmentExt;
+	}
+
+	public void setLstSegmentExt(List<SegmentExt> lstSegmentExt) {
+		this.lstSegmentExt = lstSegmentExt;
 	}
 	
 	

@@ -698,4 +698,17 @@ public class IntrogressionLineManagerImpl
 		return lstIntrogressionLine;
 		
 	}
+
+	public List<IntrogressionLine> getIntrogressionLineBySegment(Segment s) {
+		// TODO Auto-generated method stub
+		List<IntrogressionLine> lstIntrogressionLine = new ArrayList<IntrogressionLine>();
+		GermplasmSegmentManagerImpl gsManagerImpl = new GermplasmSegmentManagerImpl();
+		List<GermplasmSegment> lstGermplasmSegment = gsManagerImpl.getGermplasmSegmentBySegmentId(s.getSegmentId());
+		for(GermplasmSegment gs : lstGermplasmSegment)
+		{
+			IntrogressionLine il = this.getIntrogressionLineById(gs.getGermplasmId());
+			lstIntrogressionLine.add(il);
+		}
+		return lstIntrogressionLine;
+	}
 }

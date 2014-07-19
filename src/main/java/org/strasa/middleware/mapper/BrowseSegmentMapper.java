@@ -18,5 +18,6 @@ import org.strasa.middleware.model.Segment;
 public interface BrowseSegmentMapper
 {
 	List<Segment> findSegmentByDynamicSQL();
+	List<String> findDistinctDonorParent();
 }
 

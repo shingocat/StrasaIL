@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.strasa.middleware.mapper.BrowseIntrogressionLineMapper">
+<mapper namespace="org.strasa.middleware.mapper.BrowseSegmentMapper">
 <resultMap type="SegmentModel" id="SegmentResult">
 		<id property="segmentId" column="segment_id" />
 		<result property="chromosome" column="chromosome"/>
@@ -36,5 +36,7 @@
 		</if>
 		</where>
 	</select>
-
+	<select id="findDistinctDonorParent" resultType="String">
+		SELECT DISTINCT(donor_parent) FROM segment
+	</select>
 </mapper>

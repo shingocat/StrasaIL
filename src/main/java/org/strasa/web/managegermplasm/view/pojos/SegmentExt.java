@@ -8,6 +8,9 @@
  */
 package org.strasa.web.managegermplasm.view.pojos;
 
+import java.util.List;
+
+import org.strasa.middleware.model.IntrogressionLine;
 import org.strasa.middleware.model.Segment;
 import org.strasa.middleware.model.enumeration.Homogenous;
 
@@ -15,6 +18,7 @@ public class SegmentExt extends Segment
 {
 	private String isHomogenous;
 	private String owner; // the IL germplasm name;
+	private List<IntrogressionLine> harborer; // the list of introgression line harbor this segment;
 	
 	public SegmentExt()
 	{
@@ -81,6 +85,14 @@ public class SegmentExt extends Segment
 		this.owner = owner;
 	}
 	
+	public List<IntrogressionLine> getHarborer() {
+		return harborer;
+	}
+
+	public void setHarborer(List<IntrogressionLine> harborer) {
+		this.harborer = harborer;
+	}
+
 	@Override
 	public String toString()
 	{

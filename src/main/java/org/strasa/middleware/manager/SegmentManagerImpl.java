@@ -16,6 +16,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.strasa.middleware.factory.ConnectionFactory;
+import org.strasa.middleware.mapper.BrowseSegmentMapper;
 import org.strasa.middleware.mapper.SegmentMapper;
 import org.strasa.middleware.model.Segment;
 import org.strasa.middleware.model.SegmentExample;
@@ -23,6 +24,8 @@ import org.strasa.middleware.model.SegmentExample.Criteria;
 import org.strasa.middleware.util.ConditionAndValue;
 import org.strasa.web.managegermplasm.view.pojos.SegmentExt;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zul.CategoryModel;
+import org.zkoss.zul.SimpleCategoryModel;
 
 import com.mysql.jdbc.StringUtils;
 
@@ -102,10 +105,10 @@ public class SegmentManagerImpl
 			SegmentExample example = new SegmentExample();
 			example.or().andSegmentIdIn(segment_ids);
 			List<Segment> lstSegment = mapper.selectByExample(example);
-			for (Segment s : lstSegment)
-			{
-				System.out.println(s.toString());
-			}
+//			for (Segment s : lstSegment)
+//			{
+//				System.out.println(s.toString());
+//			}
 			return lstSegment;
 		} finally
 		{
@@ -511,8 +514,6 @@ public class SegmentManagerImpl
 			try
 			{
 				List<Segment> lstSegment = mapper.selectByExample(example);
-//				for (Segment s : lstSegment)
-//					System.out.println(s.toString());
 				return lstSegment;
 			} finally
 			{
@@ -710,4 +711,37 @@ public class SegmentManagerImpl
 	    }
 	    return lstConditionAndValue;
     }
+
+	public CategoryModel getSegmentSummaryOnChromosomeAndDonor() {
+		// TODO Auto-generated method stub
+		SimpleCategoryModel model = new SimpleCategoryModel();
+		if(connectionFactory == null)
+			connectionFactory = this.getConnectionFactory();
+		SqlSession session = connectionFactory.sqlSessionFactory.openSession();
+		try
+		{
+			SegmentMapper mapper = session.getMapper(SegmentMapper.class);
+			SegmentExample example = new SegmentExample();		
+			BrowseSegmentMapper browseMapper = session.getMapper(BrowseSegmentMapper.class);
+			List<String> lstDonorParent = browseMapper.findDistinctDonorParent();
+
+//			System.out.println("Return size " + lstDonorParent.size());
+			for(String s : lstDonorParent)
+			{
+//				System.out.println(s.toString());
+				for(int i = 1; i <= 12 ; i++)
+				{
+					example.clear();
+					example.or().andChromosomeEqualTo(String.valueOf(i)).andDonorParentEqualTo(s);
+					model.setValue(s, "Chromosome " + i, mapper.countByExample(example));
+				}
+			}
+
+		} finally
+		{
+			session.close();
+		}
+		
+		return model;
+	}
 }

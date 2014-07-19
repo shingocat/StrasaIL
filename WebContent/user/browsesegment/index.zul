@@ -6,8 +6,11 @@
 		<div sclass="page-header">
 			<label value="Browse Segment" />
 		</div>
+		<div  height="100%" width="100%" style="overflow:auto">
+				<include self="@define(content)" src="browsesegment/segmentsummary.zul" />
+		</div>
 		<tabbox id="tabBox" sclass="page-content">
-			<tabs id="tabs" />
+			<tabs id="tabs" visible="true" />
 			<tabpanels id="tabPanels" />
 		</tabbox>
 	</div>
