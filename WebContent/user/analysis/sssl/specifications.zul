@@ -1,0 +1,61 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<style src="../css/main.css" />
+	<div id="SSSLSpecificationsWindow" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.strasa.web.analysis.sssl.view.model.Specifications')"
+		align="center" height="98%">
+
+		<vlayout>
+			<grid zclass="none">
+				<columns>
+					<column label="" width="120px" />
+					<column label="" width="500px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="Select Data" />
+						<hlayout spacing="50px">
+							<vlayout width="100%">
+								<radiogroup>
+									<vlayout width="100%" spacing="10px">
+										<div align="left">
+											<hlayout>
+												<combobox id="studiesCombo" visible="false"
+													model="@load(vm.lstStudy)" readonly="true"
+													selectedItem="@bind(vm.selectedStudy)" onChange="@command('updateDataSetList')">
+													<template name="model">
+														<comboitem value="@load(each)" label="@load(each.name)" />
+													</template>
+												</combobox>
+												<combobox id="dataSetCombo" visible="false"
+													model="@load(vm.lstStudyDataSet)" readonly="true"
+													selectedItem="@bind(vm.selectedStudyDataSet)" onChange="@command('displaySelectedDataSet')">
+													<template name="model">
+														<comboitem value="@load(each)" label="@load(each.title)" />
+													</template>
+												</combobox>
+												<label id="lblMsgUpload" visible="@load(vm.variableDataVisible)"
+													value="@load(vm.dataFileName)" sclass="label-search" />
+												<button sclass="btn-danger" id="selectDataBtn" label="From a Study"
+													image="/images/find.png" onClick="@command('selectFromDatabase')" />
+
+												<button sclass="btn-danger" id="uploadCSVbtn" upload="true"
+													label="From External File(.csv)" image="/images/find.png"
+													onUpload="@command('uploadCSV')" />
+
+												<button id="resetBtn" label="Reset"
+													onClick="@global-command('launchSSSL')" visible="false"
+													sclass="btn-danger" />
+											</hlayout>
+										</div>
+									</vlayout>
+								</radiogroup>
+							</vlayout>
+						</hlayout>
+					</row>
+				</rows>
+			</grid>
+		</vlayout>
+		</div>
+		
+</zk>
