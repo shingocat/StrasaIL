@@ -1,0 +1,78 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div align="left" hflex="1">
+		<groupbox width="100%">
+			<caption>Display:</caption>
+			<vbox hflex="1">
+				<checkbox label="Descriptive Statistics" id="descriptiveStatCB"
+					checked="true" />
+				<checkbox label="Variance Components" id="varComponentCB"
+					checked="true" />
+			</vbox>
+		</groupbox>
+		<groupbox width="100%">
+			<caption>Contrasts:</caption>
+			<vlayout hflex="1">
+				<div visible="true">
+					<checkbox label="Compare with Control" id="compareWithControlCB"
+						onCheck="@global-command('isCompareWithControlCBChecked')" />
+					<hlayout>
+						<space width="20px" />
+						<label value="Control : " />
+						<combobox id="controlCBB" width="150px" disabled="true">
+							<template name="model">
+								<comboitem label="${each}" />
+							</template>
+						</combobox>
+					</hlayout>
+				</div>
+				<div>
+					<groupbox closable="false" open="true">
+						<caption label="Specified Contrast"></caption>
+						<!-- <checkbox label="Specified Contrast" id="specifiedContrastCB" 
+							onCheck="@global-command('isSpecifiedContrastCBChecked')" /> -->
+						<vlayout style="margin: 10px 10px 10px 20px">
+							<div id="specifiedContrastDiv" visible="true">
+								<hlayout>
+									<label id="fileNameOfContrastLb" value="@load(vm.contrastFileName)"
+										sclass="label-search" />
+									<separator width="10px" />
+									<button id="contrastFromFileBtn" label="From File(.csv)"
+										sclass="btn-primary" upload="true, maxsize=-1" disabled="false"
+										onUpload="@command('uploadContrastFromFile')" />
+									<separator width="10px" />
+									<button id="contrastByManuallyBtn" label="Manually Input"
+										sclass="btn-primary" disabled="false"
+										onClick="@command('manuallyInputContrast')" />
+									<separator width="10px" />
+									<button id="contrastResetBtn" label="Reset Contrast"
+										onClick="@command('resetContrast')" sclass="btn-danger"
+										visible="false" />
+								</hlayout>
+								<separator height="10px" />
+								<div id="contrastByManuallyDiv" visible="false">
+									<hlayout>
+										<label value="Factor Name : " />
+										<textbox id="contrastVariableTB" readonly="true"></textbox>
+										<separator width="10px" />
+										<label value="No. of Contrast : " />
+										<doublespinner id="numberOfContrastDS" step="1"
+											value="0" constraint="no negative, min 0" onChnage="@command('updateContrastGridManually')"/>
+									</hlayout>
+								</div>
+								<separator height="20px" />
+								<hlayout>
+									<div id="contrastGridDiv" width="98%" height="98%">
+										<!-- <include id="includeContrast" src="/user/analysis/sssl/contrast.zul" 
+											/> -->
+									</div>
+								</hlayout>
+								<separator height="20px" />
+							</div>
+						</vlayout>
+					</groupbox>
+				</div>
+			</vlayout>
+		</groupbox>
+	</div>
+</zk>

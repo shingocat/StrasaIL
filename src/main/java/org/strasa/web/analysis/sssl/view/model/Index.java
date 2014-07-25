@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabpanel;
@@ -22,9 +23,9 @@ public class Index {
 	private RServeManager rServeManager;
 
 	@AfterCompose
-	public void init(@ContextParam(ContextType.COMPONENT) Component component,
+	public void afterCompose(@ContextParam(ContextType.COMPONENT) Component component,
 			@ContextParam(ContextType.VIEW) Component view){
-		
+		Selectors.wireComponents(component, this, false);
 	}
 
 
