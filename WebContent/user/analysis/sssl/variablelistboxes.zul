@@ -1,12 +1,9 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<vlayout style="padding:10px" height="1000px">
+	<vlayout style="padding:10px">
 		<hbox>
-			<!-- <groupbox width="300px" height="300px"> -->
-			<!-- <caption label="Numeric Variable" style="font-weight:bold;font-size:15px"> 
-				</caption> -->
-			<listbox id="numericLB" hflex="1" vflex="true" width="300px"
-				checkmark="true" multiple="true">
+			<listbox id="numericLB"  vflex="true" checkmark="true" width="300px"
+				multiple="true">
 				<listhead>
 					<listheader label="Numeric Variables" />
 				</listhead>
@@ -16,9 +13,6 @@
 					</listitem>
 				</template>
 			</listbox>
-
-
-			<!-- </groupbox> -->
 			<space width="10px"></space>
 			<vlayout spacing="10px" width="24px" height="300px">
 				<separator height="100px"></separator>
@@ -28,8 +22,7 @@
 					tooltip="Remove response variable" onClick="@command('removeResponse')" />
 			</vlayout>
 			<space width="10px"></space>
-			<!-- <groupbox width="300px" height="300px"> -->
-			<listbox id="responseLB" hflex="1" multiple="true" rows="4"
+			<listbox id="responseLB" multiple="true" rows="4"
 				checkmark="true" width="300px">
 				<listhead>
 					<listheader label="Response Variable" />
@@ -40,7 +33,6 @@
 					</listitem>
 				</template>
 			</listbox>
-			<!-- </groupbox> -->
 		</hbox>
 		<hbox spacing="10px" width="24px">
 			<image style="cursor:pointer" id="toNumericBtn" tooltip="set as Numeric"
@@ -48,8 +40,7 @@
 			<image style="cursor:pointer" id="toFactorBtn" src="/images/downarrow_g.png"
 				tooltip="set as Factor" onClick="@command('toFactor')" />
 		</hbox>
-		<hbox height="800px">
-			<!-- <groupbox width="300px" height="300px"> -->
+		<hbox>
 			<div vflex="1">
 				<listbox id="factorLB" hflex="1" rows="4" checkmark="true"
 					width="300px">
@@ -62,11 +53,10 @@
 						</listitem>
 					</template>
 				</listbox>
-				<!-- </groupbox> -->
 			</div>
 			<div style="overflow=auto">
 				<grid oddRowSclass="false" zclass="none">
-					<columns width="450px">
+					<columns>
 						<column label="" width="150px" />
 						<column label="" />
 					</columns>
@@ -98,26 +88,14 @@
 									<label value="Environment:" />
 								</hlayout>
 							</cell>
-							<cell width="400px">
+							<cell>
 								<hlayout>
 									<textbox id="envTB" width="150px" readonly="true"
 										tabindex="7" />
 									<space spacing="20px" />
-									<checkbox id="envFixedCB" label="Fixed"
-										onClick="@command('updateEnvOptions', selected=self.checked, label=self.label)"
-										checked="true" />
-									<space spacing="20px" />
-									<checkbox id="envRandomCB" label="Random"
-										onClick="@command('updateEnvOptions', selected=self.checked, label=self.label)" />
 								</hlayout>
 							</cell>
 						</row>
-
-						<!-- <row> <label /> <cell> <checkbox id="fixedCheckBox" label="Fixed" 
-							onClick="@global-command('updateFixedOptions', selected=self.checked)" /> 
-							<space spacing="20px" /> <checkbox id="randomCheckBox" label="Random" onClick="@global-command('updateRandomOptions', 
-							selected=self.checked)" /> </cell> </row> -->
-
 						<row>
 							<label />
 							<label />
@@ -190,7 +168,6 @@
 					</rows>
 				</grid>
 			</div>
-			<separator spacing="200px"></separator>
 		</hbox>
 	</vlayout>
 </zk>

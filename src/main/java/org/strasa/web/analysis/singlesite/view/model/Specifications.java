@@ -133,7 +133,7 @@ public class Specifications {
 
 	//Rserve Parameters
 	private int fileFormat=1;
-	private String separator="NULL";;
+	private String separator="NULL";
 	private String tempFileName;
 	private String fileName;
 

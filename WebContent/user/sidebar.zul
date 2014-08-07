@@ -52,7 +52,7 @@
 			<nav label="Analysis" iconSclass="z-icon-edit">
 				<navitem label="Browse Result" id="browseanalysisresult"
 					iconSclass="z-icon-angle-double-right" />
-				<nav label="Breeding Trait" iconSclass="z-icon-edit">
+				<nav label="Breeding Trial" iconSclass="z-icon-edit">
 					<navitem label="Single-Site" id="singlesite" iconSclass="z-icon-angle-double-right" />
 					<navitem label="Multi-Site" iconSclass="z-icon-angle-double-right" />
 				</nav>

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.analysis.rserve.manager.RServeManager;
+import org.analysis.rserve.manager.SSSLRserveManager;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.spring.security.model.SecurityUtil;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
@@ -91,6 +92,7 @@ public class Specifications {
 	private Tabpanel graphOptionsTP;
 
 	// modelSpecificationsTabpanel;
+	private Combobox lstTypeOfEnvCBB;
 	private Combobox lstTypeOfDesignCBB;
 	private Include includeVariableLst;
 	private Listbox numericLB;
@@ -106,8 +108,6 @@ public class Specifications {
 	private Row envRow;
 	private Image addEnvBtn;
 	private Textbox envTB;
-	private Checkbox envFixedCB;
-	private Checkbox envRandomCB;
 	private Row blockRow;
 	private Image addBlockBtn;
 	private Textbox blockTB;
@@ -127,36 +127,54 @@ public class Specifications {
 	private Checkbox varComponentCB;
 	private Checkbox compareWithControlCB;
 	private Combobox controlCBB;
-	// private Checkbox specifiedContrastCB;
-	private Div specifiedContrastDiv;
-	private Label fileNameOfContrastLb;
-	private Button contrastFromFileBtn;
-	private Button contrastByManuallyBtn;
-	private Button contrastResetBtn;
-	private Div contrastByManuallyDiv;
-	private Textbox contrastVariableTB;
-	private Doublespinner numberOfContrastDS;
-	private Div contrastGridDiv;
-
-	// contrast grid
-	// private Include includeContrast;
-	// private Grid contrastGrid;
-	// private Columns contrastGridColumns;
-	// private Rows contrastGridRows;
+	private Div specifiedContrastOnGenotypeDiv;
+	private Label fileNameOfContrastOnGenotypeLb;
+	private Button contrastFromFileOnGenotypeBtn;
+	private Button contrastByManuallyOnGenotypeBtn;
+	private Button contrastResetOnGenotypeBtn;
+	private Div contrastByManuallyOnGenotypeDiv;
+	private Doublespinner numberOfContrastOnGenotypeDS;
+	private Div contrastGridOnGenotypeDiv;
+	private Div specifiedContrastOnEnvDiv;
+	private Label fileNameOfContrastOnEnvLb;
+	private Button contrastFromFileOnEnvBtn;
+	private Button contrastByManuallyOnEnvBtn;
+	private Button contrastResetOnEnvBtn;
+	private Div contrastByManuallyOnEnvDiv;
+	private Doublespinner numberOfContrastOnEnvDS;
+	private Div contrastGridOnEnvDiv;
+	private Div genotypeByEnvDiv;
+	private Checkbox finlayWilkinsonModelCB;
+	private Checkbox shuklaModelCB;
+	private Checkbox ammiModelCB;
+	private Checkbox ggeModelCB;
 
 	// graphOptionTabpanel;
 	private Include includeGraphOptions;
-	private Listbox listbox;
-	private Checkbox boxplotCB;
-	private Checkbox histogramCB;
-	private Checkbox heatmapCB;
-	private Combobox fieldRowCBB;
-	private Combobox fieldColumnCBB;
-	private Checkbox diagnosticplotCB;
+	private Div singleEnvOnGraphDiv;
+	private Checkbox boxplotSingleEnvCB;
+	private Checkbox histogramSingleEnvCB;
+	private Checkbox diagnosticplotSingleEnvCB;
+	private Div acrossEnvOnGraphDiv;
+	private Checkbox boxplotAcrossEnvCB;
+	private Checkbox histogramAcrossEnvCB;
+	private Checkbox diagnosticplotAcrossEnvCB;
+	private Div multiplicativeModelOnGraphDiv;
+	private Checkbox responsePlotCB;
+	private Checkbox adaptationMapCB;
+	private Checkbox ammiBiplotCB;
+	private Checkbox ammiBiplotPC1VsPC2CB;
+	private Checkbox ammiBiplotPC1VsPC3CB;
+	private Checkbox ammiBiplotPC2VsPC3CB;
+	private Checkbox ggeBiplotSymmetricViewCB;
+	private Checkbox ggeBiplotEnvironmentViewCB;
+	private Checkbox ggeBiplotGenotypeViewCB;
 
 	// run button
 	private Button runBtn;
 
+	private RServeManager rServeManager;
+	private SSSLRserveManager ssslRServeManager;
 	private StudyManagerImpl studyManagerImpl;
 	private StudyDataSetManagerImpl studyDataSetManagerImpl;
 	private BrowseStudyManagerImpl browseStudyManagerImpl;
@@ -168,11 +186,12 @@ public class Specifications {
 	private String dataFileName;
 	private boolean isVariableDataVisible;
 	private List<String> lstTypeOfDesign;
+	private List<String> lstTypeOfEnv;
 	private SSSLAnalysisModel ssslAnalysisModel;
 	private List<String> lstVarNames;
 	private String resultRServe;
-	private List<String> columnList = new ArrayList<String>();
-	private List<String[]> dataList = new ArrayList<String[]>();
+	private List<String> columnList = new ArrayList<String>(); // column list from raw data
+	private List<String[]> dataList = new ArrayList<String[]>(); // raw data from selected data
 	private List<String> contrastColumnList = new ArrayList<String>();
 	private List<String[]> contrastDataList = new ArrayList<String[]>();
 	private int pageSize = 10;
@@ -188,7 +207,12 @@ public class Specifications {
 	private String fileName;
 	private File tempContrastFile;
 	private File uploadedContrastFile;
-	private String contrastFileName;
+	private String contrastFileNameOnGenotype;
+	private String contrastFileNameOnEnv;
+	
+	private List<String> lstVarInfo;
+	private int fileFormat = 1;
+	private String separator="NULL";
 
 	@AfterCompose
 	public void afterCompose(
@@ -230,6 +254,8 @@ public class Specifications {
 				.getFellow("modelSpecificationsTP");
 		this.otherOptionsTP = (Tabpanel) component.getFellow("otherOptionsTP");
 		this.graphOptionsTP = (Tabpanel) component.getFellow("graphOptionsTP");
+		this.lstTypeOfEnvCBB = (Combobox) component
+				.getFellow("lstTypeOfEnvCBB");
 		this.lstTypeOfDesignCBB = (Combobox) component
 				.getFellow("lstTypeOfDesignCBB");
 		this.includeVariableLst = (Include) component
@@ -256,10 +282,6 @@ public class Specifications {
 		this.envRow = (Row) this.includeVariableLst.getFellow("envRow");
 		this.addEnvBtn = (Image) this.includeVariableLst.getFellow("addEnvBtn");
 		this.envTB = (Textbox) this.includeVariableLst.getFellow("envTB");
-		this.envFixedCB = (Checkbox) this.includeVariableLst
-				.getFellow("envFixedCB");
-		this.envRandomCB = (Checkbox) this.includeVariableLst
-				.getFellow("envRandomCB");
 		this.blockRow = (Row) this.includeVariableLst.getFellow("blockRow");
 		this.addBlockBtn = (Image) this.includeVariableLst
 				.getFellow("addBlockBtn");
@@ -287,47 +309,80 @@ public class Specifications {
 				.getFellow("compareWithControlCB");
 		this.controlCBB = (Combobox) this.includeOtherOptions
 				.getFellow("controlCBB");
-		this.specifiedContrastDiv = (Div) this.includeOtherOptions
-				.getFellow("specifiedContrastDiv");
-		this.fileNameOfContrastLb = (Label) this.includeOtherOptions
-				.getFellow("fileNameOfContrastLb");
-		this.contrastFromFileBtn = (Button) this.includeOtherOptions
-				.getFellow("contrastFromFileBtn");
-		this.contrastByManuallyBtn = (Button) this.includeOtherOptions
-				.getFellow("contrastByManuallyBtn");
-		this.contrastResetBtn = (Button) this.includeOtherOptions
-				.getFellow("contrastResetBtn");
-		this.contrastByManuallyDiv = (Div) this.includeOtherOptions
-				.getFellow("contrastByManuallyDiv");
-		this.contrastVariableTB = (Textbox) this.includeOtherOptions
-				.getFellow("contrastVariableTB");
-		this.numberOfContrastDS = (Doublespinner) this.includeOtherOptions
-				.getFellow("numberOfContrastDS");
-		this.contrastGridDiv = (Div) this.includeOtherOptions
-				.getFellow("contrastGridDiv");
-		// this.includeContrast = (Include) this.includeOtherOptions
-		// .getFellow("includeContrast");
-		// this.contrastGrid = (Grid) this.includeContrast
-		// .getFellow("contrastGrid");
-		// this.contrastGridColumns = (Columns) this.includeContrast
-		// .getFellow("contrastGridColumns");
-		// this.contrastGridRows = (Rows) this.includeContrast
-		// .getFellow("contrastGridRows");
+		this.specifiedContrastOnGenotypeDiv = (Div) includeOtherOptions
+				.getFellow("specifiedContrastOnGenotypeDiv");
+		this.fileNameOfContrastOnGenotypeLb = (Label) includeOtherOptions
+				.getFellow("fileNameOfContrastOnGenotypeLb");
+		this.contrastFromFileOnGenotypeBtn = (Button) includeOtherOptions
+				.getFellow("contrastFromFileOnGenotypeBtn");
+		this.contrastByManuallyOnGenotypeBtn = (Button) includeOtherOptions
+				.getFellow("contrastByManuallyOnGenotypeBtn");
+		this.contrastResetOnGenotypeBtn = (Button) includeOtherOptions
+				.getFellow("contrastResetOnGenotypeBtn");
+		this.contrastByManuallyOnGenotypeDiv = (Div) includeOtherOptions
+				.getFellow("contrastByManuallyOnGenotypeDiv");
+		this.numberOfContrastOnGenotypeDS = (Doublespinner) includeOtherOptions
+				.getFellow("numberOfContrastOnGenotypeDS");
+		this.contrastGridOnGenotypeDiv = (Div) includeOtherOptions
+				.getFellow("contrastGridOnGenotypeDiv");
+		this.specifiedContrastOnEnvDiv = (Div) includeOtherOptions
+				.getFellow("specifiedContrastOnEnvDiv");
+		this.fileNameOfContrastOnEnvLb = (Label) includeOtherOptions
+				.getFellow("fileNameOfContrastOnEnvLb");
+		this.contrastFromFileOnEnvBtn = (Button) includeOtherOptions
+				.getFellow("contrastFromFileOnEnvBtn");
+		this.contrastResetOnEnvBtn = (Button) includeOtherOptions
+				.getFellow("contrastResetOnEnvBtn");
+		this.contrastByManuallyOnEnvDiv = (Div) includeOtherOptions
+				.getFellow("contrastByManuallyOnEnvDiv");
+		this.numberOfContrastOnEnvDS = (Doublespinner) includeOtherOptions
+				.getFellow("numberOfContrastOnEnvDS");
+		this.contrastGridOnEnvDiv = (Div) includeOtherOptions
+				.getFellow("contrastGridOnEnvDiv");
+		this.genotypeByEnvDiv = (Div) includeOtherOptions
+				.getFellow("genotypeByEnvDiv");
+		this.finlayWilkinsonModelCB = (Checkbox) includeOtherOptions
+				.getFellow("finlayWilkinsonModelCB");
+		this.shuklaModelCB = (Checkbox) includeOtherOptions
+				.getFellow("shuklaModelCB");
+		this.ammiModelCB = (Checkbox) includeOtherOptions
+				.getFellow("ammiModelCB");
+		this.ggeModelCB = (Checkbox) includeOtherOptions
+				.getFellow("ggeModelCB");
 		this.includeGraphOptions = (Include) component
 				.getFellow("includeGraphOptions");
-		this.listbox = (Listbox) this.includeGraphOptions.getFellow("listbox");
-		this.boxplotCB = (Checkbox) this.includeGraphOptions
-				.getFellow("boxplotCB");
-		this.histogramCB = (Checkbox) this.includeGraphOptions
-				.getFellow("histogramCB");
-		this.heatmapCB = (Checkbox) this.includeGraphOptions
-				.getFellow("heatmapCB");
-		this.fieldRowCBB = (Combobox) this.includeGraphOptions
-				.getFellow("fieldRowCBB");
-		this.fieldColumnCBB = (Combobox) this.includeGraphOptions
-				.getFellow("fieldColumnCBB");
-		this.diagnosticplotCB = (Checkbox) this.includeGraphOptions
-				.getFellow("diagnosticplotCB");
+		this.singleEnvOnGraphDiv = (Div) includeGraphOptions
+				.getFellow("singleEnvOnGraphDiv");
+		this.boxplotSingleEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("boxplotSingleEnvCB");
+		this.histogramSingleEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("histogramSingleEnvCB");
+		this.diagnosticplotSingleEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("diagnosticplotSingleEnvCB");
+		this.acrossEnvOnGraphDiv = (Div) includeGraphOptions
+				.getFellow("acrossEnvOnGraphDiv");
+		this.boxplotAcrossEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("boxplotAcrossEnvCB");
+		this.histogramAcrossEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("histogramAcrossEnvCB");
+		this.diagnosticplotAcrossEnvCB = (Checkbox) includeGraphOptions
+				.getFellow("diagnosticplotAcrossEnvCB");
+		this.multiplicativeModelOnGraphDiv = (Div) includeGraphOptions
+				.getFellow("multiplicativeModelOnGraphDiv");
+		this.ammiBiplotCB = (Checkbox) includeGraphOptions
+				.getFellow("ammiBiplotCB");
+		this.ammiBiplotPC1VsPC2CB = (Checkbox) includeGraphOptions
+				.getFellow("ammiBiplotPC1VsPC2CB");
+		this.ammiBiplotPC1VsPC3CB = (Checkbox) includeGraphOptions
+				.getFellow("ammiBiplotPC1VsPC3CB");
+		this.ammiBiplotPC2VsPC3CB = (Checkbox) includeGraphOptions
+				.getFellow("ammiBiplotPC2VsPC3CB");
+		this.ggeBiplotSymmetricViewCB = (Checkbox) includeGraphOptions
+				.getFellow("ggeBiplotSymmetricViewCB");
+		this.ggeBiplotEnvironmentViewCB = (Checkbox) includeGraphOptions
+				.getFellow("ggeBiplotEnvironmentViewCB");
+		this.ggeBiplotGenotypeViewCB = (Checkbox) includeGraphOptions
+				.getFellow("ggeBiplotGenotypeViewCB");
 		this.runBtn = (Button) component.getFellow("runBtn");
 
 	}
@@ -462,14 +517,14 @@ public class Specifications {
 				.getStreamData() : new ReaderInputStream(event.getMedia()
 				.getReaderData());
 		FileUtilities.uploadFile(tempFile.getAbsolutePath(), in);
-		BindUtils.postNotifyChange(null, null, this, "*");
-
-		uploadedFile = FileUtilities.getFileFromUpload(bindContext, view);
-		String filePath = userFileManager.uploadFileForAnalysis(fileName,
-				uploadedFile);
-
 		if (tempFile == null)
 			return;
+		BindUtils.postNotifyChange(null, null, this, "*");
+	
+//		uploadedFile = FileUtilities.getFileFromUpload(bindContext, view);
+		uploadedFile = tempFile;
+		String filePath = userFileManager.uploadFileForAnalysis(fileName,
+				uploadedFile);
 
 		isVariableDataVisible = true;
 		dataFileName = fileName;
@@ -479,8 +534,8 @@ public class Specifications {
 		BindUtils.postGlobalCommand(null, null,
 				"setSSSLAnalysisModelListvariables", args);
 
-		isVariableDataVisible = true;
-		dataFileName = fileName;
+//		isVariableDataVisible = true;
+//		dataFileName = fileName;
 		refreshCsv();
 		if (this.isUpdateMode)
 			isNewDataSet = true;
@@ -498,22 +553,22 @@ public class Specifications {
 
 		UploadEvent event = (UploadEvent) bindContext.getTriggerEvent();
 
-		contrastFileName = event.getMedia().getName();
-		System.out.println("contrast file name " + contrastFileName);
-		if (!contrastFileName.endsWith(".csv")) {
-			Messagebox.show("Error: File must be a text-based csv format",
-					"Upload Error", Messagebox.OK, Messagebox.ERROR);
-			return;
-		}
-
-		if (tempContrastFile == null) {
-			try {
-				tempContrastFile = File
-						.createTempFile(contrastFileName, ".tmp");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		// contrastFileName = event.getMedia().getName();
+		// System.out.println("contrast file name " + contrastFileName);
+		// if (!contrastFileName.endsWith(".csv")) {
+		// Messagebox.show("Error: File must be a text-based csv format",
+		// "Upload Error", Messagebox.OK, Messagebox.ERROR);
+		// return;
+		// }
+		//
+		// if (tempContrastFile == null) {
+		// try {
+		// tempContrastFile = File
+		// .createTempFile(contrastFileName, ".tmp");
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		// }
 
 		InputStream in = event.getMedia().isBinary() ? event.getMedia()
 				.getStreamData() : new ReaderInputStream(event.getMedia()
@@ -527,24 +582,24 @@ public class Specifications {
 
 		uploadedContrastFile = FileUtilities.getFileFromUpload(bindContext,
 				view);
-		String filePath = userFileManager.uploadFileForAnalysis(
-				contrastFileName, uploadedContrastFile);
+		// String filePath = userFileManager.uploadFileForAnalysis(
+		// contrastFileName, uploadedContrastFile);
 
 		if (tempContrastFile == null)
 			return;
 
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("contrastFilePath", filePath);
+		// args.put("contrastFilePath", filePath);
 		BindUtils.postGlobalCommand(null, null,
 				"setSSSLAnalysisModelListvariables", args);
 
 		refreshContrastCSV();
 
-		fileNameOfContrastLb.setVisible(true);
-		contrastFromFileBtn.setVisible(false);
-		contrastByManuallyBtn.setVisible(false);
-		contrastResetBtn.setVisible(true);
-		contrastByManuallyDiv.setVisible(false);
+		// fileNameOfContrastLb.setVisible(true);
+		// contrastFromFileBtn.setVisible(false);
+		// contrastByManuallyBtn.setVisible(false);
+		// contrastResetBtn.setVisible(true);
+		// contrastByManuallyDiv.setVisible(false);
 
 	}
 
@@ -589,17 +644,34 @@ public class Specifications {
 			rowRow.setVisible(true);
 			columnRow.setVisible(true);
 		}
+	}
 
-		// if (temp.equals("Row-Column") || temp.equals("Latinized Row-Column"))
-		// {
-		// if (!rowRow.isVisible())
-		// rowRow.setVisible(true);
-		// if (!columnRow.isVisible())
-		// columnRow.setVisible(true);
-		// } else {
-		// rowRow.setVisible(false);
-		// columnRow.setVisible(false);
-		// }
+	@NotifyChange("*")
+	@Command("updateEnvVariableList")
+	public void updateEnvVariableList(
+			@BindingParam("selectedIndex") Integer selectedIndex) {
+		String temp = lstTypeOfEnv.get(selectedIndex);
+		System.out.println("the selectedIndex is" + selectedIndex + ", name is " + temp);
+		switch (selectedIndex) {
+		case 0:
+			this.specifiedContrastOnEnvDiv.setVisible(true);
+			this.genotypeByEnvDiv.setVisible(true);
+			this.acrossEnvOnGraphDiv.setVisible(true);
+			this.multiplicativeModelOnGraphDiv.setVisible(true);
+			break;	
+		case 1:
+			this.specifiedContrastOnEnvDiv.setVisible(false);
+			this.genotypeByEnvDiv.setVisible(false);
+			this.acrossEnvOnGraphDiv.setVisible(false);
+			this.multiplicativeModelOnGraphDiv.setVisible(false);
+			break;
+		default:
+			this.specifiedContrastOnEnvDiv.setVisible(true);
+			this.genotypeByEnvDiv.setVisible(true);
+			this.acrossEnvOnGraphDiv.setVisible(true);
+			this.multiplicativeModelOnGraphDiv.setVisible(true);
+			break;
+		}
 	}
 
 	@Command
@@ -635,13 +707,20 @@ public class Specifications {
 	}
 
 	@NotifyChange("*")
-	@Command("manuallyInputContrast")
-	public void manuallyInputContrast() {
-		fileNameOfContrastLb.setVisible(false);
-		contrastFromFileBtn.setVisible(false);
-		contrastByManuallyBtn.setVisible(false);
-		contrastResetBtn.setVisible(true);
-		contrastByManuallyDiv.setVisible(true);
+	@Command("manuallyInputContrastOnGenotype")
+	public void manuallyInputContrastOnGenotype() {
+		// fileNameOfContrastLb.setVisible(false);
+		// contrastFromFileBtn.setVisible(false);
+		// contrastByManuallyBtn.setVisible(false);
+		// contrastResetBtn.setVisible(true);
+		// contrastByManuallyDiv.setVisible(true);
+	}
+	
+	@NotifyChange("*")
+	@Command("manuallyInputContrastOnEnv")
+	public void manuallyInputContrastOnEnv()
+	{
+		
 	}
 
 	@NotifyChange("*")
@@ -649,22 +728,22 @@ public class Specifications {
 	public void resetContrast() {
 
 		System.out.println("contrastGridReUpload " + contrastGridReUploaded);
-		System.out.println("contrad grid div children is "
-				+ contrastGridDiv.getChildren().isEmpty());
+		// System.out.println("contrad grid div children is "
+		// + contrastGridDiv.getChildren().isEmpty());
 
 		tempContrastFile = null;
 		contrastDataList.clear();
 		contrastColumnList.clear();
 		contrastGridReUploaded = false;
 
-		if (!contrastGridDiv.getChildren().isEmpty())
-			contrastGridDiv.getFirstChild().detach();
-
-		fileNameOfContrastLb.setVisible(false);
-		contrastFromFileBtn.setVisible(true);
-		contrastByManuallyBtn.setVisible(true);
-		contrastByManuallyDiv.setVisible(false);
-		contrastResetBtn.setVisible(false);
+		// if (!contrastGridDiv.getChildren().isEmpty())
+		// contrastGridDiv.getFirstChild().detach();
+		//
+		// fileNameOfContrastLb.setVisible(false);
+		// contrastFromFileBtn.setVisible(true);
+		// contrastByManuallyBtn.setVisible(true);
+		// contrastByManuallyDiv.setVisible(false);
+		// contrastResetBtn.setVisible(false);
 	}
 
 	@NotifyChange("*")
@@ -730,8 +809,10 @@ public class Specifications {
 	public void setSSSLAnalysisModelListvariables(
 			@BindingParam("filePath") String filepath) {
 		// ...
-		// ssslAnalysisModel.setDataFileName(filepath.replace("\\", "/"));
-		// rServeManager = new RServeManager();
+		 ssslAnalysisModel.setDataFileName(filepath.replace("\\", "/"));
+		 ssslRServeManager = new SSSLRserveManager();
+		 lstVarInfo = ssslRServeManager.getVariableInfo(filepath.replace("//", "/"), fileFormat, separator);
+//		 rServeManager = new RServeManager();
 		// varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"),
 		// fileFormat, separator);
 		//
@@ -746,76 +827,71 @@ public class Specifications {
 		// responseLb.setModel(responseModel);
 	}
 
-	@NotifyChange("*")
-	@Command("updateEnvOptions")
-	public void updateEnvOptions(@BindingParam("selected") Boolean isChecked,
-			@BindingParam("label") String label) {
-		System.out.println(label + " " + isChecked);
-		if (label.equals("Fixed")) {
-			if (isChecked) {
-				envFixedCB.setChecked(true);
-				envRandomCB.setChecked(false);
-			} else {
-				envFixedCB.setChecked(false);
-				envRandomCB.setChecked(true);
-			}
-		} else {
-			if (isChecked) {
-				envFixedCB.setChecked(false);
-				envRandomCB.setChecked(true);
-			} else {
-				envFixedCB.setChecked(true);
-				envRandomCB.setChecked(false);
-			}
-		}
-	}
-	
+	// @NotifyChange("*")
+	// @Command("updateEnvOptions")
+	// public void updateEnvOptions(@BindingParam("selected") Boolean isChecked,
+	// @BindingParam("label") String label) {
+	// System.out.println(label + " " + isChecked);
+	// if (label.equals("Fixed")) {
+	// if (isChecked) {
+	// envFixedCB.setChecked(true);
+	// envRandomCB.setChecked(false);
+	// } else {
+	// envFixedCB.setChecked(false);
+	// envRandomCB.setChecked(true);
+	// }
+	// } else {
+	// if (isChecked) {
+	// envFixedCB.setChecked(false);
+	// envRandomCB.setChecked(true);
+	// } else {
+	// envFixedCB.setChecked(true);
+	// envRandomCB.setChecked(false);
+	// }
+	// }
+	// }
+
 	@NotifyChange("*")
 	@Command("updateContrastGridManually")
-	public void updataContrastGridManually()
-	{
-		if(!contrastColumnList.isEmpty())
+	public void updataContrastGridManually() {
+		if (!contrastColumnList.isEmpty())
 			contrastColumnList.clear();
-		if(!contrastDataList.isEmpty())
+		if (!contrastDataList.isEmpty())
 			contrastDataList.clear();
-		
+
 	}
-	
+
 	@NotifyChange("*")
 	@Command("addResponse")
-	public void addResponse()
-	{
-		
+	public void addResponse() {
+
 	}
-	
+
 	@NotifyChange("*")
 	@Command("removeResponse")
-	public void removeResponse()
-	{
-		
+	public void removeResponse() {
+
 	}
-	
+
 	@NotifyChange("*")
 	@Command("toNumeric")
-	public void toNumeric()
-	{
-		
+	public void toNumeric() {
+
 	}
-	
+
 	@NotifyChange("*")
 	@Command("toFactor")
-	public void toFactor()
-	{
-		
+	public void toFactor() {
+
 	}
-	
+
 	@NotifyChange("*")
 	@Command("chooseVariable")
-	public void chooseVariable(@BindingParam("varTextBox") Textbox varTextBox, @BindingParam("imgButton")Image imgButton)
-	{
-		
+	public void chooseVariable(@BindingParam("varTextBox") Textbox varTextBox,
+			@BindingParam("imgButton") Image imgButton) {
+
 	}
-	
+
 	public void reloadCsvGrid() {
 		if (gridReUploaded) {
 			gridReUploaded = false;
@@ -834,11 +910,11 @@ public class Specifications {
 			contrastGridReUploaded = false;
 			return;
 		}
-		if (!contrastGridDiv.getChildren().isEmpty())
-			contrastGridDiv.getFirstChild().detach();
+		// if (!contrastGridDiv.getChildren().isEmpty())
+		// contrastGridDiv.getFirstChild().detach();
 		Include incContrastCSVData = new Include();
 		incContrastCSVData.setSrc("/user/analysis/sssl/contrast.zul");
-		incContrastCSVData.setParent(contrastGridDiv);
+		// incContrastCSVData.setParent(contrastGridDiv);
 		contrastGridReUploaded = true;
 	}
 
@@ -944,6 +1020,15 @@ public class Specifications {
 		return lstTypeOfDesign;
 	}
 
+	public List<String> getLstTypeOfEnv() {
+		if (lstTypeOfEnv == null)
+			lstTypeOfEnv = new ArrayList<String>();
+		lstTypeOfEnv.clear();
+		lstTypeOfEnv.add("Multi-Environment");
+		lstTypeOfEnv.add("Single Environment");
+		return lstTypeOfEnv;
+	}
+
 	public void setLstTypeOfDesign(List<String> lstTypeOfDesign) {
 		this.lstTypeOfDesign = lstTypeOfDesign;
 	}
@@ -987,7 +1072,7 @@ public class Specifications {
 	public void setContrastColumnList(List<String> contrastColumnList) {
 		this.contrastColumnList = contrastColumnList;
 	}
-	
+
 	public List<String[]> getDataList() {
 		System.out.println("DaALIST GEt");
 		reloadCsvGrid();
@@ -1006,13 +1091,13 @@ public class Specifications {
 	public void setDataList(List<String[]> dataList) {
 		this.dataList = dataList;
 	}
-	
-	public List<List> getContrastDataList(){
-//	public List<String[]> getContrastDataList() {
+
+	public List<List> getContrastDataList() {
+		// public List<String[]> getContrastDataList() {
 		System.out.println("Contrast Data Get");
-//		reloadContrastCSVGrid();
-//		if (true)
-//			return contrastDataList;
+		// reloadContrastCSVGrid();
+		// if (true)
+		// return contrastDataList;
 		/*
 		 * ArrayList<String[]> pageData = new ArrayList<String[]>(); for (int i
 		 * = activePage * pageSize; i < activePage * pageSize + pageSize; i++) {
@@ -1022,20 +1107,19 @@ public class Specifications {
 		 * return pageData;
 		 */
 		ArrayList<List> outer = new ArrayList<List>();
-		for(int i = 0; i < contrastDataList.size(); i++)
-		{
+		for (int i = 0; i < contrastDataList.size(); i++) {
 			String[] temp = contrastDataList.get(i);
-//			System.out.println("Row " + i + " on contrast data list : " + temp);
+			// System.out.println("Row " + i + " on contrast data list : " +
+			// temp);
 			ArrayList<String> inner = new ArrayList<String>();
-			for(int j = 0; j < temp.length; j++)
-			{
-//				System.out.println(temp[j]);
+			for (int j = 0; j < temp.length; j++) {
+				// System.out.println(temp[j]);
 				inner.add(temp[j]);
 			}
 			outer.add(inner);
 		}
-//		System.out.println("Outer size " + outer.size());
-//		return contrastDataList;
+		// System.out.println("Outer size " + outer.size());
+		// return contrastDataList;
 		return outer;
 	}
 
@@ -1106,13 +1190,20 @@ public class Specifications {
 		this.fileName = fileName;
 	}
 
-	public String getContrastFileName() {
-		return contrastFileName;
+	public String getContrastFileNameOnGenotype() {
+		return contrastFileNameOnGenotype;
 	}
 
-	public void setContrastFileName(String contrastFileName) {
-		this.contrastFileName = contrastFileName;
+	public void setContrastFileNameOnGenotype(String contrastFileNameOnGenotype) {
+		this.contrastFileNameOnGenotype = contrastFileNameOnGenotype;
 	}
 
+	public String getContrastFileNameOnEnv() {
+		return contrastFileNameOnEnv;
+	}
+
+	public void setContrastFileNameOnEnv(String contrastFileNameOnEnv) {
+		this.contrastFileNameOnEnv = contrastFileNameOnEnv;
+	}
 
 }

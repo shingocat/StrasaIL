@@ -6,46 +6,81 @@
 		</listhead>
 		<listitem>
 			<listcell>
-				<checkbox id="boxplotCB" label="Boxplot of the raw data" />
+				<!-- <checkbox id="boxplotCB" label="Boxplot of the raw data" /> -->
+				<div id="singleEnvOnGraphDiv">
+					<groupbox>
+						<caption>Single Environment</caption>
+						<vlayout>
+							<checkbox id="boxplotSingleEnvCB" label="Boxplot"></checkbox>
+							<checkbox id="histogramSingleEnvCB" label="Histogram"></checkbox>
+							<checkbox id="diagnosticplotSingleEnvCB" label="Diagnostic Plots"></checkbox>
+						</vlayout>
+					</groupbox>
+				</div>
 			</listcell>
 		</listitem>
 		<listitem>
 			<listcell>
-				<checkbox id="histogramCB" label="Histogram of the raw data" />
+				<div id="acrossEnvOnGraphDiv">
+					<groupbox>
+						<caption>Across Environment</caption>
+						<vlayout>
+							<checkbox id="boxplotAcrossEnvCB" label="Boxplot"></checkbox>
+							<checkbox id="histogramAcrossEnvCB" label="Histogram"></checkbox>
+							<checkbox id="diagnosticplotAcrossEnvCB" label="Diagnostic Plots"></checkbox>
+						</vlayout>
+					</groupbox>
+				</div>
 			</listcell>
 		</listitem>
 		<listitem>
 			<listcell>
-
-				<vbox>
-					<checkbox id="heatmapCB" label="Heatmap of the residuals" />
-					<hbox>
-						<space spacing="20px" />
-						<label value="Field row variable:" />
-						<combobox id="fieldRowCBB" model="@load(vm.lstVarNames)"
-							readonly="true">
-							<template name="model">
-								<comboitem value="@load(each)" label="@load(each)" />
-							</template>
-						</combobox>
-					</hbox>
-					<hbox>
-						<space spacing="20px" />
-						<label value="Field column variable:" />
-						<combobox id="fieldColumnCBB" model="@load(vm.lstVarNames)"
-							readonly="true">
-							<template name="model">
-								<comboitem value="@load(each)" label="@load(each)" />
-							</template>
-						</combobox>
-					</hbox>
-				</vbox>
+				<div id="multiplicativeModelOnGraphDiv">
+					<groupbox>
+						<caption>Multiplicative Models</caption>
+						<vlayout>
+							<checkbox id="responsePlotCB" label="Response Plots" />
+							<checkbox id="adaptationMapCB" label="Adaptation Map" />
+							<groupbox>
+								<caption>AMMI</caption>
+								<hlayout spacing="20px">
+									<checkbox id="ammiBiplotCB" label="AMMI1 Biplot"></checkbox>
+									<checkbox id="ammiBiplotPC1VsPC2CB" label="AMMI Biplot-PC1 vs. PC2" />
+									<checkbox id="ammiBiplotPC1VsPC3CB" label="AMMI Biplot-PC1 vs. PC3" />
+									<checkbox id="ammiBiplotPC2VsPC3CB" label="AMMI Biplot-PC2 vs. PC3" />
+								</hlayout>
+							</groupbox>
+							<groupbox>
+								<caption>GGE</caption>
+								<hlayout spacing="20px">
+									<checkbox id="ggeBiplotSymmetricViewCB" label="GGE Biplot-Symmetric View"></checkbox>
+									<checkbox id="ggeBiplotEnvironmentViewCB" label="GGE Biplot-Environment View"></checkbox>
+									<checkbox id="ggeBiplotGenotypeViewCB" label="GGE Biplot-Genotype View"></checkbox>
+								</hlayout>
+							</groupbox>
+						</vlayout>
+					</groupbox>
+				</div>
 			</listcell>
 		</listitem>
 		<listitem>
 			<listcell>
-				<checkbox id="diagnosticplotCB" label="Diagnostic plots" />
+				<!-- <checkbox id="histogramCB" label="Histogram of the raw data" /> -->
 			</listcell>
+		</listitem>
+		<listitem>
+			<!-- <listcell> <vbox> <checkbox id="heatmapCB" label="Heatmap of the 
+				residuals" /> <hbox> <space spacing="20px" /> <label value="Field row variable:" 
+				/> <combobox id="fieldRowCBB" model="@load(vm.lstVarNames)" readonly="true"> 
+				<template name="model"> <comboitem value="@load(each)" label="@load(each)" 
+				/> </template> </combobox> </hbox> <hbox> <space spacing="20px" /> <label 
+				value="Field column variable:" /> <combobox id="fieldColumnCBB" model="@load(vm.lstVarNames)" 
+				readonly="true"> <template name="model"> <comboitem value="@load(each)" label="@load(each)" 
+				/> </template> </combobox> </hbox> </vbox> </listcell> -->
+		</listitem>
+		<listitem>
+			<!-- <listcell> <checkbox id="diagnosticplotCB" label="Diagnostic plots" 
+				/> </listcell> -->
 		</listitem>
 	</listbox>
 </zk>
