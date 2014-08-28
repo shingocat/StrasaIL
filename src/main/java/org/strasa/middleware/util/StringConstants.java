@@ -11,10 +11,28 @@
  */
 package org.strasa.middleware.util;
 
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Sessions;
+
 // This value in this class is used to define Key for HashMap
 // 
 public class StringConstants
 {
+	
+//	For system value string
+	public static final String BSLASH = "\\";
+	public static final String FSLASH = "/";
+	public static final String SYSTEM_FILE_SEPARATOR = System.getProperty("file.separator");
+	public static final String SYSTEM_NAME = System.getProperty("os.name");
+	public static final String ANALYSIS_OUTPUTFOLDER_PATH = (Sessions.getCurrent().getWebApp()
+			.getRealPath("resultanalysis")
+			+ System.getProperty("file.separator")).replace(BSLASH, FSLASH);
+	public static final String DATA_PATH = System.getProperty("user.dir")
+			+ System.getProperty("file.separator") + "sample_datasets"
+			+ System.getProperty("file.separator");
+	public static final String ROOT_PATH = Executions.getCurrent().getDesktop()
+			.getWebApp().getRealPath("/WebContent");
+	
 //	all string value below is for segment table
 	public static final String CHROMOSOME = "CHROMOSOME";
 	public static final String RECURRENT_PARENT = "RECURRENT_PARENT";
@@ -30,6 +48,7 @@ public class StringConstants
 	public static final String PHYSICAL_END = "PHYSICAL_END";
 	public static final String SEGMENT_ID = "SEGMENT_ID";
 	public static final String SEGMENT_DESCRIPTION = "SEGMENT_DESCRIPTION";
+	
 	
 }
 

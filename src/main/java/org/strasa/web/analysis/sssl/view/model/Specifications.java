@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.analysis.rserve.manager.RServeManager;
 import org.analysis.rserve.manager.SSSLRserveManager;
@@ -23,6 +24,7 @@ import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.model.Study;
 import org.strasa.middleware.model.StudyDataColumn;
 import org.strasa.middleware.model.StudyDataSet;
+import org.strasa.middleware.util.StringConstants;
 import org.strasa.web.analysis.view.model.SSSLAnalysisModel;
 import org.strasa.web.utilities.AnalysisUtils;
 import org.strasa.web.utilities.FileUtilities;
@@ -34,21 +36,27 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Column;
 import org.zkoss.zul.Columns;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Doublespinner;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Groupbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Include;
+import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
@@ -61,12 +69,19 @@ import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Tabpanels;
 import org.zkoss.zul.Tabs;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.impl.InputElement;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class Specifications {
 
 	private Component component;
+	private Grid gridManuallyOnGenotype;
+	private Grid gridManuallyOnEnv;
+	private Columns columnsManuallyOnGenotype;
+	private Columns columnsManuallyOnEnv;
+	private Rows rowsManuallyOnGenotype;
+	private Rows rowsManuallyOnEnv;
 	// select data component;
 	private Div SSSLSpecificationsWindow;
 	private Combobox studiesCombobox;
@@ -125,6 +140,7 @@ public class Specifications {
 	private Include includeOtherOptions;
 	private Checkbox descriptiveStatCB;
 	private Checkbox varComponentCB;
+	private Doublebox alphaLevelDB;
 	private Checkbox compareWithControlCB;
 	private Combobox controlCBB;
 	private Div specifiedContrastOnGenotypeDiv;
@@ -160,12 +176,14 @@ public class Specifications {
 	private Checkbox histogramAcrossEnvCB;
 	private Checkbox diagnosticplotAcrossEnvCB;
 	private Div multiplicativeModelOnGraphDiv;
+	private Div ammiGraphicOptionsDiv;
 	private Checkbox responsePlotCB;
 	private Checkbox adaptationMapCB;
 	private Checkbox ammiBiplotCB;
 	private Checkbox ammiBiplotPC1VsPC2CB;
 	private Checkbox ammiBiplotPC1VsPC3CB;
 	private Checkbox ammiBiplotPC2VsPC3CB;
+	private Div ggeGraphicOptionsDiv;
 	private Checkbox ggeBiplotSymmetricViewCB;
 	private Checkbox ggeBiplotEnvironmentViewCB;
 	private Checkbox ggeBiplotGenotypeViewCB;
@@ -186,14 +204,51 @@ public class Specifications {
 	private String dataFileName;
 	private boolean isVariableDataVisible;
 	private List<String> lstTypeOfDesign;
-	private List<String> lstTypeOfEnv;
+	private List<String> lstTypeOfAnalysisEnv;
+	private String designType;
+	private String analysisEnvType;
 	private SSSLAnalysisModel ssslAnalysisModel;
-	private List<String> lstVarNames;
 	private String resultRServe;
-	private List<String> columnList = new ArrayList<String>(); // column list from raw data
-	private List<String[]> dataList = new ArrayList<String[]>(); // raw data from selected data
+	private List<String> columnList = new ArrayList<String>(); // column list
+																// from raw data
+	private List<String[]> dataList = new ArrayList<String[]>(); // raw data
+																	// from
+																	// selected
+																	// data
 	private List<String> contrastColumnList = new ArrayList<String>();
 	private List<String[]> contrastDataList = new ArrayList<String[]>();
+	private List<String> contrastColumnListOnGenotype = new ArrayList<String>(); // for
+																					// storing
+																					// column
+																					// name
+																					// of
+																					// contrast
+																					// file
+																					// column
+																					// on
+																					// genotype
+	private List<String[]> contrastDataListOnGenotype = new ArrayList<String[]>(); // storing
+																					// data
+																					// of
+																					// contrast
+																					// file
+																					// on
+																					// genotype
+	private List<String> contrastColumnListOnEnv = new ArrayList<String>(); // storing
+																			// column
+																			// name
+																			// of
+																			// contrast
+																			// file
+																			// on
+																			// env;
+	private List<String[]> contrastDataListOnEnv = new ArrayList<String[]>(); // storing
+																				// data
+																				// of
+																				// contrast
+																				// file
+																				// on
+																				// env;
 	private int pageSize = 10;
 	private int activePage = 0;
 	private boolean isDataReUploaded = false;
@@ -207,12 +262,36 @@ public class Specifications {
 	private String fileName;
 	private File tempContrastFile;
 	private File uploadedContrastFile;
+	private File uploadedContrastFileOnGenotype;
+	private File uploadedContrastFileOnEnv;
 	private String contrastFileNameOnGenotype;
 	private String contrastFileNameOnEnv;
-	
+
 	private List<String> lstVarInfo;
+	private List<String> lstVarNames;
 	private int fileFormat = 1;
-	private String separator="NULL";
+	private String separator = "NULL";
+
+	private ListModelList<String> numericModel;
+	private ListModelList<String> responseModel;
+	private ListModelList<String> factorModel;
+	private ListModelList<String> genotypeLevelsModel;
+
+	private List<String> respvars = new ArrayList<String>();
+	private String[] environmentLevels;
+	private String[] genotypeLevels;
+
+	private String errorMessage;
+
+	private Double alphalevel;
+
+	@Init
+	public void init() {
+		setAnalysisEnvType("Multi-Environment");
+		setDesignType("Randomized Complete Block(RCB)");
+		setAlphalevel(0.05);
+//		this.singleEnvOnGraphDiv.setVisible(false);
+	}
 
 	@AfterCompose
 	public void afterCompose(
@@ -255,7 +334,7 @@ public class Specifications {
 		this.otherOptionsTP = (Tabpanel) component.getFellow("otherOptionsTP");
 		this.graphOptionsTP = (Tabpanel) component.getFellow("graphOptionsTP");
 		this.lstTypeOfEnvCBB = (Combobox) component
-				.getFellow("lstTypeOfEnvCBB");
+				.getFellow("lstTypeOfAnalysisEnvCBB");
 		this.lstTypeOfDesignCBB = (Combobox) component
 				.getFellow("lstTypeOfDesignCBB");
 		this.includeVariableLst = (Include) component
@@ -305,6 +384,8 @@ public class Specifications {
 				.getFellow("descriptiveStatCB");
 		this.varComponentCB = (Checkbox) this.includeOtherOptions
 				.getFellow("varComponentCB");
+		this.alphaLevelDB = (Doublebox) this.includeOtherOptions
+				.getFellow("alphaLevelDB");
 		this.compareWithControlCB = (Checkbox) this.includeOtherOptions
 				.getFellow("compareWithControlCB");
 		this.controlCBB = (Combobox) this.includeOtherOptions
@@ -331,6 +412,8 @@ public class Specifications {
 				.getFellow("fileNameOfContrastOnEnvLb");
 		this.contrastFromFileOnEnvBtn = (Button) includeOtherOptions
 				.getFellow("contrastFromFileOnEnvBtn");
+		this.contrastByManuallyOnEnvBtn = (Button) includeOtherOptions
+				.getFellow("contrastByManuallyOnEnvBtn");
 		this.contrastResetOnEnvBtn = (Button) includeOtherOptions
 				.getFellow("contrastResetOnEnvBtn");
 		this.contrastByManuallyOnEnvDiv = (Div) includeOtherOptions
@@ -369,6 +452,11 @@ public class Specifications {
 				.getFellow("diagnosticplotAcrossEnvCB");
 		this.multiplicativeModelOnGraphDiv = (Div) includeGraphOptions
 				.getFellow("multiplicativeModelOnGraphDiv");
+		this.ammiGraphicOptionsDiv = (Div) includeGraphOptions.getFellow("ammiGraphicOptionsDiv");
+		this.responsePlotCB = (Checkbox) includeGraphOptions
+				.getFellow("responsePlotCB");
+		this.adaptationMapCB = (Checkbox) includeGraphOptions
+				.getFellow("adaptationMapCB");
 		this.ammiBiplotCB = (Checkbox) includeGraphOptions
 				.getFellow("ammiBiplotCB");
 		this.ammiBiplotPC1VsPC2CB = (Checkbox) includeGraphOptions
@@ -377,6 +465,7 @@ public class Specifications {
 				.getFellow("ammiBiplotPC1VsPC3CB");
 		this.ammiBiplotPC2VsPC3CB = (Checkbox) includeGraphOptions
 				.getFellow("ammiBiplotPC2VsPC3CB");
+		this.ggeGraphicOptionsDiv = (Div) includeGraphOptions.getFellow("ggeGraphicOptionsDiv");
 		this.ggeBiplotSymmetricViewCB = (Checkbox) includeGraphOptions
 				.getFellow("ggeBiplotSymmetricViewCB");
 		this.ggeBiplotEnvironmentViewCB = (Checkbox) includeGraphOptions
@@ -520,8 +609,8 @@ public class Specifications {
 		if (tempFile == null)
 			return;
 		BindUtils.postNotifyChange(null, null, this, "*");
-	
-//		uploadedFile = FileUtilities.getFileFromUpload(bindContext, view);
+
+		// uploadedFile = FileUtilities.getFileFromUpload(bindContext, view);
 		uploadedFile = tempFile;
 		String filePath = userFileManager.uploadFileForAnalysis(fileName,
 				uploadedFile);
@@ -534,8 +623,8 @@ public class Specifications {
 		BindUtils.postGlobalCommand(null, null,
 				"setSSSLAnalysisModelListvariables", args);
 
-//		isVariableDataVisible = true;
-//		dataFileName = fileName;
+		// isVariableDataVisible = true;
+		// dataFileName = fileName;
 		refreshCsv();
 		if (this.isUpdateMode)
 			isNewDataSet = true;
@@ -604,79 +693,186 @@ public class Specifications {
 	}
 
 	@NotifyChange("*")
+	@Command("uploadContrastFromFileOnGenotype")
+	public void uploadContrastFromFileOnGenotype(
+			@ContextParam(ContextType.BIND_CONTEXT) BindContext bindContext,
+			@ContextParam(ContextType.VIEW) Component view) {
+		if (genotypeTB.getValue().length() == 0) {
+			Messagebox
+					.show("Error: Please fill up genotype factor on Model Specifications Tab!",
+							"Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+
+		UploadEvent event = (UploadEvent) bindContext.getTriggerEvent();
+		this.contrastFileNameOnGenotype = event.getMedia().getName();
+		if (!this.contrastFileNameOnGenotype.endsWith(".csv")) {
+			Messagebox.show("Error: File must be a text-based csv format",
+					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		this.uploadedContrastFileOnGenotype = FileUtilities.getFileFromUpload(
+				bindContext, view);
+		ssslAnalysisModel
+				.setGenotypeContrastFile(this.uploadedContrastFileOnGenotype
+						.getAbsolutePath());
+		refreshContrastCSVOnGenotype();
+		this.fileNameOfContrastOnGenotypeLb.setVisible(true);
+		this.contrastFromFileOnGenotypeBtn.setVisible(false);
+		this.contrastByManuallyOnGenotypeBtn.setVisible(false);
+		this.contrastByManuallyOnGenotypeDiv.setVisible(false);
+		this.contrastResetOnGenotypeBtn.setVisible(true);
+	}
+
+	@NotifyChange("*")
+	@Command("uploadContrastFromFileOnEnv")
+	public void uploadContrastFromFileOnEnv(
+			@ContextParam(ContextType.BIND_CONTEXT) BindContext bindContext,
+			@ContextParam(ContextType.VIEW) Component view) {
+		if (envTB.getValue().length() == 0) {
+			Messagebox
+					.show("Error, Please fill up environment factor on Model Specifications Tab",
+							"Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		UploadEvent event = (UploadEvent) bindContext.getTriggerEvent();
+		this.contrastFileNameOnEnv = event.getMedia().getName();
+		if (!this.contrastFileNameOnEnv.endsWith(".csv")) {
+			Messagebox.show("Error: File must be a text-based csv format",
+					"Upload Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		this.uploadedContrastFileOnEnv = FileUtilities.getFileFromUpload(
+				bindContext, view);
+		ssslAnalysisModel.setEnvContrastFile(this.uploadedContrastFileOnEnv
+				.getAbsolutePath());
+		refreshContrastCSVOnEnv();
+		this.fileNameOfContrastOnEnvLb.setVisible(true);
+		this.contrastFromFileOnEnvBtn.setVisible(false);
+		this.contrastByManuallyOnEnvBtn.setVisible(false);
+		this.contrastByManuallyOnEnvDiv.setVisible(false);
+		this.contrastResetOnEnvBtn.setVisible(true);
+	}
+
+	@NotifyChange("*")
 	@Command("updateVariableList")
 	public void updateVariableList(
 			@BindingParam("selectedIndex") Integer selectedIndex) {
-		String temp = lstTypeOfDesign.get(selectedIndex);
-		if (temp.equals(lstTypeOfDesign.get(0))) {
+		System.out.println("Experiment design is " + this.designType);
+		if (designType.equals(lstTypeOfDesign.get(0))) {
 			blockRow.setVisible(true);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
-		} else if (temp.equals(lstTypeOfDesign.get(1))) {
+			this.ssslAnalysisModel.setDesign(0);
+		} else if (designType.equals(lstTypeOfDesign.get(1))) {
 			blockRow.setVisible(true);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
-		} else if (temp.equals(lstTypeOfDesign.get(2))) {
+			this.ssslAnalysisModel.setDesign(1);
+		} else if (designType.equals(lstTypeOfDesign.get(2))) {
 			blockRow.setVisible(false);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(true);
 			columnRow.setVisible(true);
-		} else if (temp.equals(lstTypeOfDesign.get(3))) {
+			this.ssslAnalysisModel.setDesign(2);
+		} else if (designType.equals(lstTypeOfDesign.get(3))) {
 			blockRow.setVisible(true);
 			replicateRow.setVisible(true);
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
-		} else if (temp.equals(lstTypeOfDesign.get(4))) {
+			this.ssslAnalysisModel.setDesign(3);
+		} else if (designType.equals(lstTypeOfDesign.get(4))) {
 			blockRow.setVisible(true);
 			replicateRow.setVisible(false);
 			rowRow.setVisible(true);
 			columnRow.setVisible(true);
-		} else if (temp.equals(lstTypeOfDesign.get(5))) {
+			this.ssslAnalysisModel.setDesign(4);
+		} else if (designType.equals(lstTypeOfDesign.get(5))) {
 			blockRow.setVisible(true);
 			replicateRow.setVisible(true);
 			rowRow.setVisible(false);
 			columnRow.setVisible(false);
-		} else if (temp.equals(lstTypeOfDesign.get(6))) {
+			this.ssslAnalysisModel.setDesign(5);
+		} else if (designType.equals(lstTypeOfDesign.get(6))) {
 			blockRow.setVisible(false);
 			replicateRow.setVisible(true);
 			rowRow.setVisible(true);
 			columnRow.setVisible(true);
+			this.ssslAnalysisModel.setDesign(6);
 		}
+		// String temp = lstTypeOfDesign.get(selectedIndex);
+		// if (temp.equals(lstTypeOfDesign.get(0))) {
+		// blockRow.setVisible(true);
+		// replicateRow.setVisible(false);
+		// rowRow.setVisible(false);
+		// columnRow.setVisible(false);
+		// } else if (temp.equals(lstTypeOfDesign.get(1))) {
+		// blockRow.setVisible(true);
+		// replicateRow.setVisible(false);
+		// rowRow.setVisible(false);
+		// columnRow.setVisible(false);
+		// } else if (temp.equals(lstTypeOfDesign.get(2))) {
+		// blockRow.setVisible(false);
+		// replicateRow.setVisible(false);
+		// rowRow.setVisible(true);
+		// columnRow.setVisible(true);
+		// } else if (temp.equals(lstTypeOfDesign.get(3))) {
+		// blockRow.setVisible(true);
+		// replicateRow.setVisible(true);
+		// rowRow.setVisible(false);
+		// columnRow.setVisible(false);
+		// } else if (temp.equals(lstTypeOfDesign.get(4))) {
+		// blockRow.setVisible(true);
+		// replicateRow.setVisible(false);
+		// rowRow.setVisible(true);
+		// columnRow.setVisible(true);
+		// } else if (temp.equals(lstTypeOfDesign.get(5))) {
+		// blockRow.setVisible(true);
+		// replicateRow.setVisible(true);
+		// rowRow.setVisible(false);
+		// columnRow.setVisible(false);
+		// } else if (temp.equals(lstTypeOfDesign.get(6))) {
+		// blockRow.setVisible(false);
+		// replicateRow.setVisible(true);
+		// rowRow.setVisible(true);
+		// columnRow.setVisible(true);
+		// }
 	}
 
 	@NotifyChange("*")
 	@Command("updateEnvVariableList")
 	public void updateEnvVariableList(
 			@BindingParam("selectedIndex") Integer selectedIndex) {
-		String temp = lstTypeOfEnv.get(selectedIndex);
-		System.out.println("the selectedIndex is" + selectedIndex + ", name is " + temp);
-		switch (selectedIndex) {
-		case 0:
+		System.out.println("Experiment analysis environment type is "
+				+ analysisEnvType);
+		this.ssslAnalysisModel.setAnalysisEnvType(analysisEnvType);
+		if (analysisEnvType.equals(lstTypeOfAnalysisEnv.get(0))) {
 			this.specifiedContrastOnEnvDiv.setVisible(true);
 			this.genotypeByEnvDiv.setVisible(true);
+			this.singleEnvOnGraphDiv.setVisible(false);
 			this.acrossEnvOnGraphDiv.setVisible(true);
 			this.multiplicativeModelOnGraphDiv.setVisible(true);
-			break;	
-		case 1:
+		} else if (analysisEnvType.equals(lstTypeOfAnalysisEnv.get(1))) {
 			this.specifiedContrastOnEnvDiv.setVisible(false);
 			this.genotypeByEnvDiv.setVisible(false);
+			this.singleEnvOnGraphDiv.setVisible(true);
 			this.acrossEnvOnGraphDiv.setVisible(false);
 			this.multiplicativeModelOnGraphDiv.setVisible(false);
-			break;
-		default:
-			this.specifiedContrastOnEnvDiv.setVisible(true);
-			this.genotypeByEnvDiv.setVisible(true);
-			this.acrossEnvOnGraphDiv.setVisible(true);
-			this.multiplicativeModelOnGraphDiv.setVisible(true);
-			break;
 		}
 	}
 
 	@Command
 	public void validateSSSLAnalysisInputs() {
-
+		if (validateSSSLAanalysisModel()) {
+			System.out.println("pasing variables");
+			Map<String, Object> args = new HashMap<String, Object>();
+			args.put("ssslModel", this.ssslAnalysisModel);
+			BindUtils.postGlobalCommand(null, null, "displaySSSLResult", args);
+		} else {
+			Messagebox.show(errorMessage);
+		}
 	}
 
 	@GlobalCommand
@@ -695,9 +891,17 @@ public class Specifications {
 		// }
 	}
 
-	@GlobalCommand
+	@Command("isCompareWithControlCBChecked")
 	@NotifyChange("*")
 	public void isCompareWithControlCBChecked() {
+		if (genotypeTB.getValue().length() == 0) {
+			Messagebox
+					.show("Error: Please fill up genotype factor on Model Specifications Tab!",
+							"Error", Messagebox.OK, Messagebox.ERROR);
+			compareWithControlCB.setChecked(false);
+			return;
+		}
+
 		if (compareWithControlCB.isChecked()) {
 			controlCBB.setVisible(true);
 			controlCBB.setDisabled(false);
@@ -709,18 +913,102 @@ public class Specifications {
 	@NotifyChange("*")
 	@Command("manuallyInputContrastOnGenotype")
 	public void manuallyInputContrastOnGenotype() {
-		// fileNameOfContrastLb.setVisible(false);
-		// contrastFromFileBtn.setVisible(false);
-		// contrastByManuallyBtn.setVisible(false);
-		// contrastResetBtn.setVisible(true);
-		// contrastByManuallyDiv.setVisible(true);
+		if (genotypeTB.getValue().length() == 0) {
+			Messagebox
+					.show("Error: Please fill up genotype factor on Model Specifications Tab!",
+							"Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+
+		if (!this.contrastGridOnGenotypeDiv.getChildren().isEmpty()) {
+			contrastGridOnGenotypeDiv.getFirstChild().detach();
+		}
+
+		gridManuallyOnGenotype = new Grid();
+		gridManuallyOnGenotype.setId("contrastGridByManuallyOnGenotype");
+		gridManuallyOnGenotype.setStyle("overflow:auto;");
+		gridManuallyOnGenotype.setHeight("300px");
+		gridManuallyOnGenotype.setVisible(true);
+		gridManuallyOnGenotype.setSizedByContent(true);
+		gridManuallyOnGenotype.setEmptyMessage("No data loaded...");
+
+		columnsManuallyOnGenotype = new Columns();
+		columnsManuallyOnGenotype.setParent(gridManuallyOnGenotype);
+		columnsManuallyOnGenotype.setVisible(true);
+
+		Column column = new Column();
+		column.setLabel("Label");
+		column.setHflex("1");
+		column.setParent(columnsManuallyOnGenotype);
+
+		for (int i = 0; i < this.genotypeLevels.length; i++) {
+			Column genLabel = new Column();
+			genLabel.setHflex("1");
+			genLabel.setLabel(genotypeLevels[i]);
+			genLabel.setParent(columnsManuallyOnGenotype);
+		}
+
+		rowsManuallyOnGenotype = new Rows();
+		rowsManuallyOnGenotype.setParent(gridManuallyOnGenotype);
+		rowsManuallyOnGenotype.setVisible(true);
+
+		contrastGridOnGenotypeDiv.appendChild(gridManuallyOnGenotype);
+
+		fileNameOfContrastOnGenotypeLb.setVisible(false);
+		contrastFromFileOnGenotypeBtn.setVisible(false);
+		contrastByManuallyOnGenotypeBtn.setVisible(false);
+		contrastResetOnGenotypeBtn.setVisible(true);
+		contrastByManuallyOnGenotypeDiv.setVisible(true);
 	}
-	
+
 	@NotifyChange("*")
 	@Command("manuallyInputContrastOnEnv")
-	public void manuallyInputContrastOnEnv()
-	{
-		
+	public void manuallyInputContrastOnEnv() {
+		if (envTB.getValue().length() == 0) {
+			Messagebox
+					.show("Error, Please fill up environment factor on Model Specifications Tab",
+							"Error", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		if (!this.contrastGridOnEnvDiv.getChildren().isEmpty()) {
+			this.contrastGridOnEnvDiv.getFirstChild().detach();
+		}
+
+		gridManuallyOnEnv = new Grid();
+		gridManuallyOnEnv.setId("contrastGridByManuallyOnEnv");
+		gridManuallyOnEnv.setStyle("overflow:auto;");
+		gridManuallyOnEnv.setHeight("300px");
+		gridManuallyOnEnv.setVisible(true);
+		gridManuallyOnEnv.setSizedByContent(true);
+		gridManuallyOnEnv.setEmptyMessage("No data loaded....");
+
+		columnsManuallyOnEnv = new Columns();
+		columnsManuallyOnEnv.setParent(gridManuallyOnEnv);
+		columnsManuallyOnEnv.setVisible(true);
+
+		Column column = new Column();
+		column.setLabel("Label");
+		column.setHflex("1");
+		column.setParent(columnsManuallyOnEnv);
+
+		for (int i = 0; i < this.environmentLevels.length; i++) {
+			Column envLabel = new Column();
+			envLabel.setHflex("1");
+			envLabel.setLabel(environmentLevels[i]);
+			envLabel.setParent(columnsManuallyOnEnv);
+		}
+
+		rowsManuallyOnEnv = new Rows();
+		rowsManuallyOnEnv.setParent(gridManuallyOnEnv);
+		rowsManuallyOnEnv.setVisible(true);
+
+		contrastGridOnEnvDiv.appendChild(gridManuallyOnEnv);
+
+		fileNameOfContrastOnEnvLb.setVisible(false);
+		contrastFromFileOnEnvBtn.setVisible(false);
+		contrastByManuallyOnEnvBtn.setVisible(false);
+		contrastResetOnEnvBtn.setVisible(true);
+		contrastByManuallyOnEnvDiv.setVisible(true);
 	}
 
 	@NotifyChange("*")
@@ -744,6 +1032,46 @@ public class Specifications {
 		// contrastByManuallyBtn.setVisible(true);
 		// contrastByManuallyDiv.setVisible(false);
 		// contrastResetBtn.setVisible(false);
+	}
+
+	@NotifyChange("*")
+	@Command("resetContrastOnGenotype")
+	public void resetContrastOnGenotype() {
+		contrastDataListOnGenotype.clear();
+		contrastColumnListOnGenotype.clear();
+		this.numberOfContrastOnGenotypeDS.setValue(0.0);
+		this.contrastFileNameOnGenotype = "";
+		this.uploadedContrastFileOnGenotype = null;
+		ssslAnalysisModel.setGenotypeContrastFile(null);
+
+		if (!this.contrastGridOnGenotypeDiv.getChildren().isEmpty())
+			this.contrastGridOnGenotypeDiv.getFirstChild().detach();
+
+		this.fileNameOfContrastOnGenotypeLb.setVisible(false);
+		this.contrastFromFileOnGenotypeBtn.setVisible(true);
+		this.contrastByManuallyOnGenotypeBtn.setVisible(true);
+		this.contrastByManuallyOnGenotypeDiv.setVisible(false);
+		this.contrastResetOnGenotypeBtn.setVisible(false);
+	}
+
+	@NotifyChange("*")
+	@Command("resetContrastOnEnv")
+	public void resetContrastOnEnv() {
+		contrastDataListOnEnv.clear();
+		contrastColumnListOnEnv.clear();
+		this.numberOfContrastOnEnvDS.setValue(0.0);
+		this.contrastFileNameOnEnv = "";
+		this.uploadedContrastFileOnEnv = null;
+		ssslAnalysisModel.setGenotypeContrastFile(null);
+
+		if (!this.contrastGridOnEnvDiv.getChildren().isEmpty())
+			this.contrastGridOnEnvDiv.getFirstChild().detach();
+
+		this.fileNameOfContrastOnEnvLb.setVisible(false);
+		this.contrastFromFileOnEnvBtn.setVisible(true);
+		this.contrastByManuallyOnEnvBtn.setVisible(true);
+		this.contrastByManuallyOnEnvDiv.setVisible(false);
+		this.contrastResetOnEnvBtn.setVisible(false);
 	}
 
 	@NotifyChange("*")
@@ -804,27 +1132,68 @@ public class Specifications {
 		reloadContrastCSVGrid();
 	}
 
+	@NotifyChange("*")
+	@Command("refreshContrastCSVOnGenotype")
+	public void refreshContrastCSVOnGenotype() {
+		CSVReader reader;
+		try {
+			reader = new CSVReader(new FileReader(
+					this.uploadedContrastFileOnGenotype.getAbsolutePath()));
+			List<String[]> rawData = reader.readAll();
+			contrastColumnListOnGenotype.clear();
+			contrastDataListOnGenotype.clear();
+			contrastColumnListOnGenotype = new ArrayList<String>(
+					Arrays.asList(rawData.get(0)));
+			rawData.remove(0);
+			contrastDataListOnGenotype = new ArrayList<String[]>(rawData);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		reloadContrastCSVGridOnGenotype();
+	}
+
+	@NotifyChange("*")
+	@Command("refreshContrastCSVOnEnv")
+	public void refreshContrastCSVOnEnv() {
+		CSVReader reader;
+		try {
+			reader = new CSVReader(new FileReader(
+					this.uploadedContrastFileOnEnv.getAbsolutePath()));
+			List<String[]> rawData = reader.readAll();
+			contrastColumnListOnEnv.clear();
+			contrastDataListOnEnv.clear();
+			contrastColumnListOnEnv = new ArrayList<String>(
+					Arrays.asList(rawData.get(0)));
+			rawData.remove(0);
+			contrastDataListOnEnv = new ArrayList<String[]>(rawData);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		reloadContrastCSVGridOnEnv();
+	}
+
 	@GlobalCommand("setSSSLAnalysisModelListvariables")
 	@NotifyChange("*")
 	public void setSSSLAnalysisModelListvariables(
 			@BindingParam("filePath") String filepath) {
 		// ...
-		 ssslAnalysisModel.setDataFileName(filepath.replace("\\", "/"));
-		 ssslRServeManager = new SSSLRserveManager();
-		 lstVarInfo = ssslRServeManager.getVariableInfo(filepath.replace("//", "/"), fileFormat, separator);
-//		 rServeManager = new RServeManager();
-		// varInfo = rServeManager.getVariableInfo(filepath.replace("\\", "/"),
-		// fileFormat, separator);
-		//
-		// setVarNames(AnalysisUtils.getVarNames(varInfo));
-		//
-		// numericModel= AnalysisUtils.getNumericAsListModel(varInfo);
-		// factorModel= AnalysisUtils.getFactorsAsListModel(varInfo);
-		// responseModel = new ListModelList<String>();
-		//
-		// numericLb.setModel(numericModel);
-		// factorLb.setModel(factorModel);
-		// responseLb.setModel(responseModel);
+		ssslAnalysisModel.setDataFileName(filepath.replace("\\", "/"));
+		ssslRServeManager = new SSSLRserveManager();
+		lstVarInfo = ssslRServeManager.getVariableInfo(
+				filepath.replace("//", "/"), fileFormat, separator);
+		setLstVarNames(AnalysisUtils.getVarNames(lstVarInfo));
+		numericModel = AnalysisUtils.getNumericAsListModel(lstVarInfo);
+		factorModel = AnalysisUtils.getFactorsAsListModel(lstVarInfo);
+		responseModel = new ListModelList<String>();
+
+		this.numericLB.setModel(numericModel);
+		this.factorLB.setModel(factorModel);
+		this.responseLB.setModel(responseModel);
 	}
 
 	// @NotifyChange("*")
@@ -862,34 +1231,640 @@ public class Specifications {
 	}
 
 	@NotifyChange("*")
+	@Command("updateContrastGridManuallyOnGenotype")
+	public void updateContrastGridManuallyOnGenotype(
+			@BindingParam("inputValue") Integer value) {
+		int numRows = rowsManuallyOnGenotype.getChildren().size();
+		System.out.println("number of rows on genotype manually is " + numRows);
+		if (value > numRows) {
+			Row row = new Row();
+			Textbox label = new Textbox();
+			label.setHflex("1");
+			label.setValue("C" + value);
+			label.setVisible(true);
+			label.setConstraint("no empty");
+			label.setParent(row);
+
+			for (int i = 0; i < this.genotypeLevels.length; i++) {
+				Doublebox intbox = new Doublebox();
+				intbox.setHflex("1");
+				intbox.setVisible(true);
+				intbox.setConstraint("no empty");
+				intbox.setParent(row);
+			}
+
+			row.setParent(rowsManuallyOnGenotype);
+		} else if (value < numRows && numRows > 0) {
+			rowsManuallyOnGenotype.removeChild(rowsManuallyOnGenotype
+					.getLastChild());
+		}
+	}
+
+	@NotifyChange("*")
+	@Command("updateContrastGridManuallyOnEnv")
+	public void updateContrastGridManuallyOnEnv(
+			@BindingParam("inputValue") Integer value) {
+		int numRows = rowsManuallyOnEnv.getChildren().size();
+		if (value > numRows) {
+			Row row = new Row();
+			Textbox label = new Textbox();
+			label.setHflex("1");
+			label.setValue("C" + value);
+			label.setVisible(true);
+			label.setConstraint("no empty");
+			label.setParent(row);
+
+			for (int i = 0; i < this.environmentLevels.length; i++) {
+				Doublebox input = new Doublebox();
+				input.setHflex("1");
+				input.setConstraint("no empty");
+				input.setVisible(true);
+				input.setParent(row);
+			}
+
+			row.setParent(rowsManuallyOnEnv);
+		} else if (value < numRows && numRows > 0) {
+			rowsManuallyOnEnv.removeChild(rowsManuallyOnEnv.getLastChild());
+		}
+	}
+
+	@NotifyChange("*")
 	@Command("addResponse")
 	public void addResponse() {
-
+		chooseResponseVariable();
 	}
 
 	@NotifyChange("*")
 	@Command("removeResponse")
 	public void removeResponse() {
-
+		unchooseResponseVariable();
 	}
 
-	@NotifyChange("*")
+	@NotifyChange({ "factorModel", "numericModel" })
 	@Command("toNumeric")
 	public void toNumeric() {
+		Set<String> set = this.factorModel.getSelection();
+		if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+			fileName = fileName.replace("\\", "//");
+		} else {
+			fileName = fileName.replace("\\", "/");
+		}
 
+		for (String selectedItem : set) {
+			if (AnalysisUtils.isColumnNumeric(lstVarInfo, selectedItem)) {
+				numericModel.add(selectedItem);
+				factorModel.remove(selectedItem);
+			} else {
+				Messagebox.show("Can't move variable. \n" + selectedItem
+						+ " is not Numeric.");
+			}
+		}
 	}
 
-	@NotifyChange("*")
+	@NotifyChange({ "factorModel", "numericModel" })
 	@Command("toFactor")
 	public void toFactor() {
-
+		Set<String> set = this.numericModel.getSelection();
+		for (String selectedItem : set) {
+			this.factorModel.add(selectedItem);
+			this.numericModel.remove(selectedItem);
+		}
 	}
 
 	@NotifyChange("*")
 	@Command("chooseVariable")
-	public void chooseVariable(@BindingParam("varTextBox") Textbox varTextBox,
+	public boolean chooseVariable(
+			@BindingParam("varTextBox") Textbox varTextBox,
 			@BindingParam("imgButton") Image imgButton) {
+		Set<String> set = factorModel.getSelection();
+		if (varTextBox.getValue().isEmpty() && !set.isEmpty()) {
+			for (String selectedItem : set) {
+				varTextBox.setValue(selectedItem);
+				factorModel.remove(selectedItem);
+			}
 
+			if (varTextBox.getId().equals("genotypeTB")) {
+				genotypeLevels = ssslRServeManager.getLevels(columnList,
+						dataList, genotypeTB.getValue());
+				genotypeLevelsModel = AnalysisUtils
+						.toListModelList(genotypeLevels);
+				this.controlCBB.setModel(genotypeLevelsModel);
+			}
+
+			if (varTextBox.getId().equals("envTB")) {
+				this.environmentLevels = ssslRServeManager.getLevels(
+						columnList, dataList, envTB.getValue());
+			}
+
+			// if (genotypeLevels.length != 0) {
+			// // do the something of compare to recurrent parent;
+			//
+			// }
+
+			imgButton.setSrc("/images/leftarrow_g.png");
+			return true;
+		} else if (!varTextBox.getValue().isEmpty()) {
+			factorModel.add(varTextBox.getValue());
+			varTextBox.setValue(null);
+		}
+		imgButton.setSrc("/images/rightarrow_g.png");
+		return false;
+	}
+	
+	@Command("updateAMMIGraphicOptions")
+	@NotifyChange("*")
+	public void updateAMMIGraphicOptions(@BindingParam("status") boolean isChecked)
+	{
+		if(isChecked)
+		{
+			this.ammiGraphicOptionsDiv.setVisible(true);
+		} else
+		{
+			this.ammiGraphicOptionsDiv.setVisible(false);
+		}
+	}
+	
+	@Command("updateGGEGraphicOptions")
+	@NotifyChange("*")
+	public void updateGGEGraphicOptions(@BindingParam("status") boolean isChecked)
+	{
+		if(isChecked)
+			this.ggeGraphicOptionsDiv.setVisible(true);
+		else
+			this.ggeGraphicOptionsDiv.setVisible(false);
+	}
+	
+	private boolean validateSSSLAanalysisModel() {
+		if (fileName == null) {
+			errorMessage = "No Raw Data Selected!";
+			return false;
+		}
+
+		System.out.println("File name is " + fileName.toString());
+		String folderPath = AnalysisUtils.createOutputFolder(
+				fileName.replaceAll(" ", ""), "ssslAnalysis");
+		ssslAnalysisModel.setResultFolderPath(folderPath);
+
+		userFileManager.moveUploadedFileToOutputFolder(folderPath,
+				fileName.replaceAll(" ", ""), uploadedFile);
+
+		ssslAnalysisModel.setOutFileName(ssslAnalysisModel
+				.getResultFolderPath() + "SSSL_Analysis_Output.txt");
+
+		// Contrast File setting
+		if (this.uploadedContrastFileOnGenotype != null) {
+			if (contrastColumnListOnGenotype.size() != (this.genotypeLevels.length + 1)) {
+				errorMessage = "The uploaded file of genotype contrast coefficients is not same as genotype levels";
+				return false;
+			}
+			// File file = new
+			// File(ssslAnalysisModel.getGenotypeContrastFile());
+			// System.out.println("genotye contrast file is " +
+			// file.getAbsolutePath());
+			File newfile = userFileManager.copyUploadedFileToOutputFolder(
+					ssslAnalysisModel.getResultFolderPath(),
+					"GenotypeContrastCoefficients",
+					this.uploadedContrastFileOnGenotype);
+			ssslAnalysisModel
+					.setGenotypeContrastFile(newfile.getAbsolutePath());
+		}
+
+		if (this.uploadedContrastFileOnEnv != null) {
+			if (contrastColumnListOnEnv.size() != (this.environmentLevels.length + 1)) {
+				errorMessage = "The uploaded file of environment contrast coefficients is not same as environment levels";
+				return false;
+			}
+			// File file = new File(ssslAnalysisModel.getEnvContrastFile());
+			// System.out.println("environment contrast file is " +
+			// file.getAbsolutePath());
+			File newfile = userFileManager.copyUploadedFileToOutputFolder(
+					ssslAnalysisModel.getResultFolderPath(),
+					"EnvironmentContrastCoefficients",
+					this.uploadedContrastFileOnEnv);
+			ssslAnalysisModel.setEnvContrastFile(newfile.getAbsolutePath());
+		}
+
+		if (this.contrastByManuallyOnGenotypeDiv.isVisible()) {
+			Rows rows = this.gridManuallyOnGenotype.getRows();
+			List<String[]> genotypeContrast = new ArrayList<String[]>();
+			String[] header = new String[1 + genotypeLevels.length];
+			for (int i = 0; i < header.length; i++) {
+				if (i == 0)
+					header[i] = "Label";
+				else
+					header[i] = genotypeLevels[i - 1];
+			}
+			genotypeContrast.add(header);
+			if (!rows.getChildren().isEmpty()) {
+				for (int i = 0; i < rows.getChildren().size(); i++) {
+					Row row = (Row) rows.getChildren().get(i);
+					String[] values = new String[row.getChildren().size()];
+					for (int j = 0; j < row.getChildren().size(); j++) {
+						if (j == 0) {
+							Textbox input = (Textbox) row.getChildren().get(j);
+							try {
+								if (input.isValid()) {
+									values[j] = input.getValue();
+								} else {
+									errorMessage = "Error, please input contrast value on Row "
+											+ (i + 1)
+											+ ", Column "
+											+ (j + 1)
+											+ ", for genotype!";
+									return false;
+								}
+							} catch (WrongValueException e) {
+								e.printStackTrace();
+							}
+						} else {
+							Doublebox input = (Doublebox) row.getChildren()
+									.get(j);
+							try {
+								if (input.isValid()) {
+									values[j] = String
+											.valueOf(input.getValue());
+								} else {
+									errorMessage = "Error, please input contrast value on Row "
+											+ (i + 1)
+											+ ", Column "
+											+ (j + 1)
+											+ ", for genotype!";
+									return false;
+								}
+							} catch (WrongValueException e) {
+								e.printStackTrace();
+							}
+						}
+						// System.out
+						// .println("Value on " + j + " is " + values[j]);
+					}
+					double sum = 0;
+					for (int k = 1; k < values.length; k++) {
+						sum = sum + Double.valueOf(values[k]);
+					}
+					if (sum != 0) {
+						errorMessage = "Error, please check contrast coefficients on "
+								+ (i + 1)
+								+ " rows on Genotype! It should be equal to zero!";
+						return false;
+					}
+					// System.out.println("sum of value on " + i + ", row is "
+					// + sum);
+					genotypeContrast.add(values);
+				}
+
+			} else {
+				errorMessage = "Error, there are no any contrast coefficients on genotype!";
+				return false;
+			}
+
+			for (String[] temp : genotypeContrast) {
+				System.out.println("Genotype Contrast:");
+				for (int i = 0; i < temp.length; i++) {
+					System.out.print(temp[i] + "\t");
+				}
+				System.out.println();
+			}
+
+			String file = ssslAnalysisModel.getResultFolderPath()
+					+ StringConstants.SYSTEM_FILE_SEPARATOR
+					+ "GenotypeContrastCoefficients.csv";
+			FileUtilities.saveDataToFile(genotypeContrast,
+					"GenotypeContrastCoefficients.csv",
+					ssslAnalysisModel.getResultFolderPath());
+			ssslAnalysisModel.setGenotypeContrastFile(file);
+		}
+
+		if (this.contrastByManuallyOnEnvDiv.isVisible()) {
+			Rows rows = this.gridManuallyOnEnv.getRows();
+			List<String[]> envContrast = new ArrayList<String[]>();
+			String[] header = new String[1 + environmentLevels.length];
+			for (int i = 0; i < header.length; i++) {
+				if (i == 0)
+					header[i] = "Label";
+				else
+					header[i] = environmentLevels[i - 1];
+			}
+			envContrast.add(header);
+			if (!rows.getChildren().isEmpty()) {
+				for (int i = 0; i < rows.getChildren().size(); i++) {
+					Row row = (Row) rows.getChildren().get(i);
+					String[] values = new String[row.getChildren().size()];
+					for (int j = 0; j < row.getChildren().size(); j++) {
+						if (j == 0) {
+							Textbox input = (Textbox) row.getChildren().get(j);
+							try {
+								if (input.isValid()) {
+									values[j] = input.getValue();
+								} else {
+									errorMessage = "Error, please input contrast value on Row "
+											+ (i + 1)
+											+ ", Column "
+											+ (j + 1)
+											+ ", for Environment!";
+									return false;
+								}
+							} catch (WrongValueException e) {
+								e.printStackTrace();
+							}
+						} else {
+							Doublebox input = (Doublebox) row.getChildren()
+									.get(j);
+							try {
+								if (input.isValid()) {
+									values[j] = String
+											.valueOf(input.getValue());
+								} else {
+									errorMessage = "Error, please input contrast value on Row "
+											+ (i + 1)
+											+ ", Column "
+											+ (j + 1)
+											+ ", for Environment!";
+									return false;
+								}
+							} catch (WrongValueException e) {
+								e.printStackTrace();
+							}
+						}
+						// System.out
+						// .println("Value on " + j + " is " + values[j]);
+					}
+					double sum = 0;
+					for (int k = 1; k < values.length; k++) {
+						sum = sum + Double.valueOf(values[k]);
+					}
+					if (sum != 0) {
+						errorMessage = "Error, please check contrast coefficients on "
+								+ (i + 1)
+								+ " rows on Environment! It should be equal to zero!";
+						return false;
+					}
+					// System.out.println("sum of value on " + i + ", row is "
+					// + sum);
+					envContrast.add(values);
+				}
+
+			} else {
+				errorMessage = "Error, there are no any contrast coefficients on environment!";
+				return false;
+			}
+
+			for (String[] temp : envContrast) {
+				System.out.println("Environment Contrast:");
+				for (int i = 0; i < temp.length; i++) {
+					System.out.print(temp[i] + "\t");
+				}
+				System.out.println();
+			}
+
+			String file = ssslAnalysisModel.getResultFolderPath()
+					+ StringConstants.SYSTEM_FILE_SEPARATOR
+					+ "EnvironmentContrastCoefficients.csv";
+			FileUtilities.saveDataToFile(envContrast,
+					"EnvironmentContrastCoefficients.csv",
+					ssslAnalysisModel.getResultFolderPath());
+			ssslAnalysisModel.setEnvContrastFile(file);
+		}
+
+		// set Vars
+		System.out.println("Environment Analysis Type is " + analysisEnvType);
+
+		System.out.println("Design Type is " + designType);
+		if (!this.lstTypeOfEnvCBB.getValue().isEmpty()) {
+			ssslAnalysisModel.setAnalysisEnvType(this.lstTypeOfEnvCBB
+					.getValue());
+		} else {
+			errorMessage = "Analysis Environment Type cannot be empty!";
+			return false;
+		}
+		if (!this.responseLB.getItems().isEmpty()) {
+			// ssslAnalysisModel.setResponseVars((String[])
+			// this.responseModel.toArray());
+			ssslAnalysisModel.setResponseVars(this.responseModel
+					.toArray(new String[responseModel.size()]));
+		} else {
+			errorMessage = "Response Variable cannot be empty!";
+			return false;
+		}
+		if (!this.genotypeTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setGenotypeFactor(this.genotypeTB.getValue());
+			ssslAnalysisModel.setGenotypeFactorLevels(ssslRServeManager
+					.getLevels(columnList, dataList,
+							ssslAnalysisModel.getGenotypeFactor()));
+		} else {
+			errorMessage = "Genotype cannot be empty!";
+			return false;
+		}
+
+		if (!this.envTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setEnvFactor(envTB.getValue());
+			ssslAnalysisModel.setEnvFactorLevels(ssslRServeManager.getLevels(
+					columnList, dataList, ssslAnalysisModel.getEnvFactor()));
+		} else if (this.lstTypeOfEnvCBB.getValue().equals("Multi-Environment")) {
+			errorMessage = "Environment cannot be empty!";
+			return false;
+		}
+
+		if (!this.blockTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setBlockFactor(this.blockTB.getValue());
+			ssslAnalysisModel.setBlockFactorLevels(ssslRServeManager.getLevels(
+					columnList, dataList, ssslAnalysisModel.getBlockFactor()));
+		} else if (blockRow.isVisible()) {
+			errorMessage = "Block cannot be empty!";
+			return false;
+		}
+
+		if (!this.replicateTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setReplicateFactor(this.replicateTB.getValue());
+			ssslAnalysisModel.setReplicateFactorLevels(ssslRServeManager
+					.getLevels(columnList, dataList,
+							ssslAnalysisModel.getReplicateFactor()));
+		} else if (replicateRow.isVisible()) {
+			errorMessage = "Replicate cannot be empty!";
+			return false;
+		}
+
+		if (!this.columnTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setColumnFactor(this.columnTB.getValue());
+			ssslAnalysisModel.setColumnFactorLevels(ssslRServeManager
+					.getLevels(columnList, dataList,
+							ssslAnalysisModel.getColumnFactor()));
+		} else if (columnRow.isVisible()) {
+			errorMessage = "Column cannot be empty!";
+			return false;
+		}
+
+		if (!this.rowTB.getValue().isEmpty()) {
+			ssslAnalysisModel.setRowFactor(this.rowTB.getValue());
+			ssslAnalysisModel.setRowFactorLevels(ssslRServeManager.getLevels(
+					columnList, dataList, ssslAnalysisModel.getRowFactor()));
+		} else if (rowRow.isVisible()) {
+			errorMessage = "Column cannot be empty!";
+			return false;
+		}
+
+		// set other options
+		if (this.descriptiveStatCB.isChecked()) {
+			ssslAnalysisModel.setDescriptiveStat(true);
+		} else {
+			ssslAnalysisModel.setDescriptiveStat(false);
+		}
+		if (this.varComponentCB.isChecked()) {
+			ssslAnalysisModel.setVarComponent(true);
+		} else {
+			ssslAnalysisModel.setVarComponent(false);
+		}
+		if(this.alphalevel > 0)
+		{
+			ssslAnalysisModel.setSignificantAlpha(this.alphalevel);
+		} else
+		{
+			errorMessage = "Alpha Level is not correct!";
+			return false;
+		}
+		System.out.println("Control is " + controlCBB.getValue());
+		if (this.compareWithControlCB.isChecked()
+				&& this.controlCBB.getValue().length() != 0) {
+			ssslAnalysisModel.setCompareWithRecurrent(true);
+			ssslAnalysisModel.setRecurrentParent(this.controlCBB.getValue());
+		} else if (this.compareWithControlCB.isChecked()
+				&& this.controlCBB.getValue().length() == 0) {
+			errorMessage = "Recurrent Parent cannot be empty!";
+			return false;
+		}
+		// Here for define the contrast file for genotype and environment
+
+		if (this.genotypeByEnvDiv.isVisible()
+				&& this.finlayWilkinsonModelCB.isChecked()) {
+			ssslAnalysisModel.setFinlayWikinson(true);
+		} else {
+			ssslAnalysisModel.setFinlayWikinson(false);
+		}
+		if (this.genotypeByEnvDiv.isVisible() && this.shuklaModelCB.isChecked()) {
+			ssslAnalysisModel.setShukla(true);
+		} else {
+			ssslAnalysisModel.setShukla(false);
+		}
+		if (this.genotypeByEnvDiv.isVisible() && this.ammiModelCB.isChecked()) {
+			ssslAnalysisModel.setAMMI(true);
+		} else {
+			ssslAnalysisModel.setAMMI(false);
+		}
+		if (this.genotypeByEnvDiv.isVisible() && this.ggeModelCB.isChecked()) {
+			ssslAnalysisModel.setGGE(true);
+		} else {
+			ssslAnalysisModel.setGGE(false);
+		}
+		// for graphic options
+		if (this.boxplotSingleEnvCB.isChecked()) {
+			ssslAnalysisModel.setBoxplotOnSingleEnv(true);
+		} else {
+			ssslAnalysisModel.setBoxplotOnSingleEnv(false);
+		}
+		if (this.histogramSingleEnvCB.isChecked()) {
+			ssslAnalysisModel.setHistogramOnSingleEnv(true);
+		} else {
+			ssslAnalysisModel.setHistogramOnSingleEnv(false);
+		}
+		if (this.diagnosticplotSingleEnvCB.isChecked()) {
+			ssslAnalysisModel.setDiagnosticPlotOnSingleEnv(true);
+		} else {
+			ssslAnalysisModel.setDiagnosticPlotOnSingleEnv(false);
+		}
+		if (this.acrossEnvOnGraphDiv.isVisible()
+				&& this.boxplotAcrossEnvCB.isChecked()) {
+			ssslAnalysisModel.setBoxplotOnAcrossEnv(true);
+		} else {
+			ssslAnalysisModel.setBoxplotOnAcrossEnv(false);
+		}
+		if (this.acrossEnvOnGraphDiv.isVisible()
+				&& this.histogramAcrossEnvCB.isChecked()) {
+			ssslAnalysisModel.setHistogramOnAcrossEnv(true);
+		} else {
+			ssslAnalysisModel.setHistogramOnAcrossEnv(false);
+		}
+		if (this.acrossEnvOnGraphDiv.isVisible()
+				&& this.diagnosticplotAcrossEnvCB.isChecked()) {
+			ssslAnalysisModel.setDiagnosticPlotOnAcrossEnv(true);
+		} else {
+			ssslAnalysisModel.setDiagnosticPlotOnAcrossEnv(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.responsePlotCB.isChecked()) {
+			ssslAnalysisModel.setResponsePlot(true);
+		} else {
+			ssslAnalysisModel.setResponsePlot(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.adaptationMapCB.isChecked()) {
+			ssslAnalysisModel.setAdaptationMap(true);
+		} else {
+			ssslAnalysisModel.setAdaptationMap(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ammiBiplotCB.isChecked()) {
+			ssslAnalysisModel.setAMMI1Biplot(true);
+		} else {
+			ssslAnalysisModel.setAMMI1Biplot(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ammiBiplotPC1VsPC2CB.isChecked()) {
+			ssslAnalysisModel.setAMMIBiplotPC1VsPC2(true);
+		} else {
+			ssslAnalysisModel.setAMMIBiplotPC1VsPC2(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ammiBiplotPC1VsPC3CB.isChecked()) {
+			ssslAnalysisModel.setAMMIBiplotPC1VsPC3(true);
+		} else {
+			ssslAnalysisModel.setAMMIBiplotPC1VsPC3(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ammiBiplotPC2VsPC3CB.isChecked()) {
+			ssslAnalysisModel.setAMMIBiplotPC2VsPC3(true);
+		} else {
+			ssslAnalysisModel.setAMMIBiplotPC2VsPC3(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ggeBiplotSymmetricViewCB.isChecked()) {
+			ssslAnalysisModel.setGGEBiplotSymmetricView(true);
+		} else {
+			ssslAnalysisModel.setGGEBiplotSymmetricView(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ggeBiplotEnvironmentViewCB.isChecked()) {
+			ssslAnalysisModel.setGGEBiplotEnvironmentView(true);
+		} else {
+			ssslAnalysisModel.setGGEBiplotEnvironmentView(false);
+		}
+		if (this.multiplicativeModelOnGraphDiv.isVisible()
+				&& this.ggeBiplotGenotypeViewCB.isChecked()) {
+			ssslAnalysisModel.setGGEBiplotGenotypeView(true);
+		} else {
+			ssslAnalysisModel.setGGEBiplotGenotypeView(false);
+		}
+
+		return true;
+	}
+
+	private void chooseResponseVariable() {
+		Set<String> set = numericModel.getSelection();
+		System.out.println("addResponse");
+		for (String selectedItem : set) {
+			respvars.add(selectedItem);
+			responseModel.add(selectedItem);
+			numericModel.remove(selectedItem);
+		}
+	}
+
+	private void unchooseResponseVariable() {
+		Set<String> set = responseModel.getSelection();
+		System.out.println("removeResponse");
+		for (String selectedItem : set) {
+			respvars.remove(selectedItem);
+			numericModel.add(selectedItem);
+			responseModel.remove(selectedItem);
+		}
 	}
 
 	public void reloadCsvGrid() {
@@ -916,6 +1891,23 @@ public class Specifications {
 		incContrastCSVData.setSrc("/user/analysis/sssl/contrast.zul");
 		// incContrastCSVData.setParent(contrastGridDiv);
 		contrastGridReUploaded = true;
+	}
+
+	public void reloadContrastCSVGridOnGenotype() {
+		if (!contrastGridOnGenotypeDiv.getChildren().isEmpty())
+			contrastGridOnGenotypeDiv.getFirstChild().detach();
+		Include incContrastCSVDataOnGenotype = new Include();
+		incContrastCSVDataOnGenotype
+				.setSrc("/user/analysis/sssl/contrastongenotype.zul");
+		incContrastCSVDataOnGenotype.setParent(contrastGridOnGenotypeDiv);
+	}
+
+	public void reloadContrastCSVGridOnEnv() {
+		if (!contrastGridOnEnvDiv.getChildren().isEmpty())
+			contrastGridOnEnvDiv.getFirstChild().detach();
+		Include incContrastCSVDataOnEnv = new Include();
+		incContrastCSVDataOnEnv.setSrc("/user/analysis/sssl/contrastonenv.zul");
+		incContrastCSVDataOnEnv.setParent(contrastGridOnEnvDiv);
 	}
 
 	public ArrayList<ArrayList<String>> getCsvData() {
@@ -1020,13 +2012,13 @@ public class Specifications {
 		return lstTypeOfDesign;
 	}
 
-	public List<String> getLstTypeOfEnv() {
-		if (lstTypeOfEnv == null)
-			lstTypeOfEnv = new ArrayList<String>();
-		lstTypeOfEnv.clear();
-		lstTypeOfEnv.add("Multi-Environment");
-		lstTypeOfEnv.add("Single Environment");
-		return lstTypeOfEnv;
+	public List<String> getLstTypeOfAnalysisEnv() {
+		if (lstTypeOfAnalysisEnv == null)
+			lstTypeOfAnalysisEnv = new ArrayList<String>();
+		lstTypeOfAnalysisEnv.clear();
+		lstTypeOfAnalysisEnv.add("Multi-Environment");
+		lstTypeOfAnalysisEnv.add("Single Environment");
+		return lstTypeOfAnalysisEnv;
 	}
 
 	public void setLstTypeOfDesign(List<String> lstTypeOfDesign) {
@@ -1204,6 +2196,64 @@ public class Specifications {
 
 	public void setContrastFileNameOnEnv(String contrastFileNameOnEnv) {
 		this.contrastFileNameOnEnv = contrastFileNameOnEnv;
+	}
+
+	public String getDesignType() {
+		return designType;
+	}
+
+	public void setDesignType(String designType) {
+		this.designType = designType;
+	}
+
+	public String getAnalysisEnvType() {
+		return analysisEnvType;
+	}
+
+	public void setAnalysisEnvType(String analysisEnvType) {
+		this.analysisEnvType = analysisEnvType;
+	}
+
+	public List<String> getContrastColumnListOnGenotype() {
+		return contrastColumnListOnGenotype;
+	}
+
+	public void setContrastColumnListOnGenotype(
+			List<String> contrastColumnListOnGenotype) {
+		this.contrastColumnListOnGenotype = contrastColumnListOnGenotype;
+	}
+
+	public List<String[]> getContrastDataListOnGenotype() {
+		return contrastDataListOnGenotype;
+	}
+
+	public void setContrastDataListOnGenotype(
+			List<String[]> contrastDataListOnGenotype) {
+		this.contrastDataListOnGenotype = contrastDataListOnGenotype;
+	}
+
+	public List<String> getContrastColumnListOnEnv() {
+		return contrastColumnListOnEnv;
+	}
+
+	public void setContrastColumnListOnEnv(List<String> contrastColumnListOnEnv) {
+		this.contrastColumnListOnEnv = contrastColumnListOnEnv;
+	}
+
+	public List<String[]> getContrastDataListOnEnv() {
+		return contrastDataListOnEnv;
+	}
+
+	public void setContrastDataListOnEnv(List<String[]> contrastDataListOnEnv) {
+		this.contrastDataListOnEnv = contrastDataListOnEnv;
+	}
+
+	public Double getAlphalevel() {
+		return alphalevel;
+	}
+
+	public void setAlphalevel(Double alphalevel) {
+		this.alphalevel = alphalevel;
 	}
 
 }

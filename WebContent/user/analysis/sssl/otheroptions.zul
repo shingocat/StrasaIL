@@ -2,12 +2,16 @@
 <zk>
 	<div align="left" hflex="1">
 		<groupbox width="100%">
-			<caption>Display:</caption>
+			<caption>Basic:</caption>
 			<vbox hflex="1">
 				<checkbox label="Descriptive Statistics" id="descriptiveStatCB"
 					checked="true" />
 				<checkbox label="Variance Components" id="varComponentCB"
 					checked="true" />
+				<hlayout>
+				<label>Alpha Level</label>
+				<doublebox id="alphaLevelDB" constraint="no empty,no negative, no zero" value="@bind(vm.alphalevel)" />
+				</hlayout>
 			</vbox>
 		</groupbox>
 		<groupbox width="100%">
@@ -15,7 +19,7 @@
 			<vlayout hflex="1">
 				<div visible="true">
 					<checkbox label="Compare with Recurrent Parent" id="compareWithControlCB"
-						onCheck="@global-command('isCompareWithControlCBChecked')" />
+						onCheck="@command('isCompareWithControlCBChecked')" />
 					<hlayout>
 						<space width="20px" />
 						<label value="Recurrent Parent : " />
@@ -60,7 +64,9 @@
 								<label value="No. of Contrast : " />
 								<doublespinner id="numberOfContrastOnGenotypeDS"
 									step="1" value="0" constraint="no negative, min 0"
-									onChnage="@command('updateContrastGridManuallyOnGenotype')" />
+									onChange="@command('updateContrastGridManuallyOnGenotype', inputValue=self.value)" 
+									readonly="true" instant="true">
+									</doublespinner>
 							</hlayout>
 						</div>
 						<separator height="20px" />
@@ -99,7 +105,8 @@
 								<label value="No. of Contrast : " />
 								<doublespinner id="numberOfContrastOnEnvDS" step="1"
 									value="0" constraint="no negative, min 0"
-									onChnage="@command('updateContrastGridManuallyOnEnv')" />
+									onChange="@command('updateContrastGridManuallyOnEnv', inputValue=self.value)"
+									readonly="true" instant="true"/>
 							</hlayout>
 						</div>
 						<separator height="20px" />
@@ -127,8 +134,8 @@
 					<groupbox>
 						<caption>Multiplicative Models</caption>
 						<hlayout spacing="20px">
-							<checkbox id="ammiModelCB" label="AMMI" />
-							<checkbox id="ggeModelCB" label="GGE" />
+							<checkbox id="ammiModelCB" label="AMMI" checked="true" onCheck="@command('updateAMMIGraphicOptions', status = self.checked)"/>
+							<checkbox id="ggeModelCB" label="GGE" checked="true"  onCheck="@command('updateGGEGraphicOptions', status = self.checked)"/>
 						</hlayout>
 					</groupbox>
 				</vlayout>

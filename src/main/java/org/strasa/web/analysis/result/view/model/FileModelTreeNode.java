@@ -21,7 +21,7 @@ public class FileModelTreeNode extends DefaultTreeNode<FileModel> {
  
     }
  
-    public boolean isOpen() {
+	public boolean isOpen() {
         return open;
     }
  

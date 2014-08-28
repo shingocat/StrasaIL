@@ -65,6 +65,9 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 	
 	@Wire
 	Navitem introgressionLineAnalysis; // adding by QIN MAO
+	
+	@Wire
+	Navitem genomicselection; // adding by QIN MAO
 
 	@Wire
 	Navitem linkagemapping;
@@ -231,6 +234,14 @@ public class SidebarComposer extends SelectorComposer<Component>  {
 		d.getChildren().clear();
 		Executions.createComponents("../user/analysis/linkagemapping/index.zul", d, null);
 		
+	}
+	
+	@Listen("onClick = #genomicselection")
+	public void genomicselection()
+	{
+		Div d = (Div) sidebar.getRoot().query("#contentui");
+		d.getChildren().clear();
+		Executions.createComponents("../user/analysis/genomicselection/index.zul", d, null);
 	}
 	
 	@Listen("onClick = #settings")

@@ -2,7 +2,7 @@ package org.strasa.web.analysis.view.model;
 
 import org.zkoss.zk.ui.Sessions;
 
-public class SingleSiteAnalysisModel {
+public class MultiSiteAnalysisModel {
 	private static String BSLASH = "\\";
 	private static String FSLASH = "/";
 	private static String OUTPUTFOLDER_PATH =  Sessions.getCurrent().getWebApp().getRealPath("resultanalysis")+ System.getProperty("file.separator")+
@@ -12,105 +12,96 @@ public class SingleSiteAnalysisModel {
 	private String resultFolderPath;
 	private String outFileName;
 	private String dataFileName;
-	private int design;
-	private String[] respvars= {};
+	
+	private int designIndex;
+	private String[] respvars = {"Yield", "Y2"};
 	private String environment;
-	private String[] environmentLevels = {};
-	private String genotype;
-	private String block;
+	private String[] environmentLevels = {"E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11"};
+	private String genotype = "Genotype";
+	private String block = "Block";
 	private String rep;
 	private String row;
 	private String column;
-	private boolean descriptiveStat; 
+	private boolean descriptiveStat;
 	private boolean varianceComponents;
 	private boolean boxplotRawData;
 	private boolean histogramRawData;
-	private boolean heatmapResiduals;
-	private String heatmapRow;
-	private String heatmapColumn;
 	private boolean diagnosticPlot;
 	private boolean genotypeFixed;
 	private boolean performPairwise;
 	private String pairwiseAlpha;
-	private String[] genotypeLevels = {};
-	private String[] controlLevels = {};
+	private String[] genotypeLevels = {"GEN1", "GEN2", "GEN3", "GEN4", "GEN5", "GEN6", "GEN7", "GEN8", "GEN9", "GEN10", "GEN11", "GEN12", "GEN13", "GEN14", "GEN15"};
+	private String[] controlLevels = {"GEN1"};
 	private boolean compareControl;
 	private boolean performAllPairwise;
 	private boolean genotypeRandom;
-	private boolean excludeControls;
-	private boolean genoPhenoCorrelation;
-	private boolean specifiedContrast;
-	private String contrastFileName;
+	private boolean stabilityFinlay;
+	private boolean stabilityShukla;
+	private boolean specifiedContrastGeno;
+	private String contrastGenoFilename;
+	private boolean specifiedContrastEnv;
+	private String contrastEnvFilename;
+	private boolean ammi;
+	private boolean gge;
 	
-	public SingleSiteAnalysisModel() {
-		String resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
-		String outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
-		String dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
+	public MultiSiteAnalysisModel() {
+		resultFolderPath = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH);
+		outFileName = OUTPUTFOLDER_PATH.replace(BSLASH, FSLASH) + "SEA_output.txt";
+		dataFileName = DATA_PATH.replace(BSLASH, FSLASH) + "RCB_ME.csv";
+		contrastGenoFilename = DATA_PATH.replace(BSLASH, FSLASH) + "contrastMEOGeno_RCB_ME.csv";
 		
-		int design = 0;
-		String[] respvars = {"Y1"};
-		String environment = "Site";
-		String[] environmentLevels = {"Env1", "Env2"};
-//		String environment = "NULL";
-//		String[] environmentLevels = {};
-		String genotype = "Gen";
-		String block = "Blk";
-		String rep = "NULL";
-		String row = "NULL";
-		String column = "NULL";
-		boolean descriptiveStat = false; 
-		boolean varianceComponents = false;
-		boolean boxplotRawData = false;
-		boolean histogramRawData = false;
-		boolean heatmapResiduals = false;
-		String heatmapRow = "fieldRow";
-		String heatmapColumn = "fieldColumn";
-		boolean diagnosticPlot = false;
-		boolean genotypeFixed = true;
-		boolean performPairwise = false;
-		String pairwiseAlpha = "0.05";
-		String[] genotypeLevels = {"1",   "2",   "3",   "4",   "5",   "6",   "7",   "8"};
-		String[] controlLevels = {"1", "2", "3"};
-		boolean compareControl = false;
-		boolean performAllPairwise = false;
-		boolean genotypeRandom = false;
-		boolean excludeControls = false;
-		boolean genoPhenoCorrelation = false;
-		boolean specifiedContrast = true;
-		String contrastFileName = DATA_PATH + "contrastData.csv";
+		designIndex = 0;
+		environment = "Env";
+		genotype = "Genotype";
+		block = "Block";
+		rep = "NULL";
+		row = "NULL";
+		column = "NULL";
+		descriptiveStat = true; 
+		varianceComponents = true;
+		boxplotRawData = false;
+		histogramRawData = false;
+		diagnosticPlot = false;
+		genotypeFixed = true;
+		performPairwise = true;
+		pairwiseAlpha = "0.05";
+		compareControl = true;
+		performAllPairwise = false;
+		genotypeRandom = false;
+		stabilityFinlay = true; 
+		stabilityShukla = true;
+		specifiedContrastGeno = true;
+		specifiedContrastEnv = false; 
+		contrastEnvFilename = null;
+		ammi = true;
+		gge =  true;
 		
-		setEnvironmentLevels(environmentLevels);
-		setRespvars(respvars);
-		setEnvironment(environment);
-		setResultFolderPath(resultFolderPath);
-		setOutFileName(outFileName);
-		setDataFileName(dataFileName);
-		setDesign(design);
-		setGenotype(genotype);
-		setBlock(block);
-		setRep(rep);
-		setRow(row);
-		setColumn(column);
-		setDescriptiveStat(descriptiveStat);
-		setVarianceComponents(varianceComponents);
-		setBoxplotRawData(boxplotRawData);
-		setHistogramRawData(histogramRawData);
-		setHeatmapResiduals(heatmapResiduals);
-		setHeatmapRow(heatmapRow);
-		setHeatmapColumn(heatmapColumn);
-		setDiagnosticPlot(diagnosticPlot);
-		setGenotypeFixed(genotypeFixed);
-		setPerformPairwise(performPairwise);
-		setPairwiseAlpha(pairwiseAlpha);
-		setGenotypeLevels(genotypeLevels);
-		setControlLevels(controlLevels);
-		setCompareControl(compareControl);
-		setPerformAllPairwise(performAllPairwise);
-		setGenotypeRandom(genotypeRandom);
-		setExcludeControls(excludeControls);
-		setGenoPhenoCorrelation(genoPhenoCorrelation);
-		setSpecifiedContrast(specifiedContrast);
-		setContrastFileName(contrastFileName);
+		setDesignIndex(0);
+		setEnvironment("Env");
+		setGenotype("Genotype");
+		setBlock("Block");
+		setRep("NULL");
+		setRow("NULL");
+		setColumn("NULL");
+		setDescriptiveStat(true); 
+		setVarianceComponents(true);
+		setBoxplotRawData(false);
+		setHistogramRawData(false);
+		setDiagnosticPlot(false);
+		setGenotypeFixed(true);
+		setPerformPairwise(true);
+		setPairwiseAlpha("0.05");
+		setCompareControl(true);
+		setPerformAllPairwise(false);
+		setGenotypeRandom(false);
+		setStabilityFinlay(true); 
+		setStabilityShukla(true);
+		setSpecifiedContrastGeno(true);
+		setSpecifiedContrastEnv(false); 
+		setContrastEnvFilename(null);
+		setAmmi(true);
+		setGge(true);
+		
 	}
 	
 	@Override
@@ -123,16 +114,12 @@ public class SingleSiteAnalysisModel {
 		sb.append("\n environment: "+environment);
 		sb.append("\n genotype: "+genotype);
 		sb.append("\n block: "+block);
-		sb.append("\n rep: "+design);
 		sb.append("\n row: "+row);
 		sb.append("\n column: "+column);
 		sb.append("\n descriptiveStat: "+descriptiveStat);
 		sb.append("\n varianceComponents: "+varianceComponents);
 		sb.append("\n boxplotRawData: "+boxplotRawData);
 		sb.append("\n histogramRawData: "+histogramRawData);
-		sb.append("\n heatmapResiduals: "+heatmapResiduals);
-		sb.append("\n heatmapRow: "+heatmapRow);
-		sb.append("\n heatmapColumn: "+heatmapColumn);
 		sb.append("\n diagnosticPlot: "+diagnosticPlot);
 		sb.append("\n genotypeFixed: "+genotypeFixed);
 		sb.append("\n performPairwise: "+performPairwise);
@@ -140,8 +127,6 @@ public class SingleSiteAnalysisModel {
 		sb.append("\n compareControl: "+compareControl);
 		sb.append("\n performAllPairwise: "+performAllPairwise);
 		sb.append("\n genotypeRandom: "+genotypeRandom);
-		sb.append("\n excludeControls: "+excludeControls);
-		sb.append("\n genoPhenoCorrelation: "+genoPhenoCorrelation);
 
 		return sb.toString();
 	}
@@ -170,12 +155,12 @@ public class SingleSiteAnalysisModel {
 		this.dataFileName = dataFileName;
 	}
 
-	public int getDesign() {
-		return design;
+	public int getDesignIndex() {
+		return designIndex;
 	}
 
-	public void setDesign(int design) {
-		this.design = design;
+	public void setDesignIndex(int designIndex) {
+		this.designIndex = designIndex;
 	}
 
 	public String[] getRespvars() {
@@ -274,30 +259,6 @@ public class SingleSiteAnalysisModel {
 		this.histogramRawData = histogramRawData;
 	}
 
-	public boolean isHeatmapResiduals() {
-		return heatmapResiduals;
-	}
-
-	public void setHeatmapResiduals(boolean heatmapResiduals) {
-		this.heatmapResiduals = heatmapResiduals;
-	}
-
-	public String getHeatmapRow() {
-		return heatmapRow;
-	}
-
-	public void setHeatmapRow(String heatmapRow) {
-		this.heatmapRow = heatmapRow;
-	}
-
-	public String getHeatmapColumn() {
-		return heatmapColumn;
-	}
-
-	public void setHeatmapColumn(String heatmapColumn) {
-		this.heatmapColumn = heatmapColumn;
-	}
-
 	public boolean isDiagnosticPlot() {
 		return diagnosticPlot;
 	}
@@ -370,36 +331,68 @@ public class SingleSiteAnalysisModel {
 		this.genotypeRandom = genotypeRandom;
 	}
 
-	public boolean isExcludeControls() {
-		return excludeControls;
+	public boolean isStabilityFinlay() {
+		return stabilityFinlay;
 	}
 
-	public void setExcludeControls(boolean excludeControls) {
-		this.excludeControls = excludeControls;
+	public void setStabilityFinlay(boolean stabilityFinlay) {
+		this.stabilityFinlay = stabilityFinlay;
 	}
 
-	public boolean isGenoPhenoCorrelation() {
-		return genoPhenoCorrelation;
+	public boolean isStabilityShukla() {
+		return stabilityShukla;
 	}
 
-	public void setGenoPhenoCorrelation(boolean genoPhenoCorrelation) {
-		this.genoPhenoCorrelation = genoPhenoCorrelation;
+	public void setStabilityShukla(boolean stabilityShukla) {
+		this.stabilityShukla = stabilityShukla;
 	}
 
-	public boolean isSpecifiedContrast() {
-		return specifiedContrast;
+	public boolean isSpecifiedContrastGeno() {
+		return specifiedContrastGeno;
 	}
 
-	public void setSpecifiedContrast(boolean specifiedContrast) {
-		this.specifiedContrast = specifiedContrast;
+	public void setSpecifiedContrastGeno(boolean specifiedContrastGeno) {
+		this.specifiedContrastGeno = specifiedContrastGeno;
 	}
 
-	public String getContrastFileName() {
-		return contrastFileName;
+	public String getContrastGenoFilename() {
+		return contrastGenoFilename;
 	}
 
-	public void setContrastFileName(String contrastFileName) {
-		this.contrastFileName = contrastFileName;
+	public void setContrastGenoFilename(String contrastGenoFilename) {
+		this.contrastGenoFilename = contrastGenoFilename;
+	}
+
+	public boolean isSpecifiedContrastEnv() {
+		return specifiedContrastEnv;
+	}
+
+	public void setSpecifiedContrastEnv(boolean specifiedContrastEnv) {
+		this.specifiedContrastEnv = specifiedContrastEnv;
+	}
+
+	public String getContrastEnvFilename() {
+		return contrastEnvFilename;
+	}
+
+	public void setContrastEnvFilename(String contrastEnvFilename) {
+		this.contrastEnvFilename = contrastEnvFilename;
+	}
+
+	public boolean isAmmi() {
+		return ammi;
+	}
+
+	public void setAmmi(boolean ammi) {
+		this.ammi = ammi;
+	}
+
+	public boolean isGge() {
+		return gge;
+	}
+
+	public void setGge(boolean gge) {
+		this.gge = gge;
 	}
 
 }

@@ -63,6 +63,8 @@
 				</nav>
 				<navitem label="Linkage Mapping" id="linkagemapping"
 					iconSclass="z-icon-angle-double-right" />
+				<navitem label="Genomic Selection" id="genomicselection"
+					iconSclass="z-icon-angle-double-right" />
 			</nav>
 
 			<nav label="Decision Making" iconSclass="z-icon-edit">

@@ -10,6 +10,7 @@ import org.strasa.middleware.manager.StudyFileManagerImpl;
 import org.strasa.middleware.manager.StudyManagerImpl;
 import org.strasa.middleware.manager.UserManagerImpl;
 import org.strasa.middleware.model.StudyFile;
+import org.strasa.middleware.util.StringConstants;
 import org.strasa.web.common.api.Encryptions;
 import org.zkoss.zk.ui.Sessions;
 
@@ -89,6 +90,24 @@ public class UserFileManager {
 		//		dataFile.renameTo(new File(BASE_FOLDER.getAbsolutePath() + dataFile.getName())); 
 		System.out.println("File moved to: " + resultFolderPath);
 	}
+	
+//	Create by QIN MAO
+//	it is used to copy user uploaded file to result folder
+	public File copyUploadedFileToOutputFolder(String resultFolderPath, String realName, File dataFile)
+	{
+		if(!realName.endsWith(".csv"))
+			realName = realName + ".csv";
+		File file = null;
+		try {
+			file = new File(resultFolderPath + StringConstants.SYSTEM_FILE_SEPARATOR + realName);
+			FileUtils.copyFile(dataFile, file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return file;
+	}
+	
 	public static String buildUserPath(int userid, int studyid){
 
 		String userBasePath =  userid + "_" + studyid;//Encryptions.encryptStringToNumber(new UserManagerImpl().getUserById(userid).getUsername(),userid); 

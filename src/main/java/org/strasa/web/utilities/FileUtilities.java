@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.strasa.middleware.filesystem.manager.UserFileManager;
+import org.strasa.middleware.util.StringConstants;
 import org.zkoss.bind.BindContext;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -21,7 +22,34 @@ import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
 import org.zkoss.zul.Toolbarbutton;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 public class FileUtilities {
+
+//	define by QIN MAO
+//	it is used to write a List<String[]> data to a specified file
+	public static void saveDataToFile(List<String[]> data, String fileName, String filePath)
+	{
+		String file = filePath + StringConstants.SYSTEM_FILE_SEPARATOR + fileName;
+		FileWriter filewriter;
+		CSVWriter csvwriter = null;
+		
+		if(!file.endsWith(".csv"))
+			file = file + ".csv";
+		try {
+			filewriter = new FileWriter(file);
+			csvwriter = new CSVWriter(filewriter);
+			csvwriter.writeAll(data);
+			csvwriter.flush();
+			csvwriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+
 
 	public static void uploadFile(String filepath, InputStream file) {
 		try {

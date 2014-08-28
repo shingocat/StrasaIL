@@ -79,24 +79,33 @@
 								<hlayout spacing="20px">
 									<hbox>
 										<label value="Analysis Type: " />
-										<combobox model="@load(vm.lstTypeOfEnv)" readonly="true"
-											id="lstTypeOfEnvCBB" selectedIndex="@bind(vm.ssslAnalysisModel.envType)"
-											onChange="@command('updateEnvVariableList', selectedIndex=self.selectedIndex)"
-											autodrop="true" constraint="no empty">
+										<combobox model="@load(vm.lstTypeOfAnalysisEnv)" readonly="true"
+											id="lstTypeOfAnalysisEnvCBB" selectedItem="@bind(vm.analysisEnvType)"
+											onChange="@command('updateEnvVariableList', selectedIndex=self.selectedIndex)">
 											<template name="model">
 												<comboitem value="@load(each)" label="@load(each)" />
 											</template>
 										</combobox>
+										<!-- <combobox model="@load(vm.lstTypeOfEnv)" readonly="true" id="lstTypeOfEnvCBB" 
+											selectedIndex="@bind(vm.ssslAnalysisModel.envType)" onChange="@command('updateEnvVariableList', 
+											selectedIndex=self.selectedIndex)" autodrop="true" constraint="no empty"> 
+											<template name="model"> <comboitem value="@load(each)" label="@load(each)" 
+											/> </template> </combobox> -->
 									</hbox>
 									<hbox>
 										<label value="Type of design: " />
 										<combobox model="@load(vm.lstTypeOfDesign)" readonly="true"
-											id="lstTypeOfDesignCBB" selectedIndex="@bind(vm.ssslAnalysisModel.design)"
+											id="lstTypeOfDesignCBB" selectedItem="@bind(vm.designType)"
 											onChange="@command('updateVariableList', selectedIndex=self.selectedIndex)">
 											<template name="model">
 												<comboitem value="@load(each)" label="@load(each)" />
 											</template>
 										</combobox>
+										<!-- <combobox model="@load(vm.lstTypeOfDesign)" readonly="true" 
+											id="lstTypeOfDesignCBB" selectedIndex="@bind(vm.ssslAnalysisModel.design)" 
+											onChange="@command('updateVariableList', selectedIndex=self.selectedIndex)"> 
+											<template name="model"> <comboitem value="@load(each)" label="@load(each)" 
+											/> </template> </combobox> -->
 									</hbox>
 								</hlayout>
 								<div style="overflow=auto">
@@ -121,6 +130,7 @@
 
 				<label value="@bind(vm.resultRServe)" multiline="true" />
 			</div>
+			<space height="20px"></space>
 		</vlayout>
 	</div>
 </zk>

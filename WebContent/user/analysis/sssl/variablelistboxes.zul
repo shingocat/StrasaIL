@@ -42,7 +42,7 @@
 		</hbox>
 		<hbox>
 			<div vflex="1">
-				<listbox id="factorLB" hflex="1" rows="4" checkmark="true"
+				<listbox id="factorLB" hflex="1" rows="4" checkmark="true" multiple="true"
 					width="300px">
 					<listhead>
 						<listheader label="Factor Variables" />

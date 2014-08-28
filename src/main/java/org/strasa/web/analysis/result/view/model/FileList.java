@@ -1,11 +1,13 @@
 package org.strasa.web.analysis.result.view.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.spring.security.model.SecurityUtil;
+import org.strasa.middleware.util.StringConstants;
 import org.zkoss.zk.ui.Executions;
 
 public class FileList {
@@ -18,14 +20,18 @@ public class FileList {
 	@SuppressWarnings("unchecked")
 	public FileList() {
 
-		
-		Set<String> foldername;
-		foldername=Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/"+SecurityUtil.getUserName()+"/Single-Site");
-		
+		Set<String> folderNameOfSingleSite;
+		Set<String> folderNameOfMultiSite;
+		Set<String> folderNameOfSSSLAnalysis;
+		folderNameOfSingleSite=Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/"+SecurityUtil.getUserName()+"/Single-Site");
+		folderNameOfMultiSite = Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/"+SecurityUtil.getUserName()+"/Multi-Site");
+		folderNameOfSSSLAnalysis = Executions.getCurrent().getDesktop().getWebApp().getResourcePaths("/resultanalysis/"+SecurityUtil.getUserName()+"/SSSL_Analysis");
 		root = new FileModelTreeNode(null,new FileModelTreeNode[] {
-				new FileModelTreeNode(new FileModel("Single-Site"),getFolderList(foldername),true),
+				new FileModelTreeNode(new FileModel("Single-Site"),getFolderList(folderNameOfSingleSite),true),
 				
-				new FileModelTreeNode(new FileModel("Multi-Site"),new FileModelTreeNode[] { },true)
+				new FileModelTreeNode(new FileModel("Multi-Site"),getFolderList(folderNameOfMultiSite),true),
+				
+				new FileModelTreeNode(new FileModel("SSSL_Analysis"), getFolderList(folderNameOfSSSLAnalysis), true),
 		},true);
 
 	}
@@ -35,6 +41,8 @@ public class FileList {
 
 
 	private FileModelTreeNode[] getFolderList(Set<String> list) {
+		if(list == null || list.size() == 0)
+			return null;
 		FileModelTreeNode[] tmp=new FileModelTreeNode[list.size()];
 		List<FileModelTreeNode> fm= new ArrayList<FileModelTreeNode>();
 		for(String l : list){
