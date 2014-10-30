@@ -32,8 +32,8 @@
 							iconSclass="z-icon-leaf" />
 					</nav>
 					<!-- End -->
-					<navitem label="Extension" id="uploadextension" iconSclass="z-icon-leaf" />
-					<navitem label="Release" id="uploadrelease" iconSclass="z-icon-leaf" />
+					<navitem label="Extension" id="uploadextension" iconSclass="z-icon-leaf" visible="false"/>
+					<navitem label="Release" id="uploadrelease" iconSclass="z-icon-leaf" visible="false"/>
 				</nav>
 				<nav label="Browse" iconSclass="z-icon-angle-double-right">
 					<navitem label="Study" iconSclass="z-icon-leaf" id="browsestudy" />
@@ -42,11 +42,11 @@
 						info -->
 					<navitem label="Segment" id="browsesegment" iconSclass="z-icon-leaf" />
 					<navitem label="Across Study" id="across" iconSclass="z-icon-leaf" />
-					<navitem label="Extension" id="extension" iconSclass="z-icon-leaf" />
-					<navitem label="Release" id="releaseinfo" iconSclass="z-icon-leaf" />
+					<navitem label="Extension" id="extension" iconSclass="z-icon-leaf" visible="false"/>
+					<navitem label="Release" id="releaseinfo" iconSclass="z-icon-leaf" visible="false"/>
 				</nav>
 				<navitem id="createfieldbook" label="Create Study Template"
-					iconSclass="z-icon-picture-o" />
+					iconSclass="z-icon-picture-o" visible="false"/>
 			</nav>
 
 			<nav label="Analysis" iconSclass="z-icon-edit">
@@ -62,12 +62,12 @@
 					<navitem label="Introgression Line" id="introgressionLineAnalysis" iconSclass="z-icon-angle-double-right" />
 				</nav>
 				<navitem label="Linkage Mapping" id="linkagemapping"
-					iconSclass="z-icon-angle-double-right" />
+					iconSclass="z-icon-angle-double-right" visible="false"/>
 				<navitem label="Genomic Selection" id="genomicselection"
-					iconSclass="z-icon-angle-double-right" />
+					iconSclass="z-icon-angle-double-right" visible="false"/>
 			</nav>
 
-			<nav label="Decision Making" iconSclass="z-icon-edit">
+			<nav label="Decision Making" iconSclass="z-icon-edit" visible="false">
 				<navitem label="Cross Predictor" iconSclass="z-icon-angle-double-right" />
 				<navitem label="Cross Designer" iconSclass="z-icon-angle-double-right" />
 			</nav>

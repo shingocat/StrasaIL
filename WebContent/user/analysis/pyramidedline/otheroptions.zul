@@ -9,8 +9,11 @@
 				<checkbox label="Variance Components" id="varComponentCB"
 					checked="true" />
 				<hlayout>
-					<label>Alpha Level</label>
-					<doublebox id="alphaLevelDB" constraint="no empty,no negative, no zero" value="@bind(vm.alphalevel)"></doublebox>
+					<label>
+						Alpha Level
+					</label>
+					<doublebox id="alphaLevelDB" constraint="no empty,no negative, no zero"
+						value="@bind(vm.alphalevel)"></doublebox>
 				</hlayout>
 			</vbox>
 		</groupbox>
@@ -24,24 +27,36 @@
 							<label id="fileNameOfContrastOnGenotypeLb" value="@load(vm.contrastFileNameOnGenotype)"
 								sclass="label-search" />
 							<separator width="10px" />
+							<button id="defaultGenesContrastBtn" label="Default"
+								sclass="btn-primary" disabled="false"
+								onClick="@command('defaultContrastOnGenotype')" />
+							<separator width="10px" />
 							<button id="contrastFromFileOnGenotypeBtn" label="From File(.csv)"
 								sclass="btn-primary" upload="true, maxsize=-1" disabled="false"
-								onUpload="@command('uploadContrastFromFileOnGenotype')"/>
+								onUpload="@command('uploadContrastFromFileOnGenotype')" />
 							<separator width="10px" />
-							<button id="contrastByManuallyOnGenotyeBtn" label="Manually Input"
+							<button id="contrastByManuallyOnGenotypeBtn" label="Manually Input"
 								sclass="btn-primary" disabled="false"
 								onClick="@command('manuallyInputContrastOnGenotype')" />
 							<separator width="10px" />
+							<!-- <button id="defaultTwoGenesContrastBtn" label="Default Bi-Genes" 
+								sclass="btn-primary" disabled="false" onClick="@command('defaultTwoGenesContrastOnGenotype')" 
+								/> <button id="defaultThreeGenesContrastBtn" label="Default Tri-Genes" sclass="btn-primary" 
+								disabled="false" onClick="@command('defaultThreeGenesContrastOnGenotype')" 
+								/> <separator width="10px" /> <button id="defaultFourGenesContrastBtn" label="Default 
+								Quadra-Genes" sclass="btn-primary" disabled="false" onClick="@command('defaultFourGenesContrastOnGenotype')" 
+								/> <separator width="10px" /> -->
 							<button id="contrastResetOnGenotypeBtn" label="Reset Contrast"
-								sclass="btn-danger" visible="false" 
-								onClick="@command('resetContrastOnGenotype')"></button> 
+								sclass="btn-danger" visible="false"
+								onClick="@command('resetContrastOnGenotype')"></button>
 						</hlayout>
 						<separator height="10px"></separator>
 						<div id="contrastByManuallyOnGenotypeDiv" visible="false">
 							<hlayout>
 								<label value="No. of Contrast: "></label>
-								<doublespinner id="numberOfContrastOnGenotypeDS" step="1" value="0"
-									constraint="no negative, min 0" readonly="true" instant="true"
+								<doublespinner id="numberOfContrastOnGenotypeDS"
+									step="1" value="0" constraint="no negative, min 0" readonly="true"
+									instant="true"
 									onChange="@command('updateContrastGridManuallyOnGenotype',inputValue=self.value)" />
 							</hlayout>
 						</div>
@@ -68,8 +83,10 @@
 					<groupbox>
 						<caption>Multiplicative Models</caption>
 						<hlayout spacing="20px">
-							<checkbox id="ammiModelCB" label="AMMI" checked="true" onCheck="@command('updateAMMIGraphicOptions', status = self.checked)"/>
-							<checkbox id="ggeModelCB" label="GGE" checked="true"  onCheck="@command('updateGGEGraphicOptions', status = self.checked)"/>
+							<checkbox id="ammiModelCB" label="AMMI" checked="true"
+								onCheck="@command('updateAMMIGraphicOptions', status = self.checked)" />
+							<checkbox id="ggeModelCB" label="GGE" checked="true"
+								onCheck="@command('updateGGEGraphicOptions', status = self.checked)" />
 						</hlayout>
 					</groupbox>
 				</vlayout>

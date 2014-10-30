@@ -15,97 +15,98 @@ import org.strasa.web.utilities.InputTransform;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 
-public class SSSLRserveManager {
-	private RConnection conn;
-	private InputTransform inputTransform;
+public class SSSLRserveManager extends JRServeMangerImpl {
+//	private RConnection conn;
+//	private InputTransform inputTransform;
 
 	public SSSLRserveManager() {
-		inputTransform = new InputTransform();
-		try {
-			conn = new RConnection();
-			System.out.println("SSSL Rserve Manager Start...");
-			conn.eval("library(PBTools)");
-		} catch (RserveException e) {
-			e.printStackTrace();
-		}
+		super();
+//		inputTransform = new InputTransform();
+//		try {
+//			conn = new RConnection();
+//			System.out.println("SSSL Rserve Manager Start...");
+//			conn.eval("library(PBTools)");
+//		} catch (RserveException e) {
+//			e.printStackTrace();
+//		}
 	}
 
-	public List<String> getVariableInfo(String fileName, int fileFormat,
-			String separator) {
-		String funcGetVarInfo;
-		List<String> lstVarInfo = new ArrayList<String>();
+//	public List<String> getVariableInfo(String fileName, int fileFormat,
+//			String separator) {
+//		String funcGetVarInfo;
+//		List<String> lstVarInfo = new ArrayList<String>();
+//
+//		if (fileFormat == 2) {
+//			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \""
+//					+ fileName + "\", fileFormat = 2, separator = \""
+//					+ separator + "\")";
+//		} else {
+//			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \""
+//					+ fileName + "\", fileFormat = " + fileFormat
+//					+ ", separator = NULL)";
+//		}
+//		String[] vars;
+//		String[] types;
+//
+//		try {
+//			System.out.println(System.getProperty("os.name"));
+//			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+//				funcGetVarInfo = funcGetVarInfo.replace("\\", "//");
+//			}
+//			System.out.println("funcGetVarInfo is " + funcGetVarInfo);
+//
+//			getConn().eval(funcGetVarInfo);
+//			vars = getConn().eval("as.vector(varsAndTypes$Variable)").asStrings();
+//			types = getConn().eval("as.vector(varsAndTypes$Type)").asStrings();
+//			for (int i = 0; i < vars.length; i++) {
+//				lstVarInfo.add(vars[i] + ":" + types[i]);
+//			}
+//			for (String s : lstVarInfo) {
+//				System.out.println(s);
+//			}
+//
+//		} catch (RserveException e) {
+//			e.printStackTrace();
+//		} catch (REXPMismatchException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			getConn().close();
+//		}
+//		return lstVarInfo;
+//	}
 
-		if (fileFormat == 2) {
-			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \""
-					+ fileName + "\", fileFormat = 2, separator = \""
-					+ separator + "\")";
-		} else {
-			funcGetVarInfo = "varsAndTypes <- getVarInfo(fileName = \""
-					+ fileName + "\", fileFormat = " + fileFormat
-					+ ", separator = NULL)";
-		}
-		String[] vars;
-		String[] types;
-
-		try {
-			System.out.println(System.getProperty("os.name"));
-			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-				funcGetVarInfo = funcGetVarInfo.replace("\\", "//");
-			}
-			System.out.println("funcGetVarInfo is " + funcGetVarInfo);
-
-			conn.eval(funcGetVarInfo);
-			vars = conn.eval("as.vector(varsAndTypes$Variable)").asStrings();
-			types = conn.eval("as.vector(varsAndTypes$Type)").asStrings();
-			for (int i = 0; i < vars.length; i++) {
-				lstVarInfo.add(vars[i] + ":" + types[i]);
-			}
-			for (String s : lstVarInfo) {
-				System.out.println(s);
-			}
-
-		} catch (RserveException e) {
-			e.printStackTrace();
-		} catch (REXPMismatchException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			conn.close();
-		}
-		return lstVarInfo;
-	}
-
-	public String[] getLevels(List<String> columnList, List<String[]> dataList,
-			String environment) {
-		int envtColumn = 0;
-		for (int i = 0; i < columnList.size(); i++) {
-			if (columnList.get(i).equals(environment)) {
-				envtColumn = i;
-			}
-		}
-
-		ArrayList<String> envts = new ArrayList<String>();
-		for (int j = 0; j < dataList.size(); j++) {
-			String level = dataList.get(j)[envtColumn];
-			if (!envts.contains(level) && !level.isEmpty()) {
-				envts.add(level);
-			}
-		}
-
-		String[] envtLevels = new String[envts.size()];
-		for (int k = 0; k < envts.size(); k++) {
-			envtLevels[k] = (String) envts.get(k);
-		}
-
-		return envtLevels;
-	}
-
-	// The other way to get levels of factor,
-	// but not implemented right now, if have time do this;
-	public String[] getLevels(String dataFile, String factorName) {
-
-		return null;
-	}
+//	public String[] getLevels(List<String> columnList, List<String[]> dataList,
+//			String environment) {
+//		int envtColumn = 0;
+//		for (int i = 0; i < columnList.size(); i++) {
+//			if (columnList.get(i).equals(environment)) {
+//				envtColumn = i;
+//			}
+//		}
+//
+//		ArrayList<String> envts = new ArrayList<String>();
+//		for (int j = 0; j < dataList.size(); j++) {
+//			String level = dataList.get(j)[envtColumn];
+//			if (!envts.contains(level) && !level.isEmpty()) {
+//				envts.add(level);
+//			}
+//		}
+//
+//		String[] envtLevels = new String[envts.size()];
+//		for (int k = 0; k < envts.size(); k++) {
+//			envtLevels[k] = (String) envts.get(k);
+//		}
+//
+//		return envtLevels;
+//	}
+//
+//	// The other way to get levels of factor,
+//	// but not implemented right now, if have time do this;
+//	public String[] getLevels(String dataFile, String factorName) {
+//
+//		return null;
+//	}
 
 	public void doAnalysis(SSSLAnalysisModel model) {
 		System.out.println("SSSL MODEL INFO : " + model.toString());
@@ -170,8 +171,8 @@ public class SSSLRserveManager {
 		boolean ammi = model.isAMMI(); // model.isAmmi();
 		boolean gge = model.isGGE(); // model.isGge();
 
-		String respvarVector = inputTransform.createRVector(respvar);
-		String controlLevelsVector = inputTransform
+		String respvarVector = getInputTransform().createRVector(respvar);
+		String controlLevelsVector = getInputTransform()
 				.createRVector(controlLevels);
 		boolean runningFixedSuccess = true;
 		boolean runningRandomSuccess = true;
@@ -227,19 +228,19 @@ public class SSSLRserveManager {
 					+ dataFileName
 					+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\"), silent = TRUE);";
 			System.out.println(readData);
-			conn.eval(readData);
-			String runSuccessData = conn.eval("class(dataMeaOneStage)")
+			getConn().eval(readData);
+			String runSuccessData = getConn().eval("class(dataMeaOneStage)")
 					.asString();
 
 			if (runSuccessData != null && runSuccessData.equals("try-error")) {
 				System.out.println("error");
-				conn.eval("capture.output(cat(\"\n***Error reading data.***\n\"),file=\""
+				getConn().eval("capture.output(cat(\"\n***Error reading data.***\n\"),file=\""
 						+ outFileName + "\",append = FALSE)"); // append to
 																// output file?
 			} else {
 				String setWd = "setwd(\"" + resultFolderPath + "\")";
 				System.out.println(setWd);
-				conn.eval(setWd);
+				getConn().eval(setWd);
 			}
 
 			String usedData = "capture.output(cat(\"\nDATA FILE: "
@@ -255,9 +256,9 @@ public class SSSLRserveManager {
 			String outSpace = "capture.output(cat(\"\n\"),file=\""
 					+ outFileName + "\",append = TRUE)";
 
-			conn.eval(usedData);
-			conn.eval(outFile);
-			conn.eval(usedDesign);
+			getConn().eval(usedData);
+			getConn().eval(outFile);
+			getConn().eval(usedDesign);
 
 			// OUTPUT
 			// Genotype Fixed
@@ -303,14 +304,14 @@ public class SSSLRserveManager {
 
 				String fixedHead = "capture.output(cat(\"GENOTYPE AS: Fixed\n\"),file=\""
 						+ outFileName + "\",append = TRUE)";
-				conn.eval(funcMeaOneStageFixed);
-				conn.eval(sep2);
-				conn.eval(fixedHead);
-				conn.eval(sep2);
-				conn.eval(outSpace);
+				getConn().eval(funcMeaOneStageFixed);
+				getConn().eval(sep2);
+				getConn().eval(fixedHead);
+				getConn().eval(sep2);
+				getConn().eval(outSpace);
 
 				System.out.println(funcMeaOneStageFixed);
-				String runSuccess = conn.eval("class(meaOne1)").asString();
+				String runSuccess = getConn().eval("class(meaOne1)").asString();
 				if (runSuccess != null && runSuccess.equals("try-error")) {
 					System.out.println("GEOneStage.test: error");
 					String checkError = "msg <- trimStrings(strsplit(meaOne1, \":\")[[1]])";
@@ -318,10 +319,10 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage.test function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 
 					runningFixedSuccess = false;
 
@@ -335,16 +336,16 @@ public class SSSLRserveManager {
 								+ "\n\"),file=\""
 								+ outFileName
 								+ "\",append = TRUE)";
-						conn.eval(sep);
-						conn.eval(respVarHead);
-						conn.eval(sep);
+						getConn().eval(sep);
+						getConn().eval(respVarHead);
+						getConn().eval(sep);
 
 						// check if the data has too many missing observations
-						double responseRate = conn.eval(
+						double responseRate = getConn().eval(
 								"meaOne1$output[[" + i + "]]$responseRate")
 								.asDouble();
 						if (responseRate < 0.80) {
-							String allNAWarning = conn
+							String allNAWarning = getConn()
 									.eval("meaOne1$output[[" + i
 											+ "]]$manyNAWarning").asString();
 							String printError1 = "capture.output(cat(\"***\\n\"), file=\""
@@ -355,13 +356,13 @@ public class SSSLRserveManager {
 									+ allNAWarning + "\\n\"), file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outSpace);
-							conn.eval(printError1);
-							conn.eval(printError2);
-							conn.eval(printError3);
-							conn.eval(printError1);
-							conn.eval(outSpace);
-							conn.eval(outSpace);
+							getConn().eval(outSpace);
+							getConn().eval(printError1);
+							getConn().eval(printError2);
+							getConn().eval(printError3);
+							getConn().eval(printError1);
+							getConn().eval(outSpace);
+							getConn().eval(outSpace);
 							printAllOutputFixed = false;
 						}
 
@@ -385,9 +386,9 @@ public class SSSLRserveManager {
 							String trialSum = "capture.output(funcTrialSum,file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(funcTrialSum);
+							getConn().eval(funcTrialSum);
 
-							String runSuccessTS = conn.eval(
+							String runSuccessTS = getConn().eval(
 									"class(funcTrialSum)").asString();
 							if (runSuccessTS != null
 									&& runSuccessTS.equals("try-error")) {
@@ -397,25 +398,25 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in class.information function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							else {
-								conn.eval(trialSumHead);
-								conn.eval(trialObsRead);
-								conn.eval(trialObsUsed);
-								conn.eval(trialSum);
-								conn.eval(outSpace);
+								getConn().eval(trialSumHead);
+								getConn().eval(trialObsRead);
+								getConn().eval(trialObsUsed);
+								getConn().eval(trialSum);
+								getConn().eval(outSpace);
 							}
 
 							// optional output: descriptive statistics
 							String funcDesc = "outDesc <- try(DescriptiveStatistics(dataMeaOneStage, \""
 									+ respvar[k]
 									+ "\", grp = NULL), silent=TRUE)";
-							conn.eval(funcDesc);
+							getConn().eval(funcDesc);
 
 							if (descriptiveStat) {
 								String outDescStat = "capture.output(cat(\"\nDESCRIPTIVE STATISTICS:\n\n\"),file=\""
@@ -423,7 +424,7 @@ public class SSSLRserveManager {
 								String outDescStat2 = "capture.output(outDesc,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								String runSuccessDescStat = conn.eval(
+								String runSuccessDescStat = getConn().eval(
 										"class(outDesc)").asString();
 								if (runSuccessDescStat != null
 										&& runSuccessDescStat
@@ -434,16 +435,16 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in DescriptiveStatistics function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								}
 
 								else {
-									conn.eval(outDescStat);
-									conn.eval(outDescStat2);
-									conn.eval(outSpace);
+									getConn().eval(outDescStat);
+									getConn().eval(outDescStat2);
+									getConn().eval(outSpace);
 								}
 							}
 
@@ -456,9 +457,9 @@ public class SSSLRserveManager {
 										+ "]]$varcomp.table,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(outVarComp);
-								conn.eval(outVarComp2);
-								conn.eval(outSpace);
+								getConn().eval(outVarComp);
+								getConn().eval(outVarComp2);
+								getConn().eval(outSpace);
 							}
 
 							// default output: Test Genotypic Effect
@@ -484,18 +485,18 @@ public class SSSLRserveManager {
 							String outAnovaTable10 = "detach(\"package:lmerTest\")";
 
 							// rConnection.eval(outspace);
-							conn.eval(outAnovaTable1);
-							conn.eval(outAnovaTable2);
-							conn.eval(outAnovaTable3);
-							conn.eval(outAnovaTable4);
-							conn.eval(outAnovaTable5);
-							conn.eval(outAnovaTable6);
-							conn.eval(outAnovaTable7);
+							getConn().eval(outAnovaTable1);
+							getConn().eval(outAnovaTable2);
+							getConn().eval(outAnovaTable3);
+							getConn().eval(outAnovaTable4);
+							getConn().eval(outAnovaTable5);
+							getConn().eval(outAnovaTable6);
+							getConn().eval(outAnovaTable7);
 							// rConnection.eval(outSpace);
-							conn.eval(outAnovaTable8);
-							conn.eval(outAnovaTable9);
-							conn.eval(outSpace);
-							conn.eval(outAnovaTable10);
+							getConn().eval(outAnovaTable8);
+							getConn().eval(outAnovaTable9);
+							getConn().eval(outSpace);
+							getConn().eval(outAnovaTable10);
 
 							// default output: Test Environment Effect
 							String outTestEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -512,11 +513,11 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$testsig.Env,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outTestEnv1);
-							conn.eval(outTestEnv2);
-							conn.eval(outTestEnv3);
-							conn.eval(outTestEnv4);
-							conn.eval(outSpace);
+							getConn().eval(outTestEnv1);
+							getConn().eval(outTestEnv2);
+							getConn().eval(outTestEnv3);
+							getConn().eval(outTestEnv4);
+							getConn().eval(outSpace);
 
 							// default output: Test GXE Effect
 							String outTestGenoEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF GENOTYPE X ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -533,11 +534,11 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$testsig.GenoEnv,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outTestGenoEnv1);
-							conn.eval(outTestGenoEnv2);
-							conn.eval(outTestGenoEnv3);
-							conn.eval(outTestGenoEnv4);
-							conn.eval(outSpace);
+							getConn().eval(outTestGenoEnv1);
+							getConn().eval(outTestGenoEnv2);
+							getConn().eval(outTestGenoEnv3);
+							getConn().eval(outTestGenoEnv4);
+							getConn().eval(outSpace);
 
 							// default output: Genotype x Environment Means
 							String outGenoEnv = "capture.output(cat(\"\nGENOTYPE X ENVIRONMENT MEANS:\n\n\"),file=\""
@@ -546,9 +547,9 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$wide.GenoEnv,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outGenoEnv);
-							conn.eval(outGenoEnv2);
-							conn.eval(outSpace);
+							getConn().eval(outGenoEnv);
+							getConn().eval(outGenoEnv2);
+							getConn().eval(outSpace);
 
 							// default output: Genotype Means
 							String outDescStat = "capture.output(cat(\"\nGENOTYPE LSMEANS AND STANDARD ERRORS:\n\n\"),file=\""
@@ -558,9 +559,9 @@ public class SSSLRserveManager {
 									+ "]]$means.Geno,file=\""
 									+ outFileName
 									+ "\",append = TRUE)";
-							conn.eval(outDescStat);
-							conn.eval(outDescStat2);
-							conn.eval(outSpace);
+							getConn().eval(outDescStat);
+							getConn().eval(outDescStat2);
+							getConn().eval(outSpace);
 
 							// default output: statistics on SED
 							String outSedStat1 = "capture.output(cat(\"\nSTANDARD ERROR OF THE DIFFERENCE (SED):\n\n\"),file=\""
@@ -570,9 +571,9 @@ public class SSSLRserveManager {
 									+ "]]$sedTable,file=\""
 									+ outFileName
 									+ "\",append = TRUE)";
-							conn.eval(outSedStat1);
-							conn.eval(outSedStat2);
-							conn.eval(outSpace);
+							getConn().eval(outSedStat1);
+							getConn().eval(outSedStat2);
+							getConn().eval(outSpace);
 
 							// optional output: PerformPairwise
 							if (performPairwise) {
@@ -598,10 +599,10 @@ public class SSSLRserveManager {
 									String outCompareControl2 = "capture.output(pwControl$result,file=\""
 											+ outFileName + "\",append = TRUE)";
 									System.out.println(funcPwC);
-									conn.eval(funcPwC);
-									conn.eval(outCompareControl);
+									getConn().eval(funcPwC);
+									getConn().eval(outCompareControl);
 
-									String runSuccessPwC = conn.eval(
+									String runSuccessPwC = getConn().eval(
 											"class(pwControl)").asString();
 									if (runSuccessPwC != null
 											&& runSuccessPwC
@@ -614,18 +615,18 @@ public class SSSLRserveManager {
 										String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.pairwise function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkError);
-										conn.eval(checkError2);
-										conn.eval(checkError3);
-										conn.eval(checkError4);
-										conn.eval(outSpace);
-										conn.eval(outSpace);
+										getConn().eval(checkError);
+										getConn().eval(checkError2);
+										getConn().eval(checkError3);
+										getConn().eval(checkError4);
+										getConn().eval(outSpace);
+										getConn().eval(outSpace);
 									} else {
-										conn.eval(outCompareControl2);
+										getConn().eval(outCompareControl2);
 
 										// display warning generated by
 										// checkTest in ssa.pairwise
-										String warningControlTest = conn.eval(
+										String warningControlTest = getConn().eval(
 												"pwControl$controlTestWarning")
 												.asString();
 
@@ -639,11 +640,11 @@ public class SSSLRserveManager {
 													+ outFileName
 													+ "\",append = TRUE)";
 
-											conn.eval(warningCheckTest2);
-											conn.eval(warningCheckTest3);
+											getConn().eval(warningCheckTest2);
+											getConn().eval(warningCheckTest3);
 										}
-										conn.eval(outSpace);
-										conn.eval(outSpace);
+										getConn().eval(outSpace);
+										getConn().eval(outSpace);
 										System.out
 												.println("pairwise control test:"
 														+ warningControlTest);
@@ -652,7 +653,7 @@ public class SSSLRserveManager {
 								} else if (performAllPairwise) {
 									String outPerformAllPairwise = "capture.output(cat(\"\nSIGNIFICANT PAIRWISE COMPARISONS (IF ANY): \n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(outPerformAllPairwise);
+									getConn().eval(outPerformAllPairwise);
 									if (genotypeLevels.length > 0
 											& genotypeLevels.length < 16) {
 										String funcPwAll = "pwAll <- try(ssa.pairwise(meaOne1$output[["
@@ -663,9 +664,9 @@ public class SSSLRserveManager {
 										String outPerformAllPairwise2n = "capture.output(pwAll$result,file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(funcPwAll);
+										getConn().eval(funcPwAll);
 
-										String runSuccessPwAll = conn.eval(
+										String runSuccessPwAll = getConn().eval(
 												"class(pwAll)").asString();
 										if (runSuccessPwAll != null
 												&& runSuccessPwAll
@@ -678,20 +679,20 @@ public class SSSLRserveManager {
 											String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.pairwise function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 													+ outFileName
 													+ "\",append = TRUE)";
-											conn.eval(checkError);
-											conn.eval(checkError2);
-											conn.eval(checkError3);
-											conn.eval(checkError4);
+											getConn().eval(checkError);
+											getConn().eval(checkError2);
+											getConn().eval(checkError3);
+											getConn().eval(checkError4);
 										} else {
-											conn.eval(outPerformAllPairwise2n);
-											conn.eval(outSpace);
-											conn.eval(outSpace);
+											getConn().eval(outPerformAllPairwise2n);
+											getConn().eval(outSpace);
+											getConn().eval(outSpace);
 										}
 									} else {
 										String nLevelsLarge = "capture.output(cat(\"***\nExceeded maximum number of genotypes that can be compared. \n***\n\n\"),file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(nLevelsLarge);
+										getConn().eval(nLevelsLarge);
 									}
 								}
 							}
@@ -705,15 +706,15 @@ public class SSSLRserveManager {
 										+ contrastGenoFilename
 										+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\"), silent = TRUE);";
 								System.out.println(readContrastData);
-								conn.eval(readContrastData);
-								String runSuccessContrastData = conn.eval(
+								getConn().eval(readContrastData);
+								String runSuccessContrastData = getConn().eval(
 										"class(contrastGenoData)").asString();
 
 								if (runSuccessContrastData != null
 										&& runSuccessContrastData
 												.equals("notRun")) {
 									System.out.println("error");
-									conn.eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
+									getConn().eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
 											+ outFileName
 											+ "\",append = FALSE)");
 								} else {
@@ -722,9 +723,9 @@ public class SSSLRserveManager {
 											+ "]]$model, contrastOpt = \"user\", contrast = contrastGenoData, alpha = "
 											+ pairwiseSig + "), silent = TRUE)";
 									System.out.println(userContrast);
-									conn.eval(userContrast);
+									getConn().eval(userContrast);
 
-									String runSuccessUserCtrl = conn.eval(
+									String runSuccessUserCtrl = getConn().eval(
 											"class(userContrast)").asString();
 									if (runSuccessUserCtrl != null
 											&& runSuccessUserCtrl
@@ -737,10 +738,10 @@ public class SSSLRserveManager {
 										String checkUError4 = "capture.output(cat(\"*** \nERROR in contrastAnalysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkUError);
-										conn.eval(checkUError2);
-										conn.eval(checkUError3);
-										conn.eval(checkUError4);
+										getConn().eval(checkUError);
+										getConn().eval(checkUError2);
+										getConn().eval(checkUError3);
+										getConn().eval(checkUError4);
 
 									} else {
 										String outCompareControl = "if (nrow(userContrast) != 0) {\n";
@@ -773,7 +774,7 @@ public class SSSLRserveManager {
 										outCompareControl = outCompareControl
 												+ "}";
 										// System.out.println(outCompareControl);
-										conn.eval(outCompareControl);
+										getConn().eval(outCompareControl);
 									}
 
 								} // end stmt if-else (runSuccessContrastData !=
@@ -863,7 +864,7 @@ public class SSSLRserveManager {
 
 							String genoEnvMeans = "genoEnvMeans <- meaOne1$output[["
 									+ i + "]]$means.GenoEnvCode";
-							conn.eval(genoEnvMeans);
+							getConn().eval(genoEnvMeans);
 							System.out.println(genoEnvMeans);
 
 							// stability analysis start at next line
@@ -886,11 +887,11 @@ public class SSSLRserveManager {
 									String outTestStability1b = "capture.output(funcStability1[[1]][[1]]$stability,file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(funcStability1);
-									conn.eval(outTestStability1);
+									getConn().eval(funcStability1);
+									getConn().eval(outTestStability1);
 									System.out.println(funcStability1);
 
-									String runSuccessStab = conn.eval(
+									String runSuccessStab = getConn().eval(
 											"class(funcStability1)").asString();
 									if (runSuccessStab != null
 											&& runSuccessStab
@@ -903,13 +904,13 @@ public class SSSLRserveManager {
 										String checkError4 = "capture.output(cat(\"*** \nERROR in stability.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkError);
-										conn.eval(checkError2);
-										conn.eval(checkError3);
-										conn.eval(checkError4);
+										getConn().eval(checkError);
+										getConn().eval(checkError2);
+										getConn().eval(checkError3);
+										getConn().eval(checkError4);
 									} else {
-										conn.eval(outTestStability1b);
-										conn.eval(outSpace);
+										getConn().eval(outTestStability1b);
+										getConn().eval(outSpace);
 									}
 								} else {
 									String outRemark = "capture.output(cat(\"\nSTABILITY ANALYSIS USING FINLAY-WILKINSON MODEL:\n\"),file=\""
@@ -917,8 +918,8 @@ public class SSSLRserveManager {
 									String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least five levels.***\n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outRemark);
-									conn.eval(outRemark2);
+									getConn().eval(outRemark);
+									getConn().eval(outRemark2);
 								}
 							}
 
@@ -940,10 +941,10 @@ public class SSSLRserveManager {
 											+ outFileName + "\",append = TRUE)";
 
 									System.out.println(funcStability2);
-									conn.eval(funcStability2);
-									conn.eval(outTestStability2);
+									getConn().eval(funcStability2);
+									getConn().eval(outTestStability2);
 
-									String runSuccessStab = conn.eval(
+									String runSuccessStab = getConn().eval(
 											"class(funcStability2)").asString();
 									if (runSuccessStab != null
 											&& runSuccessStab
@@ -956,13 +957,13 @@ public class SSSLRserveManager {
 										String checkError4 = "capture.output(cat(\"*** \nERROR in stability.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkError);
-										conn.eval(checkError2);
-										conn.eval(checkError3);
-										conn.eval(checkError4);
+										getConn().eval(checkError);
+										getConn().eval(checkError2);
+										getConn().eval(checkError3);
+										getConn().eval(checkError4);
 									} else {
-										conn.eval(outTestStability2b);
-										conn.eval(outSpace);
+										getConn().eval(outTestStability2b);
+										getConn().eval(outSpace);
 									}
 								} else {
 									String outRemark = "capture.output(cat(\"\nSTABILITY ANALYSIS USING SHUKLA'S MODEL:\n\"),file=\""
@@ -970,8 +971,8 @@ public class SSSLRserveManager {
 									String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least five levels.***\n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outRemark);
-									conn.eval(outRemark2);
+									getConn().eval(outRemark);
+									getConn().eval(outRemark2);
 								}
 							}
 							// end stability
@@ -1016,13 +1017,13 @@ public class SSSLRserveManager {
 											+ outFileName + "\",append = TRUE)";
 									String outAmmi2 = "capture.output(cat(\"Percentage of Total Variation Accounted for by the Principal Components: \n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(setWd);
-									conn.eval(ammiOut);
-									conn.eval(outAmmi1);
+									getConn().eval(setWd);
+									getConn().eval(ammiOut);
+									getConn().eval(outAmmi1);
 									System.out.println(setWd);
 									System.out.println(ammiOut);
 
-									String runSuccessAmmi = conn.eval(
+									String runSuccessAmmi = getConn().eval(
 											"class(ammiOut)").asString();
 									if (runSuccessAmmi != null
 											&& runSuccessAmmi
@@ -1034,18 +1035,18 @@ public class SSSLRserveManager {
 										String checkError4 = "capture.output(cat(\"*** \nERROR in ammi.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkError);
-										conn.eval(checkError2);
-										conn.eval(checkError3);
-										conn.eval(checkError4);
+										getConn().eval(checkError);
+										getConn().eval(checkError2);
+										getConn().eval(checkError3);
+										getConn().eval(checkError4);
 									} else {
 
 										String outAmmi3 = "capture.output(ammiOut$analysis,file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(outAmmi2);
-										conn.eval(outAmmi3);
-										conn.eval(outSpace);
+										getConn().eval(outAmmi2);
+										getConn().eval(outAmmi3);
+										getConn().eval(outSpace);
 									}
 								} else {
 									String outRemark = "capture.output(cat(\"\nAMMI ANALYSIS:\n\"),file=\""
@@ -1053,8 +1054,8 @@ public class SSSLRserveManager {
 									String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least three levels.***\n\n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outRemark);
-									conn.eval(outRemark2);
+									getConn().eval(outRemark);
+									getConn().eval(outRemark2);
 								}
 							}
 
@@ -1089,13 +1090,13 @@ public class SSSLRserveManager {
 									String outAmmi2 = "capture.output(cat(\"Percentage of Total Variation Accounted for by the Principal Components: \n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
 									;
-									conn.eval(setWd);
-									conn.eval(ggeOut);
-									conn.eval(outAmmi1);
+									getConn().eval(setWd);
+									getConn().eval(ggeOut);
+									getConn().eval(outAmmi1);
 									System.out.println(setWd);
 									System.out.println(ggeOut);
 
-									String runSuccessAmmi = conn.eval(
+									String runSuccessAmmi = getConn().eval(
 											"class(ggeOut)").asString();
 									if (runSuccessAmmi != null
 											&& runSuccessAmmi
@@ -1107,18 +1108,18 @@ public class SSSLRserveManager {
 										String checkError4 = "capture.output(cat(\"*** \nERROR in gge.analysis function (f=0.5):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(checkError);
-										conn.eval(checkError2);
-										conn.eval(checkError3);
-										conn.eval(checkError4);
+										getConn().eval(checkError);
+										getConn().eval(checkError2);
+										getConn().eval(checkError3);
+										getConn().eval(checkError4);
 									} else {
 
 										String outAmmi3 = "capture.output(ggeOut$analysis,file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(outAmmi2);
-										conn.eval(outAmmi3);
-										conn.eval(outSpace);
+										getConn().eval(outAmmi2);
+										getConn().eval(outAmmi3);
+										getConn().eval(outSpace);
 									}
 
 									// f=0
@@ -1192,8 +1193,8 @@ public class SSSLRserveManager {
 									String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least three levels.***\n\n\n\"),file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outRemark);
-									conn.eval(outRemark2);
+									getConn().eval(outRemark);
+									getConn().eval(outRemark2);
 								}
 							}
 
@@ -1306,13 +1307,13 @@ public class SSSLRserveManager {
 							// rConnection.eval(checkError4);
 							// }
 							// end
-							conn.eval(outSpace);
+							getConn().eval(outSpace);
 						}
 					} // end of for loop respvars
 
 					// default output: save Genotype x Environment Means to a
 					// csv file
-					String checkGenoEnvMean = conn.eval(
+					String checkGenoEnvMean = getConn().eval(
 							"meaOne1$meansGenoEnvWarning").asString();
 					System.out.println("checkGenoEnvMean: " + checkGenoEnvMean);
 
@@ -1323,9 +1324,9 @@ public class SSSLRserveManager {
 								+ resultFolderPath
 								+ "GenoEnvMeans_fixed.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 						System.out.println(funcSaveGEMeansCsv);
-						conn.eval(funcSaveGEMeansCsv);
+						getConn().eval(funcSaveGEMeansCsv);
 
-						String runSuccessSaveGEMeans = conn.eval(
+						String runSuccessSaveGEMeans = getConn().eval(
 								"class(saveGEMeans)").asString();
 						if (runSuccessSaveGEMeans != null
 								&& runSuccessSaveGEMeans.equals("try-error")) {
@@ -1335,16 +1336,16 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype x environment means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 
 					}
 
 					// default output: save Genotype Means to a csv file
-					String checkGenoMean = conn
+					String checkGenoMean = getConn()
 							.eval("meaOne1$meansGenoWarning").asString();
 					System.out.println("checkGenoMean: " + checkGenoMean);
 
@@ -1355,9 +1356,9 @@ public class SSSLRserveManager {
 								+ resultFolderPath
 								+ "GenoMeans_fixed.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 						System.out.println(funcSaveGMeansCsv);
-						conn.eval(funcSaveGMeansCsv);
+						getConn().eval(funcSaveGMeansCsv);
 
-						String runSuccessSaveGMeans = conn.eval(
+						String runSuccessSaveGMeans = getConn().eval(
 								"class(saveGMeans)").asString();
 						if (runSuccessSaveGMeans != null
 								&& runSuccessSaveGMeans.equals("try-error")) {
@@ -1367,10 +1368,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 
@@ -1380,9 +1381,9 @@ public class SSSLRserveManager {
 								+ respvarVector
 								+ ", is.random = FALSE, meaOne1), silent=TRUE)";
 						System.out.println(diagPlotsMea1SFunc);
-						conn.eval(diagPlotsMea1SFunc);
+						getConn().eval(diagPlotsMea1SFunc);
 
-						String runSuccessDiag = conn.eval(
+						String runSuccessDiag = getConn().eval(
 								"class(diagPlotsMea1S)").asString();
 						if (runSuccessDiag != null
 								&& runSuccessDiag.equals("try-error")) {
@@ -1392,10 +1393,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in creating diagnostic plot (fixed genotype):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 				} // end of else for if runSuccess
@@ -1444,14 +1445,14 @@ public class SSSLRserveManager {
 
 				String randomHead = "capture.output(cat(\"GENOTYPE AS: Random\n\"),file=\""
 						+ outFileName + "\",append = TRUE)";
-				conn.eval(funcMeaOneStageRandom);
-				conn.eval(sep2);
-				conn.eval(randomHead);
-				conn.eval(sep2);
-				conn.eval(outSpace);
+				getConn().eval(funcMeaOneStageRandom);
+				getConn().eval(sep2);
+				getConn().eval(randomHead);
+				getConn().eval(sep2);
+				getConn().eval(outSpace);
 
 				System.out.println(funcMeaOneStageRandom);
-				String runSuccess2 = conn.eval("class(meaOne2)").asString();
+				String runSuccess2 = getConn().eval("class(meaOne2)").asString();
 				if (runSuccess2 != null && runSuccess2.equals("try-error")) {
 					System.out.println("GEOneStage.test: error");
 					String checkError = "msg <- trimStrings(strsplit(meaOne2, \":\")[[1]])";
@@ -1459,10 +1460,10 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage.test function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 
 					runningRandomSuccess = false;
 				} else {
@@ -1475,15 +1476,15 @@ public class SSSLRserveManager {
 								+ "\n\"),file=\""
 								+ outFileName
 								+ "\",append = TRUE)";
-						conn.eval(sep);
-						conn.eval(respVarHead);
-						conn.eval(sep);
+						getConn().eval(sep);
+						getConn().eval(respVarHead);
+						getConn().eval(sep);
 
-						double responseRate = conn.eval(
+						double responseRate = getConn().eval(
 								"meaOne2$output[[" + i + "]]$responseRate")
 								.asDouble();
 						if (responseRate < 0.80) {
-							String allNAWarning = conn
+							String allNAWarning = getConn()
 									.eval("meaOne2$output[[" + i
 											+ "]]$manyNAWarning").asString();
 							String printError1 = "capture.output(cat(\"***\\n\"), file=\""
@@ -1494,13 +1495,13 @@ public class SSSLRserveManager {
 									+ allNAWarning + "\\n\"), file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outSpace);
-							conn.eval(printError1);
-							conn.eval(printError2);
-							conn.eval(printError3);
-							conn.eval(printError1);
-							conn.eval(outSpace);
-							conn.eval(outSpace);
+							getConn().eval(outSpace);
+							getConn().eval(printError1);
+							getConn().eval(printError2);
+							getConn().eval(printError3);
+							getConn().eval(printError1);
+							getConn().eval(outSpace);
+							getConn().eval(outSpace);
 							printAllOutputRandom = false;
 						}
 
@@ -1524,9 +1525,9 @@ public class SSSLRserveManager {
 							String trialSum = "capture.output(funcTrialSum,file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(funcTrialSum);
+							getConn().eval(funcTrialSum);
 
-							String runSuccessTS = conn.eval(
+							String runSuccessTS = getConn().eval(
 									"class(funcTrialSum)").asString();
 							if (runSuccessTS != null
 									&& runSuccessTS.equals("try-error")) {
@@ -1536,24 +1537,24 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in class.information function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							else {
-								conn.eval(trialSumHead);
-								conn.eval(trialObsRead);
-								conn.eval(trialObsUsed);
-								conn.eval(trialSum);
-								conn.eval(outSpace);
+								getConn().eval(trialSumHead);
+								getConn().eval(trialObsRead);
+								getConn().eval(trialObsUsed);
+								getConn().eval(trialSum);
+								getConn().eval(outSpace);
 							}
 
 							// optional output: for descriptive stat
 							String funcDesc = "outDesc <- DescriptiveStatistics(dataMeaOneStage, \""
 									+ respvar[k] + "\", grp = NULL)";
-							conn.eval(funcDesc);
+							getConn().eval(funcDesc);
 
 							if (descriptiveStat) {
 								String outDescStat = "capture.output(cat(\"\nDESCRIPTIVE STATISTICS:\n\n\"),file=\""
@@ -1561,7 +1562,7 @@ public class SSSLRserveManager {
 								String outDescStat2 = "capture.output(outDesc,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								String runSuccessDescStat = conn.eval(
+								String runSuccessDescStat = getConn().eval(
 										"class(outDesc)").asString();
 								if (runSuccessDescStat != null
 										&& runSuccessDescStat
@@ -1572,14 +1573,14 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in DescriptiveStatistics function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
-									conn.eval(outDescStat);
-									conn.eval(outDescStat2);
-									conn.eval(outSpace);
+									getConn().eval(outDescStat);
+									getConn().eval(outDescStat2);
+									getConn().eval(outSpace);
 								}
 							}
 
@@ -1591,9 +1592,9 @@ public class SSSLRserveManager {
 										+ i
 										+ "]]$varcomp.table,file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outVarComp);
-								conn.eval(outVarComp2);
-								conn.eval(outSpace);
+								getConn().eval(outVarComp);
+								getConn().eval(outVarComp2);
+								getConn().eval(outSpace);
 							}
 
 							// default output: Test Genotypic Effect
@@ -1611,11 +1612,11 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$testsig.Geno,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outTestGeno1);
-							conn.eval(outTestGeno2);
-							conn.eval(outTestGeno3);
-							conn.eval(outTestGeno4);
-							conn.eval(outSpace);
+							getConn().eval(outTestGeno1);
+							getConn().eval(outTestGeno2);
+							getConn().eval(outTestGeno3);
+							getConn().eval(outTestGeno4);
+							getConn().eval(outSpace);
 
 							// default output: Test Environment Effect
 							String outTestEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -1632,11 +1633,11 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$testsig.Env,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outTestEnv1);
-							conn.eval(outTestEnv2);
-							conn.eval(outTestEnv3);
-							conn.eval(outTestEnv4);
-							conn.eval(outSpace);
+							getConn().eval(outTestEnv1);
+							getConn().eval(outTestEnv2);
+							getConn().eval(outTestEnv3);
+							getConn().eval(outTestEnv4);
+							getConn().eval(outSpace);
 
 							// default output: Test GXE Effect
 							String outTestGenoEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF GENOTYPE X ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -1653,11 +1654,11 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$testsig.GenoEnv,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outTestGenoEnv1);
-							conn.eval(outTestGenoEnv2);
-							conn.eval(outTestGenoEnv3);
-							conn.eval(outTestGenoEnv4);
-							conn.eval(outSpace);
+							getConn().eval(outTestGenoEnv1);
+							getConn().eval(outTestGenoEnv2);
+							getConn().eval(outTestGenoEnv3);
+							getConn().eval(outTestGenoEnv4);
+							getConn().eval(outSpace);
 
 							// default output: Genotype X Environment Means
 							String outGenoEnv = "capture.output(cat(\"\nGENOTYPE X ENVIRONMENT MEANS:\n\n\"),file=\""
@@ -1666,9 +1667,9 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$wide.GenoEnv,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outGenoEnv);
-							conn.eval(outGenoEnv2);
-							conn.eval(outSpace);
+							getConn().eval(outGenoEnv);
+							getConn().eval(outGenoEnv2);
+							getConn().eval(outSpace);
 
 							// default output: Genotype Means
 							String outDescStat = "capture.output(cat(\"\nPREDICTED GENOTYPE MEANS:\n\n\"),file=\""
@@ -1678,9 +1679,9 @@ public class SSSLRserveManager {
 									+ "]]$means.Geno,file=\""
 									+ outFileName
 									+ "\",append = TRUE)";
-							conn.eval(outDescStat);
-							conn.eval(outDescStat2);
-							conn.eval(outSpace);
+							getConn().eval(outDescStat);
+							getConn().eval(outDescStat2);
+							getConn().eval(outSpace);
 
 							// default output: EstHerit
 							String outEstHerit = "capture.output(cat(\"\nHERITABILITY:\n\"),file=\""
@@ -1689,9 +1690,9 @@ public class SSSLRserveManager {
 									+ i
 									+ "]]$heritability,file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outEstHerit);
-							conn.eval(outEstHerit2);
-							conn.eval(outSpace);
+							getConn().eval(outEstHerit);
+							getConn().eval(outEstHerit2);
+							getConn().eval(outSpace);
 
 							// //if levels of Geno and Env are recoded, display
 							// new code for genotype and environment levels
@@ -1802,13 +1803,13 @@ public class SSSLRserveManager {
 							// rConnection.eval(checkError4);
 							// }
 
-							conn.eval(outSpace);
+							getConn().eval(outSpace);
 						}
 					}
 
 					// default output: save Genotype x Environment Means to a
 					// csv file
-					String checkGenoEnvMean = conn.eval(
+					String checkGenoEnvMean = getConn().eval(
 							"meaOne2$meansGenoEnvWarning").asString();
 					System.out.println("checkGenoEnvMean: " + checkGenoEnvMean);
 
@@ -1819,9 +1820,9 @@ public class SSSLRserveManager {
 								+ resultFolderPath
 								+ "GenoEnvMeans_random.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 						System.out.println(funcSaveGEMeansCsv);
-						conn.eval(funcSaveGEMeansCsv);
+						getConn().eval(funcSaveGEMeansCsv);
 
-						String runSuccessSaveGEMeans = conn.eval(
+						String runSuccessSaveGEMeans = getConn().eval(
 								"class(saveGEMeans)").asString();
 						if (runSuccessSaveGEMeans != null
 								&& runSuccessSaveGEMeans.equals("try-error")) {
@@ -1831,16 +1832,16 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype x environment means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 
 					}
 
 					// default output: save Genotype Means to a csv file
-					String checkGenoMean = conn
+					String checkGenoMean = getConn()
 							.eval("meaOne2$meansGenoWarning").asString();
 					System.out.println("checkGenoMean: " + checkGenoMean);
 
@@ -1851,9 +1852,9 @@ public class SSSLRserveManager {
 								+ resultFolderPath
 								+ "GenoMeans_random.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 						System.out.println(funcSaveGMeansCsv);
-						conn.eval(funcSaveGMeansCsv);
+						getConn().eval(funcSaveGMeansCsv);
 
-						String runSuccessSaveGMeans = conn.eval(
+						String runSuccessSaveGMeans = getConn().eval(
 								"class(saveGMeans)").asString();
 						if (runSuccessSaveGMeans != null
 								&& runSuccessSaveGMeans.equals("try-error")) {
@@ -1863,10 +1864,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 
@@ -1876,9 +1877,9 @@ public class SSSLRserveManager {
 								+ respvarVector
 								+ ", is.random = TRUE, meaOne2), error=function(err) \"notRun\")";
 						System.out.println(diagPlotsMea1SFunc);
-						conn.eval(diagPlotsMea1SFunc);
+						getConn().eval(diagPlotsMea1SFunc);
 
-						String runSuccessDiag = conn.eval(
+						String runSuccessDiag = getConn().eval(
 								"class(diagPlotsMea1S)").asString();
 						if (runSuccessDiag != null
 								&& runSuccessDiag.equals("try-error")) {
@@ -1888,10 +1889,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in creating diagnostic plot (fixed genotype):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 
 					}
@@ -1912,9 +1913,9 @@ public class SSSLRserveManager {
 							+ respvarVector
 							+ ", is.genoRandom = FALSE), silent=TRUE)";
 					System.out.println(runSsaResid1);
-					conn.eval(runSsaResid1);
+					getConn().eval(runSsaResid1);
 
-					String runSuccessDiagPlots = conn.eval("class(resid_f)")
+					String runSuccessDiagPlots = getConn().eval("class(resid_f)")
 							.asString();
 					if (runSuccessDiagPlots != null
 							&& runSuccessDiagPlots.equals("try-error")) {
@@ -1925,12 +1926,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage_resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval(
+						String checkResid1 = getConn().eval(
 								"resid_f$ge1residWarning").asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -1938,10 +1939,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (fixed) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_f$residuals, file = residFileNameFixed ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameFixed);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameFixed);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -1951,10 +1952,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 						}
 					}
@@ -1963,9 +1964,9 @@ public class SSSLRserveManager {
 							+ respvarVector
 							+ ", is.genoRandom = TRUE), silent=TRUE)";
 					System.out.println(runSsaResid2);
-					conn.eval(runSsaResid2);
+					getConn().eval(runSsaResid2);
 
-					String runSuccessDiagPlots = conn.eval("class(resid_r)")
+					String runSuccessDiagPlots = getConn().eval("class(resid_r)")
 							.asString();
 					if (runSuccessDiagPlots != null
 							&& runSuccessDiagPlots.equals("try-error")) {
@@ -1976,12 +1977,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage_resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval(
+						String checkResid1 = getConn().eval(
 								"resid_r$ge1residWarning").asString();
 						System.out.println("checkResid2: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -1989,10 +1990,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (random) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_r$residuals, file = residFileNameRandom ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameRandom);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameRandom);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -2002,10 +2003,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 						}
 					}
@@ -2018,10 +2019,10 @@ public class SSSLRserveManager {
 							+ ", is.genoRandom = TRUE), silent=TRUE)";
 					System.out.println(runSsaResid1);
 					System.out.println(runSsaResid2);
-					conn.eval(runSsaResid1);
-					conn.eval(runSsaResid2);
+					getConn().eval(runSsaResid1);
+					getConn().eval(runSsaResid2);
 
-					String runSuccessResidFixed = conn.eval("class(resid_f)")
+					String runSuccessResidFixed = getConn().eval("class(resid_f)")
 							.asString();
 					if (runSuccessResidFixed != null
 							&& runSuccessResidFixed.equals("try-error")) {
@@ -2032,12 +2033,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage_resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval(
+						String checkResid1 = getConn().eval(
 								"resid_f$ge1residWarning").asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -2045,10 +2046,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (fixed) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_f$residuals, file = residFileNameFixed ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameFixed);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameFixed);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -2058,15 +2059,15 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 						}
 					}
 
-					String runSuccessResidRandom = conn.eval("class(resid_r)")
+					String runSuccessResidRandom = getConn().eval("class(resid_r)")
 							.asString();
 					if (runSuccessResidRandom != null
 							&& runSuccessResidRandom.equals("try-error")) {
@@ -2077,12 +2078,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage_resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval(
+						String checkResid1 = getConn().eval(
 								"resid_r$ge1residWarning").asString();
 						System.out.println("checkResid2: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -2090,10 +2091,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (random) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid2 <- try(write.table(resid_r$residuals, file = residFileNameRandom ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameRandom);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameRandom);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid2)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -2103,10 +2104,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 						}
 					}
@@ -2136,26 +2137,26 @@ public class SSSLRserveManager {
 					+ withHist
 					+ "\"), error=function(err) \"notRun\")";
 			System.out.println(boxHistMeaFunc);
-			conn.eval(boxHistMeaFunc);
+			getConn().eval(boxHistMeaFunc);
 
-			String runSuccessBoxHistMea = conn.eval("class(boxHistMea)")
+			String runSuccessBoxHistMea = getConn().eval("class(boxHistMea)")
 					.asString();
 			// generate warning if error occurred
 			if (runSuccessBoxHistMea != null
 					&& runSuccessBoxHistMea.equals("notRun")) {
 				System.out.println("error");
-				conn.eval("capture.output(cat(\"\n***An error has occurred.***\n***Boxplot(s) and histogram(s) not created.***\n\"),file=\""
+				getConn().eval("capture.output(cat(\"\n***An error has occurred.***\n***Boxplot(s) and histogram(s) not created.***\n\"),file=\""
 						+ outFileName + "\",append = TRUE)"); // append to
 																// output file?
 			}
 
-			conn.eval(outSpace);
-			conn.eval(sep2);
+			getConn().eval(outSpace);
+			getConn().eval(sep2);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			conn.close();
+			getConn().close();
 		}
 	}
 
@@ -2230,7 +2231,7 @@ public class SSSLRserveManager {
 		boolean isGGEBiplotEnvironmentView = model.isGGEBiplotEnvironmentView();
 		boolean isGGEBiplotGenotypeView = model.isGGEBiplotGenotypeView();
 
-		String respvarVector = inputTransform.createRVector(respvars);
+		String respvarVector = getInputTransform().createRVector(respvars);
 		// boolean runningFixedSuccess =true;
 		// boolean runningRandomSuccess =true;
 		// boolean printAllOutputFixed = true;
@@ -2284,21 +2285,22 @@ public class SSSLRserveManager {
 
 			String readData = "data <- try(read.csv(\""
 					+ dataFileName
-					+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\"),silent=TRUE);";
+					+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\"),s"
+					+ "ilent=TRUE);";
 			System.out.println("Read data command " + readData);
-			conn.eval(readData);
-			String runReadData = conn.eval("class(data)").asString();
+			getConn().eval(readData);
+			String runReadData = getConn().eval("class(data)").asString();
 			System.out.println("Run read data " + runReadData);
 			if (runReadData != null && runReadData.equals("try-error")) {
 				// if (runReadData != null && runReadData.equals("notRun")) {
 				System.out.println("Error");
-				conn.eval("capture.output(cat(\"\n***Error reading data.***\n\"), file = \""
+				getConn().eval("capture.output(cat(\"\n***Error reading data.***\n\"), file = \""
 						+ outFileName + "\", append = FALSE);");
 				return;
 			} else {
 				String setwd = "setwd(\"" + resultFolderPath + "\");";
 				System.out.println("setwd command " + setwd);
-				conn.eval(setwd);
+				getConn().eval(setwd);
 			}
 
 			String usedData = "capture.output(cat(\"\nDATA FILE: "
@@ -2314,9 +2316,9 @@ public class SSSLRserveManager {
 			String outspace = "capture.output(cat(\"\n\"),file=\""
 					+ outFileName + "\",append = TRUE)";
 
-			conn.eval(usedData);
-			conn.eval(outFile);
-			conn.eval(usedDesign);
+			getConn().eval(usedData);
+			getConn().eval(outFile);
+			getConn().eval(usedDesign);
 
 			String oneStageFunc = null;
 			String groupVars = null;
@@ -2362,13 +2364,13 @@ public class SSSLRserveManager {
 			String fixedHead = "capture.output(cat(\"GENOTYPE AS: Fixed\n\"),file=\""
 					+ outFileName + "\",append = TRUE)";
 			System.out.println("One stage function " + oneStageFunc);
-			conn.eval(oneStageFunc);
-			conn.eval(sep2);
-			conn.eval(fixedHead);
-			conn.eval(sep2);
-			conn.eval(outspace);
+			getConn().eval(oneStageFunc);
+			getConn().eval(sep2);
+			getConn().eval(fixedHead);
+			getConn().eval(sep2);
+			getConn().eval(outspace);
 
-			String runOneStageFunc = conn.eval("class(meaOne1)").asString();
+			String runOneStageFunc = getConn().eval("class(meaOne1)").asString();
 			if (runOneStageFunc != null && runOneStageFunc.equals("try-error")) {
 				System.out.println("GEOneStage.test: error!");
 				String checkError = "msg <- trimStrings(strsplit(meaOne1, \":\")[[1]]);";
@@ -2376,10 +2378,10 @@ public class SSSLRserveManager {
 				String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg);";
 				String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage.test function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 						+ outFileName + "\",append = TRUE);";
-				conn.eval(checkError);
-				conn.eval(checkError2);
-				conn.eval(checkError3);
-				conn.eval(checkError4);
+				getConn().eval(checkError);
+				getConn().eval(checkError2);
+				getConn().eval(checkError3);
+				getConn().eval(checkError4);
 				return;
 			} else {
 				for (int k = 0; k < respvars.length; k++) {
@@ -2389,16 +2391,16 @@ public class SSSLRserveManager {
 							+ "\n\"),file=\""
 							+ outFileName
 							+ "\",append = TRUE);";
-					conn.eval(sep);
-					conn.eval(respVarHead);
-					conn.eval(sep);
-					conn.eval(outspace);
+					getConn().eval(sep);
+					getConn().eval(respVarHead);
+					getConn().eval(sep);
+					getConn().eval(outspace);
 
-					double responseRate = conn.eval(
+					double responseRate = getConn().eval(
 							"meaOne1$output[[" + i + "]]$responseRate")
 							.asDouble();
 					if (responseRate < 0.80) {
-						String allNAWarning = conn.eval(
+						String allNAWarning = getConn().eval(
 								"meaOne1$output[[" + i + "]]$manyNAWarning")
 								.asString();
 						String printError1 = "capture.output(cat(\"***\\n\"), file=\""
@@ -2409,13 +2411,13 @@ public class SSSLRserveManager {
 								+ allNAWarning + "\\n\"), file=\""
 								+ outFileName + "\",append = TRUE)";
 
-						conn.eval(outspace);
-						conn.eval(printError1);
-						conn.eval(printError2);
-						conn.eval(printError3);
-						conn.eval(printError1);
-						conn.eval(outspace);
-						conn.eval(outspace);
+						getConn().eval(outspace);
+						getConn().eval(printError1);
+						getConn().eval(printError2);
+						getConn().eval(printError3);
+						getConn().eval(printError1);
+						getConn().eval(outspace);
+						getConn().eval(outspace);
 						return;
 						// printAllOutputFixed=false;
 					}
@@ -2439,9 +2441,9 @@ public class SSSLRserveManager {
 					String trialSum = "capture.output(funcTrialSum,file=\""
 							+ outFileName + "\",append = TRUE)";
 
-					conn.eval(funcTrialSum);
+					getConn().eval(funcTrialSum);
 
-					String runSuccessTS = conn.eval("class(funcTrialSum)")
+					String runSuccessTS = getConn().eval("class(funcTrialSum)")
 							.asString();
 					if (runSuccessTS != null
 							&& runSuccessTS.equals("try-error")) {
@@ -2451,23 +2453,23 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in class.information function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 						// return;
 					} else {
-						conn.eval(trialSumHead);
-						conn.eval(trialObsRead);
-						conn.eval(trialObsUsed);
-						conn.eval(trialSum);
-						conn.eval(outspace);
+						getConn().eval(trialSumHead);
+						getConn().eval(trialObsRead);
+						getConn().eval(trialObsUsed);
+						getConn().eval(trialSum);
+						getConn().eval(outspace);
 					}
 
 					// optional output: descriptive statistics
 					String funcDesc = "outDesc <- try(DescriptiveStatistics(data, \""
 							+ respvars[k] + "\", grp = NULL), silent=TRUE)";
-					conn.eval(funcDesc);
+					getConn().eval(funcDesc);
 
 					if (isDescriptiveStat) {
 						String outDescStat = "capture.output(cat(\"\nDESCRIPTIVE STATISTICS:\n\n\"),file=\""
@@ -2475,7 +2477,7 @@ public class SSSLRserveManager {
 						String outDescStat2 = "capture.output(outDesc,file=\""
 								+ outFileName + "\",append = TRUE)";
 
-						String runSuccessDescStat = conn.eval("class(outDesc)")
+						String runSuccessDescStat = getConn().eval("class(outDesc)")
 								.asString();
 						if (runSuccessDescStat != null
 								&& runSuccessDescStat.equals("try-error")) {
@@ -2485,15 +2487,15 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in DescriptiveStatistics function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 							// return;
 						} else {
-							conn.eval(outDescStat);
-							conn.eval(outDescStat2);
-							conn.eval(outspace);
+							getConn().eval(outDescStat);
+							getConn().eval(outDescStat2);
+							getConn().eval(outspace);
 						}
 					}
 
@@ -2505,9 +2507,9 @@ public class SSSLRserveManager {
 								+ i + "]]$varcomp.table,file=\"" + outFileName
 								+ "\",append = TRUE)";
 
-						conn.eval(outVarComp);
-						conn.eval(outVarComp2);
-						conn.eval(outspace);
+						getConn().eval(outVarComp);
+						getConn().eval(outVarComp2);
+						getConn().eval(outspace);
 					}
 
 					// default output: Test Genotypic Effect
@@ -2533,18 +2535,18 @@ public class SSSLRserveManager {
 					String outAnovaTable10 = "detach(\"package:lmerTest\")";
 
 					// rEngine.eval(outspace);
-					conn.eval(outAnovaTable1);
-					conn.eval(outAnovaTable2);
-					conn.eval(outAnovaTable3);
-					conn.eval(outAnovaTable4);
-					conn.eval(outAnovaTable5);
-					conn.eval(outAnovaTable6);
-					conn.eval(outAnovaTable7);
+					getConn().eval(outAnovaTable1);
+					getConn().eval(outAnovaTable2);
+					getConn().eval(outAnovaTable3);
+					getConn().eval(outAnovaTable4);
+					getConn().eval(outAnovaTable5);
+					getConn().eval(outAnovaTable6);
+					getConn().eval(outAnovaTable7);
 					// rEngine.eval(outSpace);
-					conn.eval(outAnovaTable8);
-					conn.eval(outAnovaTable9);
-					conn.eval(outspace);
-					conn.eval(outAnovaTable10);
+					getConn().eval(outAnovaTable8);
+					getConn().eval(outAnovaTable9);
+					getConn().eval(outspace);
+					getConn().eval(outAnovaTable10);
 
 					// default output: Test Environment Effect
 					String outTestEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -2562,11 +2564,11 @@ public class SSSLRserveManager {
 					String outTestEnv4 = "capture.output(meaOne1$output[[" + i
 							+ "]]$testsig.Env,file=\"" + outFileName
 							+ "\",append = TRUE)";
-					conn.eval(outTestEnv1);
-					conn.eval(outTestEnv2);
-					conn.eval(outTestEnv3);
-					conn.eval(outTestEnv4);
-					conn.eval(outspace);
+					getConn().eval(outTestEnv1);
+					getConn().eval(outTestEnv2);
+					getConn().eval(outTestEnv3);
+					getConn().eval(outTestEnv4);
+					getConn().eval(outspace);
 
 					// default output: Test GXE Effect
 					String outTestGenoEnv1 = "capture.output(cat(\"\nTESTING FOR THE SIGNIFICANCE OF GENOTYPE X ENVIRONMENT EFFECT USING -2 LOGLIKELIHOOD RATIO TEST:\n\"),file=\""
@@ -2584,11 +2586,11 @@ public class SSSLRserveManager {
 					String outTestGenoEnv4 = "capture.output(meaOne1$output[["
 							+ i + "]]$testsig.GenoEnv,file=\"" + outFileName
 							+ "\",append = TRUE)";
-					conn.eval(outTestGenoEnv1);
-					conn.eval(outTestGenoEnv2);
-					conn.eval(outTestGenoEnv3);
-					conn.eval(outTestGenoEnv4);
-					conn.eval(outspace);
+					getConn().eval(outTestGenoEnv1);
+					getConn().eval(outTestGenoEnv2);
+					getConn().eval(outTestGenoEnv3);
+					getConn().eval(outTestGenoEnv4);
+					getConn().eval(outspace);
 
 					// default output: Genotype x Environment Means
 					String outGenoEnv = "capture.output(cat(\"\nGENOTYPE X ENVIRONMENT MEANS:\n\n\"),file=\""
@@ -2596,9 +2598,9 @@ public class SSSLRserveManager {
 					String outGenoEnv2 = "capture.output(meaOne1$output[[" + i
 							+ "]]$wide.GenoEnv,file=\"" + outFileName
 							+ "\",append = TRUE)";
-					conn.eval(outGenoEnv);
-					conn.eval(outGenoEnv2);
-					conn.eval(outspace);
+					getConn().eval(outGenoEnv);
+					getConn().eval(outGenoEnv2);
+					getConn().eval(outspace);
 
 					// default output: Genotype Means
 					String outDescStat = "capture.output(cat(\"\nGENOTYPE LSMEANS AND STANDARD ERRORS:\n\n\"),file=\""
@@ -2606,9 +2608,9 @@ public class SSSLRserveManager {
 					String outDescStat2 = "capture.output(meaOne1$output[[" + i
 							+ "]]$means.Geno,file=\"" + outFileName
 							+ "\",append = TRUE)";
-					conn.eval(outDescStat);
-					conn.eval(outDescStat2);
-					conn.eval(outspace);
+					getConn().eval(outDescStat);
+					getConn().eval(outDescStat2);
+					getConn().eval(outspace);
 
 					// default output: statistics on SED
 					String outSedStat1 = "capture.output(cat(\"\nSTANDARD ERROR OF THE DIFFERENCE (SED):\n\n\"),file=\""
@@ -2616,9 +2618,9 @@ public class SSSLRserveManager {
 					String outSedStat2 = "capture.output(meaOne1$output[[" + i
 							+ "]]$sedTable,file=\"" + outFileName
 							+ "\",append = TRUE)";
-					conn.eval(outSedStat1);
-					conn.eval(outSedStat2);
-					conn.eval(outspace);
+					getConn().eval(outSedStat1);
+					getConn().eval(outSedStat2);
+					getConn().eval(outspace);
 
 					// compare with recurrent parent
 					if (isCompareWithRecurrentParent) {
@@ -2639,10 +2641,10 @@ public class SSSLRserveManager {
 						String outCompareControl2 = "capture.output(pwControl$result,file=\""
 								+ outFileName + "\",append = TRUE)";
 						System.out.println(funcPwC);
-						conn.eval(funcPwC);
-						conn.eval(outCompareControl);
+						getConn().eval(funcPwC);
+						getConn().eval(outCompareControl);
 
-						String runSuccessPwC = conn.eval("class(pwControl)")
+						String runSuccessPwC = getConn().eval("class(pwControl)")
 								.asString();
 						if (runSuccessPwC != null
 								&& runSuccessPwC.equals("try-error")) {
@@ -2652,19 +2654,19 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.pairwise function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
-							conn.eval(outspace);
-							conn.eval(outspace);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
+							getConn().eval(outspace);
+							getConn().eval(outspace);
 							// return;
 						} else {
-							conn.eval(outCompareControl2);
+							getConn().eval(outCompareControl2);
 
 							// display warning generated by checkTest in
 							// ssa.pairwise
-							String warningControlTest = conn.eval(
+							String warningControlTest = getConn().eval(
 									"pwControl$controlTestWarning").asString();
 
 							if (!warningControlTest.equals("NONE")) {
@@ -2676,11 +2678,11 @@ public class SSSLRserveManager {
 										+ outFileName
 										+ "\",append = TRUE)";
 
-								conn.eval(warningCheckTest2);
-								conn.eval(warningCheckTest3);
+								getConn().eval(warningCheckTest2);
+								getConn().eval(warningCheckTest3);
 							}
-							conn.eval(outspace);
-							conn.eval(outspace);
+							getConn().eval(outspace);
+							getConn().eval(outspace);
 							System.out.println("pairwise control test:"
 									+ warningControlTest);
 
@@ -2695,14 +2697,14 @@ public class SSSLRserveManager {
 								+ genotypeContrastFile
 								+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, row.names = 1, sep = \",\", check.names = FALSE), silent= TRUE);";
 						System.out.println(readContrastData);
-						conn.eval(readContrastData);
-						String runSuccessContrastData = conn.eval(
+						getConn().eval(readContrastData);
+						String runSuccessContrastData = getConn().eval(
 								"class(contrastGenoData)").asString();
 
 						if (runSuccessContrastData != null
 								&& runSuccessContrastData.equals("try-error")) {
 							System.out.println("error");
-							conn.eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
+							getConn().eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
 									+ outFileName + "\",append = FALSE)");
 						} else {
 							String userContrast = "userContrast <- try(contrastAnalysis(model = meaOne1$output[["
@@ -2710,9 +2712,9 @@ public class SSSLRserveManager {
 									+ "]]$model, contrastOpt = \"user\", contrast = contrastGenoData, alpha = "
 									+ pairwiseSig + "), silent = TRUE)";
 							System.out.println(userContrast);
-							conn.eval(userContrast);
+							getConn().eval(userContrast);
 
-							String runSuccessUserCtrl = conn.eval(
+							String runSuccessUserCtrl = getConn().eval(
 									"class(userContrast)").asString();
 							if (runSuccessUserCtrl != null
 									&& runSuccessUserCtrl.equals("try-error")) {
@@ -2723,10 +2725,10 @@ public class SSSLRserveManager {
 								String checkUError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkUError4 = "capture.output(cat(\"*** \nERROR in contrastAnalysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkUError);
-								conn.eval(checkUError2);
-								conn.eval(checkUError3);
-								conn.eval(checkUError4);
+								getConn().eval(checkUError);
+								getConn().eval(checkUError2);
+								getConn().eval(checkUError3);
+								getConn().eval(checkUError4);
 
 							} else {
 								String outCompareControl = "if (nrow(userContrast) != 0) {\n";
@@ -2751,7 +2753,7 @@ public class SSSLRserveManager {
 										+ outFileName + "\",append = TRUE)\n";
 								outCompareControl = outCompareControl + "}";
 								// System.out.println(outCompareControl);
-								conn.eval(outCompareControl);
+								getConn().eval(outCompareControl);
 							}
 
 						} // end stmt if-else (runSuccessContrastData != null &&
@@ -2760,7 +2762,7 @@ public class SSSLRserveManager {
 
 					String genoEnvMeans = "genoEnvMeans <- meaOne1$output[["
 							+ i + "]]$means.GenoEnvCode";
-					conn.eval(genoEnvMeans);
+					getConn().eval(genoEnvMeans);
 					System.out.println("genotyp environment means command "
 							+ genoEnvMeans);
 
@@ -2784,11 +2786,11 @@ public class SSSLRserveManager {
 							String outTestStability1b = "capture.output(funcStability1[[1]][[1]]$stability,file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(funcStability1);
-							conn.eval(outTestStability1);
+							getConn().eval(funcStability1);
+							getConn().eval(outTestStability1);
 							System.out.println(funcStability1);
 
-							String runSuccessStab = conn.eval(
+							String runSuccessStab = getConn().eval(
 									"class(funcStability1)").asString();
 							if (runSuccessStab != null
 									&& runSuccessStab.equals("try-error")) {
@@ -2798,13 +2800,13 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in stability.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
-								conn.eval(outTestStability1b);
-								conn.eval(outspace);
+								getConn().eval(outTestStability1b);
+								getConn().eval(outspace);
 							}
 						} else {
 							String outRemark = "capture.output(cat(\"\nSTABILITY ANALYSIS USING FINLAY-WILKINSON MODEL:\n\"),file=\""
@@ -2812,8 +2814,8 @@ public class SSSLRserveManager {
 							String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least five levels.***\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outRemark);
-							conn.eval(outRemark2);
+							getConn().eval(outRemark);
+							getConn().eval(outRemark2);
 						}
 					}
 
@@ -2835,10 +2837,10 @@ public class SSSLRserveManager {
 									+ outFileName + "\",append = TRUE)";
 
 							System.out.println(funcStability2);
-							conn.eval(funcStability2);
-							conn.eval(outTestStability2);
+							getConn().eval(funcStability2);
+							getConn().eval(outTestStability2);
 
-							String runSuccessStab = conn.eval(
+							String runSuccessStab = getConn().eval(
 									"class(funcStability2)").asString();
 							if (runSuccessStab != null
 									&& runSuccessStab.equals("try-error")) {
@@ -2848,13 +2850,13 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in stability.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
-								conn.eval(outTestStability2b);
-								conn.eval(outspace);
+								getConn().eval(outTestStability2b);
+								getConn().eval(outspace);
 							}
 						} else {
 							String outRemark = "capture.output(cat(\"\nSTABILITY ANALYSIS USING SHUKLA'S MODEL:\n\"),file=\""
@@ -2862,8 +2864,8 @@ public class SSSLRserveManager {
 							String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least five levels.***\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outRemark);
-							conn.eval(outRemark2);
+							getConn().eval(outRemark);
+							getConn().eval(outRemark2);
 						}
 					}
 
@@ -2935,13 +2937,13 @@ public class SSSLRserveManager {
 									+ outFileName + "\",append = TRUE)";
 							String outAmmi2 = "capture.output(cat(\"Percentage of Total Variation Accounted for by the Principal Components: \n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(setWd);
-							conn.eval(ammiOut);
-							conn.eval(outAmmi1);
+							getConn().eval(setWd);
+							getConn().eval(ammiOut);
+							getConn().eval(outAmmi1);
 							System.out.println(setWd);
 							System.out.println(ammiOut);
 
-							String runSuccessAmmi = conn.eval("class(ammiOut)")
+							String runSuccessAmmi = getConn().eval("class(ammiOut)")
 									.asString();
 							if (runSuccessAmmi != null
 									&& runSuccessAmmi.equals("try-error")) {
@@ -2951,17 +2953,17 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in ammi.analysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
 
 								String outAmmi3 = "capture.output(ammiOut$analysis,file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outAmmi2);
-								conn.eval(outAmmi3);
-								conn.eval(outspace);
+								getConn().eval(outAmmi2);
+								getConn().eval(outAmmi3);
+								getConn().eval(outspace);
 							}
 						} else {
 							String outRemark = "capture.output(cat(\"\nAMMI ANALYSIS:\n\"),file=\""
@@ -2969,8 +2971,8 @@ public class SSSLRserveManager {
 							String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least three levels.***\n\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outRemark);
-							conn.eval(outRemark2);
+							getConn().eval(outRemark);
+							getConn().eval(outRemark2);
 						}
 					}
 
@@ -3017,13 +3019,13 @@ public class SSSLRserveManager {
 							String outAmmi2 = "capture.output(cat(\"Percentage of Total Variation Accounted for by the Principal Components: \n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 							;
-							conn.eval(setWd);
-							conn.eval(ggeOut);
-							conn.eval(outAmmi1);
+							getConn().eval(setWd);
+							getConn().eval(ggeOut);
+							getConn().eval(outAmmi1);
 							System.out.println(setWd);
 							System.out.println(ggeOut);
 
-							String runSuccessAmmi = conn.eval("class(ggeOut)")
+							String runSuccessAmmi = getConn().eval("class(ggeOut)")
 									.asString();
 							if (runSuccessAmmi != null
 									&& runSuccessAmmi.equals("try-error")) {
@@ -3033,17 +3035,17 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in gge.analysis function (f=0.5):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
 
 								String outAmmi3 = "capture.output(ggeOut$analysis,file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outAmmi2);
-								conn.eval(outAmmi3);
-								conn.eval(outspace);
+								getConn().eval(outAmmi2);
+								getConn().eval(outAmmi3);
+								getConn().eval(outspace);
 							}
 
 							// f=0
@@ -3068,10 +3070,10 @@ public class SSSLRserveManager {
 										+ "]]$MSE, number = FALSE, yVar = \""
 										+ ybarName
 										+ "\", f=0, graphSym = FALSE, graphEnv = FALSE, graphGeno = FALSE), silent=TRUE)";
-							conn.eval(ggeOut2);
+							getConn().eval(ggeOut2);
 							System.out.println(ggeOut2);
 
-							String runSuccessAmmi2 = conn
+							String runSuccessAmmi2 = getConn()
 									.eval("class(ggeOut2)").asString();
 							if (runSuccessAmmi2 != null
 									&& runSuccessAmmi2.equals("try-error")) {
@@ -3081,10 +3083,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in gge.analysis function (f=0):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							// f=1
@@ -3109,10 +3111,10 @@ public class SSSLRserveManager {
 										+ "]]$MSE, number = FALSE, yVar = \""
 										+ ybarName
 										+ "\", f=1, graphSym = FALSE, graphEnv = FALSE, graphGeno = FALSE), silent=TRUE)";
-							conn.eval(ggeOut3);
+							getConn().eval(ggeOut3);
 							System.out.println(ggeOut3);
 
-							String runSuccessAmmi3 = conn
+							String runSuccessAmmi3 = getConn()
 									.eval("class(ggeOut3)").asString();
 							if (runSuccessAmmi3 != null
 									&& runSuccessAmmi3.equals("try-error")) {
@@ -3122,10 +3124,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in gge.analysis function (f=1):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 						} else {
 							String outRemark = "capture.output(cat(\"\nGGE ANALYSIS:\n\"),file=\""
@@ -3133,17 +3135,17 @@ public class SSSLRserveManager {
 							String outRemark2 = "capture.output(cat(\"***This is not done. The environment factor should have at least three levels.***\n\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							conn.eval(outRemark);
-							conn.eval(outRemark2);
+							getConn().eval(outRemark);
+							getConn().eval(outRemark2);
 						}
 					}
-					conn.eval(outspace);
+					getConn().eval(outspace);
 
 				} // end of loop of response variable
 
 				// default output: save Genotype x Environment Means to a csv
 				// file
-				String checkGenoEnvMean = conn.eval(
+				String checkGenoEnvMean = getConn().eval(
 						"meaOne1$meansGenoEnvWarning").asString();
 				System.out.println("checkGenoEnvMean: " + checkGenoEnvMean);
 
@@ -3154,9 +3156,9 @@ public class SSSLRserveManager {
 							+ resultFolderPath
 							+ "GenoEnvMeans_fixed.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 					System.out.println(funcSaveGEMeansCsv);
-					conn.eval(funcSaveGEMeansCsv);
+					getConn().eval(funcSaveGEMeansCsv);
 
-					String runSuccessSaveGEMeans = conn.eval(
+					String runSuccessSaveGEMeans = getConn().eval(
 							"class(saveGEMeans)").asString();
 					if (runSuccessSaveGEMeans != null
 							&& runSuccessSaveGEMeans.equals("try-error")) {
@@ -3166,16 +3168,16 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype x environment means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					}
 
 				}
 
 				// default output: save Genotype Means to a csv file
-				String checkGenoMean = conn.eval("meaOne1$meansGenoWarning")
+				String checkGenoMean = getConn().eval("meaOne1$meansGenoWarning")
 						.asString();
 				System.out.println("checkGenoMean: " + checkGenoMean);
 
@@ -3186,9 +3188,9 @@ public class SSSLRserveManager {
 							+ resultFolderPath
 							+ "GenoMeans_fixed.csv\",sep=\",\",row.names=FALSE), silent=TRUE)";
 					System.out.println(funcSaveGMeansCsv);
-					conn.eval(funcSaveGMeansCsv);
+					getConn().eval(funcSaveGMeansCsv);
 
-					String runSuccessSaveGMeans = conn
+					String runSuccessSaveGMeans = getConn()
 							.eval("class(saveGMeans)").asString();
 					if (runSuccessSaveGMeans != null
 							&& runSuccessSaveGMeans.equals("try-error")) {
@@ -3198,10 +3200,10 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in saving genotype means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					}
 				}
 
@@ -3211,9 +3213,9 @@ public class SSSLRserveManager {
 							+ respvarVector
 							+ ", is.random = FALSE, meaOne1), silent=TRUE)";
 					System.out.println(diagPlotsMea1SFunc);
-					conn.eval(diagPlotsMea1SFunc);
+					getConn().eval(diagPlotsMea1SFunc);
 
-					String runSuccessDiag = conn.eval("class(diagPlotsMea1S)")
+					String runSuccessDiag = getConn().eval("class(diagPlotsMea1S)")
 							.asString();
 					if (runSuccessDiag != null
 							&& runSuccessDiag.equals("try-error")) {
@@ -3223,10 +3225,10 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in creating diagnostic plot (fixed genotype):\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					}
 				}
 
@@ -3238,9 +3240,9 @@ public class SSSLRserveManager {
 						+ respvarVector
 						+ ", is.genoRandom = FALSE), silent=TRUE)";
 				System.out.println(runSsaResid1);
-				conn.eval(runSsaResid1);
+				getConn().eval(runSsaResid1);
 
-				String runSuccessDiagPlots = conn.eval("class(resid_f)")
+				String runSuccessDiagPlots = getConn().eval("class(resid_f)")
 						.asString();
 				if (runSuccessDiagPlots != null
 						&& runSuccessDiagPlots.equals("try-error")) {
@@ -3251,22 +3253,22 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in GEOneStage_resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 				} else {
-					String checkResid1 = conn.eval("resid_f$ge1residWarning")
+					String checkResid1 = getConn().eval("resid_f$ge1residWarning")
 							.asString();
 					System.out.println("checkResid1: " + checkResid1);
 					if (checkResid1.equals("empty")) {
 						System.out.println("Saving resid (fixed) not done.");
 					} else {
 						String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_f$residuals, file = residFileNameFixed ,sep=\",\",row.names=FALSE), silent=TRUE)";
-						conn.eval(residFileNameFixed);
-						conn.eval(func1SaveResidualsCsv);
+						getConn().eval(residFileNameFixed);
+						getConn().eval(func1SaveResidualsCsv);
 
-						String runSuccessSaveResid = conn.eval(
+						String runSuccessSaveResid = getConn().eval(
 								"class(saveResid)").asString();
 						if (runSuccessSaveResid != null
 								&& runSuccessSaveResid.equals("try-error")) {
@@ -3276,10 +3278,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 				}
@@ -3301,9 +3303,9 @@ public class SSSLRserveManager {
 						+ withBox + ", hist=" + withHist + "), silent = TRUE)";
 
 				System.out.println("boxHistFunc1 = " + boxHistFunc1);
-				conn.eval(boxHistFunc1);
+				getConn().eval(boxHistFunc1);
 
-				String runBoxHistFunc1 = conn.eval("class(boxHistAcrossEnv1)")
+				String runBoxHistFunc1 = getConn().eval("class(boxHistAcrossEnv1)")
 						.asString();
 
 				if (runBoxHistFunc1 != null
@@ -3314,14 +3316,14 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in graph.mea1s.boxhist function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 				}
 
-				conn.eval(outspace);
-				conn.eval(sep2);
+				getConn().eval(outspace);
+				getConn().eval(sep2);
 
 			} // end of read data success
 
@@ -3333,7 +3335,7 @@ public class SSSLRserveManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			conn.close();
+			getConn().close();
 		}
 
 	}
@@ -3388,10 +3390,10 @@ public class SSSLRserveManager {
 					StringConstants.BSLASH, StringConstants.FSLASH);
 		}
 
-		String respvarVector = inputTransform.createRVector(respvars);
+		String respvarVector = getInputTransform().createRVector(respvars);
 		// String genotypeLevelsVector=
 		// inputTransform.createRVector(genotypeLevels);
-		String controlLevelsVector = inputTransform
+		String controlLevelsVector = getInputTransform()
 				.createRVector(controlLevels);
 		boolean runningFixedSuccess = true;
 		boolean runningRandomSuccess = true;
@@ -3448,17 +3450,17 @@ public class SSSLRserveManager {
 					+ dataFileName
 					+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), blank.lines.skip=TRUE, sep = \",\")";
 			System.out.println(readData);
-			conn.eval(readData);
-			String runSuccessData = conn.eval("class(data)").asString();
+			getConn().eval(readData);
+			String runSuccessData = getConn().eval("class(data)").asString();
 
 			if (runSuccessData != null && runSuccessData.equals("notRun")) {
 				System.out.println("error");
-				conn.eval("capture.output(cat(\"\n***Error reading data.***\n\"),file=\""
+				getConn().eval("capture.output(cat(\"\n***Error reading data.***\n\"),file=\""
 						+ outFileName + "\",append = FALSE)");
 			} else {
 				String setWd = "setwd(\"" + resultFolderPath + "\")";
 				System.out.println(setWd);
-				conn.eval(setWd);
+				getConn().eval(setWd);
 			}
 
 			String usedData = "capture.output(cat(\"\nDATA FILE: "
@@ -3474,9 +3476,9 @@ public class SSSLRserveManager {
 			String outspace = "capture.output(cat(\"\n\"),file=\""
 					+ outFileName + "\",append = TRUE)";
 
-			conn.eval(usedData);
-			conn.eval(outFile);
-			conn.eval(usedDesign);
+			getConn().eval(usedData);
+			getConn().eval(outFile);
+			getConn().eval(usedDesign);
 
 			// OUTPUT
 			// Genotype Fixed
@@ -3554,15 +3556,15 @@ public class SSSLRserveManager {
 				}
 				String fixedHead = "capture.output(cat(\"GENOTYPE AS: Fixed\n\"),file=\""
 						+ outFileName + "\",append = TRUE)";
-				conn.eval(funcSsaFixed);
-				conn.eval(sep2);
-				conn.eval(fixedHead);
-				conn.eval(sep2);
-				conn.eval(outspace);
+				getConn().eval(funcSsaFixed);
+				getConn().eval(sep2);
+				getConn().eval(fixedHead);
+				getConn().eval(sep2);
+				getConn().eval(outspace);
 
 				System.out.println(funcSsaFixed);
 
-				String runSuccess = conn.eval("class(ssa1)").asString();
+				String runSuccess = getConn().eval("class(ssa1)").asString();
 				if (runSuccess != null && runSuccess.equals("try-error")) {
 					System.out.println("ssa.test: error");
 					String checkError = "msg <- trimStrings(strsplit(ssa1, \":\")[[1]])";
@@ -3570,10 +3572,10 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.test function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 
 					runningFixedSuccess = false;
 
@@ -3585,10 +3587,10 @@ public class SSSLRserveManager {
 								+ "\n\"),file=\""
 								+ outFileName
 								+ "\",append = TRUE)";
-						conn.eval(sep);
-						conn.eval(respVarHead);
-						conn.eval(sep);
-						conn.eval(outspace);
+						getConn().eval(sep);
+						getConn().eval(respVarHead);
+						getConn().eval(sep);
+						getConn().eval(outspace);
 
 						// optional output: descriptive statistics
 						if (descriptiveStat) {
@@ -3607,14 +3609,14 @@ public class SSSLRserveManager {
 										+ "\"), silent=TRUE)";
 							}
 							System.out.println(funcDesc);
-							conn.eval(funcDesc);
+							getConn().eval(funcDesc);
 
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 							String outDescStat2 = "capture.output(outDesc,file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							String runSuccessDescStat = conn.eval(
+							String runSuccessDescStat = getConn().eval(
 									"class(outDesc)").asString();
 							if (runSuccessDescStat != null
 									&& runSuccessDescStat.equals("try-error")) {
@@ -3624,15 +3626,15 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in DescriptiveStatistics function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
-								conn.eval(outspace);
-								conn.eval(outDescStat);
-								conn.eval(outDescStat2);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(outDescStat);
+								getConn().eval(outDescStat2);
+								getConn().eval(outspace);
 							}
 						}
 						int envLevelsLength = 0;
@@ -3656,19 +3658,19 @@ public class SSSLRserveManager {
 										+ j
 										+ "]]$env,\"\n\"),file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(sep);
-								conn.eval(envtHead);
-								conn.eval(sep);
-								conn.eval(outspace);
+								getConn().eval(sep);
+								getConn().eval(envtHead);
+								getConn().eval(sep);
+								getConn().eval(outspace);
 							}
 
 							// check if the data has too many missing
 							// observation
-							double nrowData = conn.eval(
+							double nrowData = getConn().eval(
 									"ssa1$output[[" + i + "]]$site[[" + j
 											+ "]]$responseRate").asDouble();
 							if (nrowData < 0.80) {
-								String allNAWarning = conn.eval(
+								String allNAWarning = getConn().eval(
 										"ssa1$output[[" + i + "]]$site[[" + j
 												+ "]]$manyNAWarning")
 										.asString();
@@ -3680,21 +3682,21 @@ public class SSSLRserveManager {
 										+ allNAWarning + "\\n\"), file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(outspace);
-								conn.eval(printError1);
-								conn.eval(printError2);
-								conn.eval(printError3);
-								conn.eval(printError1);
-								conn.eval(outspace);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(printError1);
+								getConn().eval(printError2);
+								getConn().eval(printError3);
+								getConn().eval(printError1);
+								getConn().eval(outspace);
+								getConn().eval(outspace);
 								printAllOutputFixed = false;
 
 							} else {
-								String lmerRun = conn.eval(
+								String lmerRun = getConn().eval(
 										"ssa1$output[[" + i + "]]$site[[" + j
 												+ "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = conn.eval(
+									String lmerError = getConn().eval(
 											"ssa1$output[[" + i + "]]$site[["
 													+ j + "]]$lmerError")
 											.asString();
@@ -3707,13 +3709,13 @@ public class SSSLRserveManager {
 											+ "\\n\"), file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outspace);
-									conn.eval(printError1);
-									conn.eval(printError2);
-									conn.eval(printError3);
-									conn.eval(printError1);
-									conn.eval(outspace);
-									conn.eval(outspace);
+									getConn().eval(outspace);
+									getConn().eval(printError1);
+									getConn().eval(printError2);
+									getConn().eval(printError3);
+									getConn().eval(printError1);
+									getConn().eval(outspace);
+									getConn().eval(outspace);
 									printAllOutputFixed = false;
 								}
 							}
@@ -3744,10 +3746,10 @@ public class SSSLRserveManager {
 								String trialSum = "capture.output(funcTrialSum,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(funcTrialSum);
+								getConn().eval(funcTrialSum);
 								// System.out.println(funcTrialSum);
 
-								String runSuccessTS = conn.eval(
+								String runSuccessTS = getConn().eval(
 										"class(funcTrialSum)").asString();
 								if (runSuccessTS != null
 										&& runSuccessTS.equals("try-error")) {
@@ -3757,16 +3759,16 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in class.information function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
-									conn.eval(trialSumHead);
-									conn.eval(trialObsRead);
-									conn.eval(trialObsUsed);
-									conn.eval(trialSum);
-									conn.eval(outspace);
+									getConn().eval(trialSumHead);
+									getConn().eval(trialObsRead);
+									getConn().eval(trialObsUsed);
+									getConn().eval(trialSum);
+									getConn().eval(outspace);
 								}
 
 								// optional output: variance components
@@ -3780,9 +3782,9 @@ public class SSSLRserveManager {
 											+ "]]$varcomp.table,file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outVarComp);
-									conn.eval(outVarComp2);
-									conn.eval(outspace);
+									getConn().eval(outVarComp);
+									getConn().eval(outVarComp2);
+									getConn().eval(outspace);
 								}
 
 								// default output: test for genotypic effect
@@ -3808,18 +3810,18 @@ public class SSSLRserveManager {
 										+ outFileName + "\",append = TRUE)";
 								String outAnovaTable10 = "detach(\"package:lmerTest\")";
 
-								conn.eval(outAnovaTable1);
-								conn.eval(outAnovaTable2);
-								conn.eval(outAnovaTable3);
-								conn.eval(outAnovaTable4);
-								conn.eval(outAnovaTable5);
-								conn.eval(outAnovaTable6);
-								conn.eval(outAnovaTable7);
-								conn.eval(outspace);
-								conn.eval(outAnovaTable8);
-								conn.eval(outAnovaTable9);
-								conn.eval(outspace);
-								conn.eval(outAnovaTable10);
+								getConn().eval(outAnovaTable1);
+								getConn().eval(outAnovaTable2);
+								getConn().eval(outAnovaTable3);
+								getConn().eval(outAnovaTable4);
+								getConn().eval(outAnovaTable5);
+								getConn().eval(outAnovaTable6);
+								getConn().eval(outAnovaTable7);
+								getConn().eval(outspace);
+								getConn().eval(outAnovaTable8);
+								getConn().eval(outAnovaTable9);
+								getConn().eval(outspace);
+								getConn().eval(outAnovaTable10);
 
 								// default output: test for genotypic effect
 								// String outAnovaTable1b =
@@ -3891,9 +3893,9 @@ public class SSSLRserveManager {
 										+ "]]$summary.statistic,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(outDescStat);
-								conn.eval(outDescStat2);
-								conn.eval(outspace);
+								getConn().eval(outDescStat);
+								getConn().eval(outDescStat2);
+								getConn().eval(outspace);
 
 								// default output: standard error of the
 								// differences
@@ -3907,9 +3909,9 @@ public class SSSLRserveManager {
 										+ outFileName
 										+ "\",append = TRUE)";
 
-								conn.eval(outsedTable);
-								conn.eval(outsedTable2);
-								conn.eval(outspace);
+								getConn().eval(outsedTable);
+								getConn().eval(outsedTable2);
+								getConn().eval(outspace);
 
 								if (compareControl || specifiedContrast) {
 									double pairwiseSig = Double
@@ -3926,9 +3928,9 @@ public class SSSLRserveManager {
 												+ pairwiseSig
 												+ "), silent = TRUE)";
 										System.out.println(compareCtrl);
-										conn.eval(compareCtrl);
+										getConn().eval(compareCtrl);
 
-										String runSuccessCompareCtrl = conn
+										String runSuccessCompareCtrl = getConn()
 												.eval("class(cntrl)")
 												.asString();
 										if (runSuccessCompareCtrl != null
@@ -3942,10 +3944,10 @@ public class SSSLRserveManager {
 											String checkError4 = "capture.output(cat(\"*** \nERROR in contrastAnalysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 													+ outFileName
 													+ "\",append = TRUE)";
-											conn.eval(checkError);
-											conn.eval(checkError2);
-											conn.eval(checkError3);
-											conn.eval(checkError4);
+											getConn().eval(checkError);
+											getConn().eval(checkError2);
+											getConn().eval(checkError3);
+											getConn().eval(checkError4);
 
 										} else {
 											String outCompareControl = "if (nrow(cntrl) != 0) {\n";
@@ -3979,7 +3981,7 @@ public class SSSLRserveManager {
 													+ "}";
 											System.out
 													.println(outCompareControl);
-											conn.eval(outCompareControl);
+											getConn().eval(outCompareControl);
 										}
 									} // end stmt if (compareControl)
 
@@ -3988,8 +3990,8 @@ public class SSSLRserveManager {
 												+ contrastFileName
 												+ "\", header = TRUE, na.strings = c(\"NA\",\".\",\" \",\"\"), row.names = 1, blank.lines.skip=TRUE, sep = \",\")";
 										System.out.println(readContrastData);
-										conn.eval(readContrastData);
-										String runSuccessContrastData = conn
+										getConn().eval(readContrastData);
+										String runSuccessContrastData = getConn()
 												.eval("class(contrastData)")
 												.asString();
 
@@ -3997,7 +3999,7 @@ public class SSSLRserveManager {
 												&& runSuccessContrastData
 														.equals("notRun")) {
 											System.out.println("error");
-											conn.eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
+											getConn().eval("capture.output(cat(\"\n***Error reading contrast data.***\n\"),file=\""
 													+ outFileName
 													+ "\",append = FALSE)");
 										} else {
@@ -4009,9 +4011,9 @@ public class SSSLRserveManager {
 													+ pairwiseSig
 													+ "), silent = TRUE)";
 											System.out.println(userContrast);
-											conn.eval(userContrast);
+											getConn().eval(userContrast);
 
-											String runSuccessUserCtrl = conn
+											String runSuccessUserCtrl = getConn()
 													.eval("class(userContrast)")
 													.asString();
 											if (runSuccessUserCtrl != null
@@ -4025,10 +4027,10 @@ public class SSSLRserveManager {
 												String checkUError4 = "capture.output(cat(\"*** \nERROR in contrastAnalysis function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 														+ outFileName
 														+ "\",append = TRUE)";
-												conn.eval(checkUError);
-												conn.eval(checkUError2);
-												conn.eval(checkUError3);
-												conn.eval(checkUError4);
+												getConn().eval(checkUError);
+												getConn().eval(checkUError2);
+												getConn().eval(checkUError3);
+												getConn().eval(checkUError4);
 
 											} else {
 												String outCompareControl = "if (nrow(userContrast) != 0) {\n";
@@ -4062,7 +4064,7 @@ public class SSSLRserveManager {
 														+ "}";
 												System.out
 														.println(outCompareControl);
-												conn.eval(outCompareControl);
+												getConn().eval(outCompareControl);
 											}
 
 										} // end stmt if-else
@@ -4218,9 +4220,9 @@ public class SSSLRserveManager {
 
 					// default output: save the means, standard error of the
 					// mean, variance and no. of reps in a file
-					String checkMeanSSE = conn.eval("ssa1$meansseWarning")
+					String checkMeanSSE = getConn().eval("ssa1$meansseWarning")
 							.asString();
-					String checkVarRep = conn.eval("ssa1$varrepWarning")
+					String checkVarRep = getConn().eval("ssa1$varrepWarning")
 							.asString();
 					System.out.println("checkMeanSSE: " + checkMeanSSE);
 					System.out.println("checkVarRep: " + checkVarRep);
@@ -4241,11 +4243,11 @@ public class SSSLRserveManager {
 						}
 						String funcSaveSesVarRepCsv = "saveMeans <- try(write.table(meansVar,file = meansFileName ,sep=\",\",row.names=FALSE), silent=TRUE)";
 
-						conn.eval(meansFileName);
-						conn.eval(funcSaveSesVarRep);
-						conn.eval(funcSaveSesVarRepCsv);
+						getConn().eval(meansFileName);
+						getConn().eval(funcSaveSesVarRep);
+						getConn().eval(funcSaveSesVarRepCsv);
 
-						String runSuccessSaveMeansSes = conn.eval(
+						String runSuccessSaveMeansSes = getConn().eval(
 								"class(saveMeans)").asString();
 						if (runSuccessSaveMeansSes != null
 								&& runSuccessSaveMeansSes.equals("try-error")) {
@@ -4255,10 +4257,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving means file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 
@@ -4279,9 +4281,9 @@ public class SSSLRserveManager {
 									+ "\", is.random = FALSE, ssa1), silent=TRUE)";
 						}
 						System.out.println(diagPlotsFunc);
-						conn.eval(diagPlotsFunc);
+						getConn().eval(diagPlotsFunc);
 
-						String runSuccessDiagPlots = conn.eval(
+						String runSuccessDiagPlots = getConn().eval(
 								"class(diagPlots)").asString();
 						if (runSuccessDiagPlots != null
 								&& runSuccessDiagPlots.equals("try-error")) {
@@ -4292,10 +4294,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in graph.sea.diagplots function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 				}
@@ -4556,14 +4558,14 @@ public class SSSLRserveManager {
 				}
 				String randomHead = "capture.output(cat(\"GENOTYPE AS: Random\n\"),file=\""
 						+ outFileName + "\",append = TRUE)";
-				conn.eval(funcSsaRandom);
-				conn.eval(sep2);
-				conn.eval(randomHead);
-				conn.eval(sep2);
-				conn.eval(outspace);
+				getConn().eval(funcSsaRandom);
+				getConn().eval(sep2);
+				getConn().eval(randomHead);
+				getConn().eval(sep2);
+				getConn().eval(outspace);
 				System.out.println(funcSsaRandom);
 
-				String runSuccess2 = conn.eval("class(ssa2)").asString();
+				String runSuccess2 = getConn().eval("class(ssa2)").asString();
 				if (runSuccess2 != null && runSuccess2.equals("try-error")) {
 					System.out.println("ssa2: error");
 					String checkError = "msg <- trimStrings(strsplit(ssa2, \":\")[[1]])";
@@ -4571,10 +4573,10 @@ public class SSSLRserveManager {
 					String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 					String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.test function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 							+ outFileName + "\",append = TRUE)";
-					conn.eval(checkError);
-					conn.eval(checkError2);
-					conn.eval(checkError3);
-					conn.eval(checkError4);
+					getConn().eval(checkError);
+					getConn().eval(checkError2);
+					getConn().eval(checkError3);
+					getConn().eval(checkError4);
 
 					runningRandomSuccess = false;
 				} else {
@@ -4586,10 +4588,10 @@ public class SSSLRserveManager {
 								+ "\n\"),file=\""
 								+ outFileName
 								+ "\",append = TRUE)";
-						conn.eval(sep);
-						conn.eval(respVarHead);
-						conn.eval(sep);
-						conn.eval(outspace);
+						getConn().eval(sep);
+						getConn().eval(respVarHead);
+						getConn().eval(sep);
+						getConn().eval(outspace);
 
 						// optional output: descriptive statistics
 						if (descriptiveStat) {
@@ -4607,14 +4609,14 @@ public class SSSLRserveManager {
 										+ environment
 										+ "\"), silent=TRUE)";
 							}
-							conn.eval(funcDesc);
+							getConn().eval(funcDesc);
 							System.out.println(funcDesc);
 							String outDescStat = "capture.output(cat(\"DESCRIPTIVE STATISTICS:\n\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
 							String outDescStat2 = "capture.output(outDesc,file=\""
 									+ outFileName + "\",append = TRUE)";
 
-							String runSuccessDescStat = conn.eval(
+							String runSuccessDescStat = getConn().eval(
 									"class(outDesc)").asString();
 							if (runSuccessDescStat != null
 									&& runSuccessDescStat.equals("try-error")) {
@@ -4624,15 +4626,15 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in DescriptiveStatistics function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							} else {
-								conn.eval(outspace);
-								conn.eval(outDescStat);
-								conn.eval(outDescStat2);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(outDescStat);
+								getConn().eval(outDescStat2);
+								getConn().eval(outspace);
 							}
 						}
 						int envLevelsLength2 = 0;
@@ -4657,19 +4659,19 @@ public class SSSLRserveManager {
 										+ j
 										+ "]]$env,\"\n\"),file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(sep);
-								conn.eval(envtHead);
-								conn.eval(sep);
-								conn.eval(outspace);
+								getConn().eval(sep);
+								getConn().eval(envtHead);
+								getConn().eval(sep);
+								getConn().eval(outspace);
 							}
 
 							// check if the data has too many missing
 							// observations
-							double responseRate = conn.eval(
+							double responseRate = getConn().eval(
 									"ssa2$output[[" + i + "]]$site[[" + j
 											+ "]]$responseRate").asDouble();
 							if (responseRate < 0.8) {
-								String allNAWarning2 = conn.eval(
+								String allNAWarning2 = getConn().eval(
 										"ssa2$output[[" + i + "]]$site[[" + j
 												+ "]]$manyNAWarning")
 										.asString();
@@ -4681,20 +4683,20 @@ public class SSSLRserveManager {
 										+ allNAWarning2 + "\\n\"), file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(outspace);
-								conn.eval(printError1);
-								conn.eval(printError2);
-								conn.eval(printError3);
-								conn.eval(printError1);
-								conn.eval(outspace);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(printError1);
+								getConn().eval(printError2);
+								getConn().eval(printError3);
+								getConn().eval(printError1);
+								getConn().eval(outspace);
+								getConn().eval(outspace);
 								printAllOutputRandom = false;
 							} else {
-								String lmerRun = conn.eval(
+								String lmerRun = getConn().eval(
 										"ssa2$output[[" + i + "]]$site[[" + j
 												+ "]]$lmerRun").asString();
 								if (lmerRun.equals("ERROR")) {
-									String lmerError = conn.eval(
+									String lmerError = getConn().eval(
 											"ssa2$output[[" + i + "]]$site[["
 													+ j + "]]$lmerError")
 											.asString();
@@ -4707,13 +4709,13 @@ public class SSSLRserveManager {
 											+ "\\n\"), file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outspace);
-									conn.eval(printError1);
-									conn.eval(printError2);
-									conn.eval(printError3);
-									conn.eval(printError1);
-									conn.eval(outspace);
-									conn.eval(outspace);
+									getConn().eval(outspace);
+									getConn().eval(printError1);
+									getConn().eval(printError2);
+									getConn().eval(printError3);
+									getConn().eval(printError1);
+									getConn().eval(outspace);
+									getConn().eval(outspace);
 									printAllOutputRandom = false;
 								}
 							}
@@ -4721,7 +4723,7 @@ public class SSSLRserveManager {
 							if (printAllOutputRandom) {
 								// display warning generated by checkTest in
 								// ssa.test
-								String warningCheckTest = conn.eval(
+								String warningCheckTest = getConn().eval(
 										"ssa2$output[[" + i + "]]$site[[" + j
 												+ "]]$checkTestWarning")
 										.asString();
@@ -4736,9 +4738,9 @@ public class SSSLRserveManager {
 									String warningCheckTest4 = "capture.output(cat(\"\n*** \\n\"), file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(warningCheckTest2);
-									conn.eval(warningCheckTest3);
-									conn.eval(warningCheckTest4);
+									getConn().eval(warningCheckTest2);
+									getConn().eval(warningCheckTest3);
+									getConn().eval(warningCheckTest4);
 								}
 								System.out.println("check test:"
 										+ warningCheckTest);
@@ -4768,9 +4770,9 @@ public class SSSLRserveManager {
 								String trialSum = "capture.output(funcTrialSum,file=\""
 										+ outFileName + "\",append = TRUE)";
 
-								conn.eval(funcTrialSum);
+								getConn().eval(funcTrialSum);
 
-								String runSuccessTS = conn.eval(
+								String runSuccessTS = getConn().eval(
 										"class(funcTrialSum)").asString();
 								if (runSuccessTS != null
 										&& runSuccessTS.equals("try-error")) {
@@ -4780,16 +4782,16 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in class.information function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
-									conn.eval(trialSumHead);
-									conn.eval(trialObsRead);
-									conn.eval(trialObsUsed);
-									conn.eval(trialSum);
-									conn.eval(outspace);
+									getConn().eval(trialSumHead);
+									getConn().eval(trialObsRead);
+									getConn().eval(trialObsUsed);
+									getConn().eval(trialSum);
+									getConn().eval(outspace);
 								}
 
 								// optional output: variance components
@@ -4803,9 +4805,9 @@ public class SSSLRserveManager {
 											+ "]]$varcomp.table,file=\""
 											+ outFileName + "\",append = TRUE)";
 
-									conn.eval(outVarComp);
-									conn.eval(outVarComp2);
-									conn.eval(outspace);
+									getConn().eval(outVarComp);
+									getConn().eval(outVarComp2);
+									getConn().eval(outspace);
 								}
 
 								// default output: test genotypic effect
@@ -4829,14 +4831,14 @@ public class SSSLRserveManager {
 										+ j
 										+ "]]$models.table,file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outTestGen1);
-								conn.eval(outTestGen2);
-								conn.eval(outTestGen3);
-								conn.eval(outTestGen4);
-								conn.eval(outspace);
+								getConn().eval(outTestGen1);
+								getConn().eval(outTestGen2);
+								getConn().eval(outTestGen3);
+								getConn().eval(outTestGen4);
+								getConn().eval(outspace);
 
 								// default output: test for check effect
-								String newExcludeCheck = conn.eval(
+								String newExcludeCheck = getConn().eval(
 										"ssa2$output[[" + i + "]]$site[[" + j
 												+ "]]$newExcludeCheck")
 										.toString();
@@ -4867,18 +4869,18 @@ public class SSSLRserveManager {
 									String outAnovaTable10 = "detach(\"package:lmerTest\")";
 
 									// rConnection.eval(outspace);
-									conn.eval(outAnovaTable1);
-									conn.eval(outAnovaTable2);
-									conn.eval(outAnovaTable3);
-									conn.eval(outAnovaTable4);
-									conn.eval(outAnovaTable5);
-									conn.eval(outAnovaTable6);
-									conn.eval(outAnovaTable7);
-									conn.eval(outspace);
-									conn.eval(outAnovaTable8);
-									conn.eval(outAnovaTable9);
-									conn.eval(outspace);
-									conn.eval(outAnovaTable10);
+									getConn().eval(outAnovaTable1);
+									getConn().eval(outAnovaTable2);
+									getConn().eval(outAnovaTable3);
+									getConn().eval(outAnovaTable4);
+									getConn().eval(outAnovaTable5);
+									getConn().eval(outAnovaTable6);
+									getConn().eval(outAnovaTable7);
+									getConn().eval(outspace);
+									getConn().eval(outAnovaTable8);
+									getConn().eval(outAnovaTable9);
+									getConn().eval(outspace);
+									getConn().eval(outAnovaTable10);
 								}
 
 								// default output: predicted means
@@ -4890,13 +4892,13 @@ public class SSSLRserveManager {
 										+ j
 										+ "]]$summary.statistic,file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outPredMeans);
-								conn.eval(outPredMeans2);
-								conn.eval(outspace);
+								getConn().eval(outPredMeans);
+								getConn().eval(outPredMeans2);
+								getConn().eval(outspace);
 
 								// default output: lsmeans of checks
 								if (excludeControls) {
-									int newCheckListLength = conn.eval(
+									int newCheckListLength = getConn().eval(
 											"ssa2$output[[" + i + "]]$site[["
 													+ j
 													+ "]]$newCheckListLength")
@@ -4913,9 +4915,9 @@ public class SSSLRserveManager {
 												+ "]]$lsmeans.checks,file=\""
 												+ outFileName
 												+ "\",append = TRUE)";
-										conn.eval(outLSMeansCheck);
-										conn.eval(outLSMeansCheck2);
-										conn.eval(outspace);
+										getConn().eval(outLSMeansCheck);
+										getConn().eval(outLSMeansCheck2);
+										getConn().eval(outspace);
 									}
 								}
 
@@ -4930,10 +4932,10 @@ public class SSSLRserveManager {
 										+ outFileName + "\",append = TRUE)";
 								String outEstHerit3 = "capture.output(cat(\"\n\"),file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(outEstHerit);
-								conn.eval(outEstHerit2);
-								conn.eval(outEstHerit3);
-								conn.eval(outspace);
+								getConn().eval(outEstHerit);
+								getConn().eval(outEstHerit2);
+								getConn().eval(outEstHerit3);
+								getConn().eval(outspace);
 							}
 
 						}
@@ -4942,7 +4944,7 @@ public class SSSLRserveManager {
 					// optional output: estimate genotypic and phenotypic
 					// correlations
 					if (genoPhenoCorrelation) {
-						conn.eval(sep2);
+						getConn().eval(sep2);
 						String funcEstCorr = null;
 						if (excludeControls) {
 							if (environment == "NULL") {
@@ -5335,9 +5337,9 @@ public class SSSLRserveManager {
 						}
 
 						System.out.println(funcEstCorr);
-						conn.eval(funcEstCorr);
+						getConn().eval(funcEstCorr);
 
-						String runSuccessGPCorr = conn.eval("class(gpcorr)")
+						String runSuccessGPCorr = getConn().eval("class(gpcorr)")
 								.asString();
 						if (runSuccessGPCorr != null
 								&& runSuccessGPCorr.equals("try-error")) {
@@ -5347,14 +5349,14 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in genoNpheno.corr function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						} else {
 							String outEstGenoCorr = "capture.output(cat(\"\nGENOTYPIC CORRELATIONS:\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outEstGenoCorr);
+							getConn().eval(outEstGenoCorr);
 
 							int envLevelsLength = 0;
 							if (environment == "NULL") {
@@ -5376,23 +5378,23 @@ public class SSSLRserveManager {
 											+ "]]),file=\""
 											+ outFileName
 											+ "\",append = TRUE)";
-									conn.eval(outspace);
-									conn.eval(outEstGenoCorr2);
-									conn.eval(outspace);
+									getConn().eval(outspace);
+									getConn().eval(outEstGenoCorr2);
+									getConn().eval(outspace);
 								}
 								String outEstGenoCorr2b = "capture.output(gpcorr$GenoCorr[["
 										+ j
 										+ "]],file=\""
 										+ outFileName
 										+ "\",append = TRUE)";
-								conn.eval(outspace);
-								conn.eval(outEstGenoCorr2b);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(outEstGenoCorr2b);
+								getConn().eval(outspace);
 							}
 
 							String outEstPhenoCorr = "capture.output(cat(\"\nPHENOTYPIC CORRELATIONS:\n\"),file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(outEstPhenoCorr);
+							getConn().eval(outEstPhenoCorr);
 
 							for (int m = 0; m < envLevelsLength; m++) { // no of
 																		// envts
@@ -5407,24 +5409,24 @@ public class SSSLRserveManager {
 											+ "]]),file=\""
 											+ outFileName
 											+ "\",append = TRUE)";
-									conn.eval(outspace);
-									conn.eval(outEstPhenoCorr2);
-									conn.eval(outspace);
+									getConn().eval(outspace);
+									getConn().eval(outEstPhenoCorr2);
+									getConn().eval(outspace);
 								}
 								String outEstPhenoCorr2b = "capture.output(gpcorr$PhenoCorr[["
 										+ j
 										+ "]],file=\""
 										+ outFileName
 										+ "\",append = TRUE)";
-								conn.eval(outspace);
-								conn.eval(outEstPhenoCorr2b);
-								conn.eval(outspace);
+								getConn().eval(outspace);
+								getConn().eval(outEstPhenoCorr2b);
+								getConn().eval(outspace);
 							}
 						} // end of else for if runSuccessGPCorr
 					}
 
 					// default option: save predicted means to a file
-					String checkPredMean = conn.eval("ssa2$meansWarning")
+					String checkPredMean = getConn().eval("ssa2$meansWarning")
 							.asString();
 					System.out.println("checkPredMean: " + checkPredMean);
 
@@ -5435,10 +5437,10 @@ public class SSSLRserveManager {
 								+ resultFolderPath
 								+ "\",\"predictedMeans.csv\", sep=\"\")";
 						String funcSavePredMeansCsv = "saveDataB1 <- try(write.table(ssa2$means,file = meansFileName2 ,sep=\",\",row.names=FALSE), silent=TRUE)";
-						conn.eval(meansFileName2);
-						conn.eval(funcSavePredMeansCsv);
+						getConn().eval(meansFileName2);
+						getConn().eval(funcSavePredMeansCsv);
 
-						String runSuccessSavePredMeans = conn.eval(
+						String runSuccessSavePredMeans = getConn().eval(
 								"class(saveDataB1)").asString();
 						if (runSuccessSavePredMeans != null
 								&& runSuccessSavePredMeans.equals("try-error")) {
@@ -5448,10 +5450,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in saving predicted means to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 
@@ -5472,9 +5474,9 @@ public class SSSLRserveManager {
 									+ "\", is.random = TRUE, ssa2), silent=TRUE)";
 						}
 						System.out.println(diagPlotsFunc);
-						conn.eval(diagPlotsFunc);
+						getConn().eval(diagPlotsFunc);
 
-						String runSuccessDiagPlots = conn.eval(
+						String runSuccessDiagPlots = getConn().eval(
 								"class(diagPlots)").asString();
 						if (runSuccessDiagPlots != null
 								&& runSuccessDiagPlots.equals("try-error")) {
@@ -5485,10 +5487,10 @@ public class SSSLRserveManager {
 							String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 							String checkError4 = "capture.output(cat(\"*** \nERROR in graph.sea.diagplots function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 									+ outFileName + "\",append = TRUE)";
-							conn.eval(checkError);
-							conn.eval(checkError2);
-							conn.eval(checkError3);
-							conn.eval(checkError4);
+							getConn().eval(checkError);
+							getConn().eval(checkError2);
+							getConn().eval(checkError3);
+							getConn().eval(checkError4);
 						}
 					}
 
@@ -5543,9 +5545,9 @@ public class SSSLRserveManager {
 								+ "\", is.genoRandom = FALSE), silent=TRUE)";
 					}
 					System.out.println(runSsaResid1);
-					conn.eval(runSsaResid1);
+					getConn().eval(runSsaResid1);
 
-					String runSuccessDiagPlots = conn.eval("class(resid_f)")
+					String runSuccessDiagPlots = getConn().eval("class(resid_f)")
 							.asString();
 					if (runSuccessDiagPlots != null
 							&& runSuccessDiagPlots.equals("try-error")) {
@@ -5555,12 +5557,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval("resid_f$residWarning")
+						String checkResid1 = getConn().eval("resid_f$residWarning")
 								.asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -5568,10 +5570,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (fixed) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_f$residuals, file = residFileNameFixed ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameFixed);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameFixed);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -5581,10 +5583,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							// generate heatmap
@@ -5615,9 +5617,9 @@ public class SSSLRserveManager {
 											+ environment + "\"), silent=TRUE)";
 								}
 								System.out.println(funcHeat);
-								conn.eval(funcHeat);
+								getConn().eval(funcHeat);
 
-								String runSuccessHeat = conn.eval(
+								String runSuccessHeat = getConn().eval(
 										"class(heat1)").asString();
 								if (runSuccessHeat != null
 										&& runSuccessHeat.equals("try-error")) {
@@ -5628,17 +5630,17 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in Heatmap function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
 									for (int k = 0; k < respvars.length; k++) {
 										int i = k + 1; // 1-relative index;
 
 										String envLevelsCommand = "length(heat1[["
 												+ i + "]]$site)";
-										int envLevels = conn.eval(
+										int envLevels = getConn().eval(
 												envLevelsCommand).asInteger();
 										for (int m = 0; m < envLevels; m++) {
 											int j = m + 1; // 1-relative index;
@@ -5648,7 +5650,7 @@ public class SSSLRserveManager {
 													+ "]]$site[["
 													+ j
 													+ "]]";
-											String warningList = conn.eval(
+											String warningList = getConn().eval(
 													warningListCommand)
 													.asString();
 
@@ -5665,7 +5667,7 @@ public class SSSLRserveManager {
 														+ "]],\"\n\"),file=\""
 														+ outFileName
 														+ "\",append = TRUE)";
-												conn.eval(trialObsUsed);
+												getConn().eval(trialObsUsed);
 											}
 										}
 									}
@@ -5685,9 +5687,9 @@ public class SSSLRserveManager {
 								+ "\", is.genoRandom = TRUE), silent=TRUE)";
 					}
 					System.out.println(runSsaResid2);
-					conn.eval(runSsaResid2);
+					getConn().eval(runSsaResid2);
 
-					String runSuccessDiagPlots = conn.eval("class(resid_r)")
+					String runSuccessDiagPlots = getConn().eval("class(resid_r)")
 							.asString();
 					if (runSuccessDiagPlots != null
 							&& runSuccessDiagPlots.equals("try-error")) {
@@ -5698,12 +5700,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval("resid_r$residWarning")
+						String checkResid1 = getConn().eval("resid_r$residWarning")
 								.asString();
 						System.out.println("checkResid2: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -5711,10 +5713,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (random) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_r$residuals, file = residFileNameRandom ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameRandom);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameRandom);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -5724,10 +5726,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							// generate heatmap
@@ -5758,9 +5760,9 @@ public class SSSLRserveManager {
 											+ environment + "\"), silent=TRUE)";
 								}
 								System.out.println(funcHeat);
-								conn.eval(funcHeat);
+								getConn().eval(funcHeat);
 
-								String runSuccessHeat = conn.eval(
+								String runSuccessHeat = getConn().eval(
 										"class(heat2)").asString();
 								if (runSuccessHeat != null
 										&& runSuccessHeat.equals("try-error")) {
@@ -5771,17 +5773,17 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in Heatmap function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
 									for (int k = 0; k < respvars.length; k++) {
 										int i = k + 1; // 1-relative index;
 
 										String envLevelsCommand = "length(heat2[["
 												+ i + "]]$site)";
-										int envLevels = conn.eval(
+										int envLevels = getConn().eval(
 												envLevelsCommand).asInteger();
 										for (int m = 0; m < envLevels; m++) {
 											int j = m + 1; // 1-relative index;
@@ -5791,7 +5793,7 @@ public class SSSLRserveManager {
 													+ "]]$site[["
 													+ j
 													+ "]]";
-											String warningList = conn.eval(
+											String warningList = getConn().eval(
 													warningListCommand)
 													.asString();
 
@@ -5808,7 +5810,7 @@ public class SSSLRserveManager {
 														+ "]],\"\n\"),file=\""
 														+ outFileName
 														+ "\",append = TRUE)";
-												conn.eval(trialObsUsed);
+												getConn().eval(trialObsUsed);
 											}
 										}
 									}
@@ -5836,10 +5838,10 @@ public class SSSLRserveManager {
 					}
 					System.out.println(runSsaResid1);
 					System.out.println(runSsaResid2);
-					conn.eval(runSsaResid1);
-					conn.eval(runSsaResid2);
+					getConn().eval(runSsaResid1);
+					getConn().eval(runSsaResid2);
 
-					String runSuccessResidFixed = conn.eval("class(resid_f)")
+					String runSuccessResidFixed = getConn().eval("class(resid_f)")
 							.asString();
 					if (runSuccessResidFixed != null
 							&& runSuccessResidFixed.equals("try-error")) {
@@ -5849,12 +5851,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval("resid_f$residWarning")
+						String checkResid1 = getConn().eval("resid_f$residWarning")
 								.asString();
 						System.out.println("checkResid1: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -5862,10 +5864,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (fixed) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid <- try(write.table(resid_f$residuals, file = residFileNameFixed ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameFixed);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameFixed);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -5875,10 +5877,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							// generate heatmap
@@ -5909,9 +5911,9 @@ public class SSSLRserveManager {
 											+ environment + "\"), silent=TRUE)";
 								}
 								System.out.println(funcHeat);
-								conn.eval(funcHeat);
+								getConn().eval(funcHeat);
 
-								String runSuccessHeat = conn.eval(
+								String runSuccessHeat = getConn().eval(
 										"class(heat1)").asString();
 								if (runSuccessHeat != null
 										&& runSuccessHeat.equals("try-error")) {
@@ -5922,17 +5924,17 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in Heatmap function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
 									for (int k = 0; k < respvars.length; k++) {
 										int i = k + 1; // 1-relative index;
 
 										String envLevelsCommand = "length(heat1[["
 												+ i + "]]$site)";
-										int envLevels = conn.eval(
+										int envLevels = getConn().eval(
 												envLevelsCommand).asInteger();
 										for (int m = 0; m < envLevels; m++) {
 											int j = m + 1; // 1-relative index;
@@ -5942,7 +5944,7 @@ public class SSSLRserveManager {
 													+ "]]$site[["
 													+ j
 													+ "]]";
-											String warningList = conn.eval(
+											String warningList = getConn().eval(
 													warningListCommand)
 													.asString();
 
@@ -5959,7 +5961,7 @@ public class SSSLRserveManager {
 														+ "]],\"\n\"),file=\""
 														+ outFileName
 														+ "\",append = TRUE)";
-												conn.eval(trialObsUsed);
+												getConn().eval(trialObsUsed);
 											}
 										}
 									}
@@ -5968,7 +5970,7 @@ public class SSSLRserveManager {
 						}
 					}
 
-					String runSuccessResidRandom = conn.eval("class(resid_r)")
+					String runSuccessResidRandom = getConn().eval("class(resid_r)")
 							.asString();
 					if (runSuccessResidRandom != null
 							&& runSuccessResidRandom.equals("try-error")) {
@@ -5979,12 +5981,12 @@ public class SSSLRserveManager {
 						String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 						String checkError4 = "capture.output(cat(\"*** \nERROR in ssa.resid function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 								+ outFileName + "\",append = TRUE)";
-						conn.eval(checkError);
-						conn.eval(checkError2);
-						conn.eval(checkError3);
-						conn.eval(checkError4);
+						getConn().eval(checkError);
+						getConn().eval(checkError2);
+						getConn().eval(checkError3);
+						getConn().eval(checkError4);
 					} else {
-						String checkResid1 = conn.eval("resid_r$residWarning")
+						String checkResid1 = getConn().eval("resid_r$residWarning")
 								.asString();
 						System.out.println("checkResid2: " + checkResid1);
 						if (checkResid1.equals("empty")) {
@@ -5992,10 +5994,10 @@ public class SSSLRserveManager {
 									.println("Saving resid (random) not done.");
 						} else {
 							String func1SaveResidualsCsv = "saveResid2 <- try(write.table(resid_r$residuals, file = residFileNameRandom ,sep=\",\",row.names=FALSE), silent=TRUE)";
-							conn.eval(residFileNameRandom);
-							conn.eval(func1SaveResidualsCsv);
+							getConn().eval(residFileNameRandom);
+							getConn().eval(func1SaveResidualsCsv);
 
-							String runSuccessSaveResid = conn.eval(
+							String runSuccessSaveResid = getConn().eval(
 									"class(saveResid2)").asString();
 							if (runSuccessSaveResid != null
 									&& runSuccessSaveResid.equals("try-error")) {
@@ -6005,10 +6007,10 @@ public class SSSLRserveManager {
 								String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 								String checkError4 = "capture.output(cat(\"*** \nERROR in saving residuals to a file:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 										+ outFileName + "\",append = TRUE)";
-								conn.eval(checkError);
-								conn.eval(checkError2);
-								conn.eval(checkError3);
-								conn.eval(checkError4);
+								getConn().eval(checkError);
+								getConn().eval(checkError2);
+								getConn().eval(checkError3);
+								getConn().eval(checkError4);
 							}
 
 							if (heatmapResiduals) {
@@ -6038,9 +6040,9 @@ public class SSSLRserveManager {
 											+ environment + "\"), silent=TRUE)";
 								}
 								System.out.println(funcHeat);
-								conn.eval(funcHeat);
+								getConn().eval(funcHeat);
 
-								String runSuccessHeat = conn.eval(
+								String runSuccessHeat = getConn().eval(
 										"class(heat2)").asString();
 								if (runSuccessHeat != null
 										&& runSuccessHeat.equals("try-error")) {
@@ -6051,17 +6053,17 @@ public class SSSLRserveManager {
 									String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 									String checkError4 = "capture.output(cat(\"*** \nERROR in Heatmap function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 											+ outFileName + "\",append = TRUE)";
-									conn.eval(checkError);
-									conn.eval(checkError2);
-									conn.eval(checkError3);
-									conn.eval(checkError4);
+									getConn().eval(checkError);
+									getConn().eval(checkError2);
+									getConn().eval(checkError3);
+									getConn().eval(checkError4);
 								} else {
 									for (int k = 0; k < respvars.length; k++) {
 										int i = k + 1; // 1-relative index;
 
 										String envLevelsCommand = "length(heat2[["
 												+ i + "]]$site)";
-										int envLevels = conn.eval(
+										int envLevels = getConn().eval(
 												envLevelsCommand).asInteger();
 										for (int m = 0; m < envLevels; m++) {
 											int j = m + 1; // 1-relative index;
@@ -6071,7 +6073,7 @@ public class SSSLRserveManager {
 													+ "]]$site[["
 													+ j
 													+ "]]";
-											String warningList = conn.eval(
+											String warningList = getConn().eval(
 													warningListCommand)
 													.asString();
 
@@ -6088,7 +6090,7 @@ public class SSSLRserveManager {
 														+ "]],\"\n\"),file=\""
 														+ outFileName
 														+ "\",append = TRUE)";
-												conn.eval(trialObsUsed);
+												getConn().eval(trialObsUsed);
 											}
 										}
 									}
@@ -6125,9 +6127,9 @@ public class SSSLRserveManager {
 						+ withHist + "\"), silent=TRUE)";
 			}
 			System.out.println(boxHistFunc);
-			conn.eval(boxHistFunc);
+			getConn().eval(boxHistFunc);
 
-			String runSuccessBoxHist = conn.eval("class(boxHist)").asString();
+			String runSuccessBoxHist = getConn().eval("class(boxHist)").asString();
 			if (runSuccessBoxHist != null
 					&& runSuccessBoxHist.equals("try-error")) {
 				System.out.println("boxplot/histogram: error");
@@ -6136,18 +6138,18 @@ public class SSSLRserveManager {
 				String checkError3 = "msg <- gsub(\"\\\"\", \"\", msg)";
 				String checkError4 = "capture.output(cat(\"*** \nERROR in graph.sea.boxhist function:\\n  \",msg, \"\n***\n\n\", sep = \"\"), file=\""
 						+ outFileName + "\",append = TRUE)";
-				conn.eval(checkError);
-				conn.eval(checkError2);
-				conn.eval(checkError3);
-				conn.eval(checkError4);
+				getConn().eval(checkError);
+				getConn().eval(checkError2);
+				getConn().eval(checkError3);
+				getConn().eval(checkError4);
 			}
-			conn.eval(outspace);
-			conn.eval(sep2);
+			getConn().eval(outspace);
+			getConn().eval(sep2);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			conn.close();
+			getConn().close();
 		}
 	}
 

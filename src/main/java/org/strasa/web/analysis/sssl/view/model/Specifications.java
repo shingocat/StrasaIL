@@ -508,7 +508,7 @@ public class Specifications {
 			@ContextParam(ContextType.BIND_CONTEXT) BindContext bindContext,
 			@ContextParam(ContextType.VIEW) Component view) {
 		selectDataBtn.setVisible(false);
-		studiesCombobox.setVisible(true);
+		studiesCombobox.setVisible(false);
 		resetBtn.setVisible(true);
 		uploadCSVBtn.setVisible(false);
 

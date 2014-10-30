@@ -1,6 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
-	<vlayout style="padding:10px" height="1000px">
+	<vlayout style="padding:10px">
 		<hbox>
 			<listbox id="numericLB" hflex="1" vflex="true" width="300px"
 				checkmark="true" multiple="true">
@@ -40,7 +40,7 @@
 			<image style="cursor:pointer" id="toFactorBtn" src="/images/downarrow_g.png"
 				tooltip="set as Factor" onClick="@command('toFactor')" />
 		</hbox>
-		<hbox height="800px">
+		<hbox>
 			<div vflex="1">
 				<listbox id="factorLB" hflex="1" rows="4" checkmark="true"
 					width="300px">
@@ -94,12 +94,17 @@
 									<textbox id="envTB" width="150px" readonly="true"
 										tabindex="7" />
 									<space spacing="20px" />
-									<checkbox id="envFixedCB" label="Fixed"
-										onClick="@command('updateEnvOptions', selected=self.checked, label=self.label)"
-										checked="true" />
-									<space spacing="20px" />
-									<checkbox id="envRandomCB" label="Random"
-										onClick="@command('updateEnvOptions', selected=self.checked, label=self.label)" />
+									<checkbox id="envIsRandomCB" label="isRandom"
+										onClick="@command('isEnvFactorRandomChecked', isChecked=self.checked)"
+										checked="false" tooltiptext="If it is checked, the environment factor would be considered as random factor in linear model."/>
+									<!-- <popup id="isEnvFactorRandom" width="200px">
+										<html tooltiptext="If it is checked, the environment factor would be considered as random factor in linear model.">
+										<![CDATA[ If it is checked, the environment factor would be considered as random factor in linear model. <br /> ]]>
+										</html>
+									</popup> -->
+									<!-- <space spacing="20px" /> <checkbox id="envRandomCB" label="Random" 
+										onClick="@command('updateEnvOptions', selected=self.checked, label=self.label)" 
+										/> -->
 								</hlayout>
 							</cell>
 						</row>
@@ -175,7 +180,6 @@
 					</rows>
 				</grid>
 			</div>
-			<separator spacing="200px"></separator>
 		</hbox>
 	</vlayout>
 </zk>
